@@ -564,4 +564,36 @@ public class SandSimulator : MonoBehaviour
 
         Debug.Log($"Dropped {droppedCount} sand particles in a chunk at ({centerX}, {centerY})");
     }
+
+    public void DropSandRectangle(int centerX, int centerY, float widthCells, float heightCells, CellType sandType)
+    {
+        // widthCells: °¡·Î Ä­ ¼ö (¿¹: 1.0)
+        // heightCells: ¼¼·Î Ä­ ¼ö (¿¹: 0.8, 1.2)
+
+        int widthPixels = Mathf.RoundToInt(widthCells * cellPixelSize);
+        int heightPixels = Mathf.RoundToInt(heightCells * cellPixelSize);
+
+        int halfWidth = widthPixels / 2;
+        int halfHeight = heightPixels / 2;
+
+        int droppedCount = 0;
+        int targetAmount = widthPixels * heightPixels;
+
+        for (int dy = -halfHeight; dy < halfHeight && droppedCount < targetAmount; dy++)
+        {
+            for (int dx = -halfWidth; dx < halfWidth && droppedCount < targetAmount; dx++)
+            {
+                int posX = centerX + dx;
+                int posY = centerY + dy;
+
+                if (IsInBounds(posX, posY) && grid[posX, posY] == CellType.Empty)
+                {
+                    grid[posX, posY] = sandType;
+                    droppedCount++;
+                }
+            }
+        }
+
+        Debug.Log($"Dropped {droppedCount} sand particles in {widthCells}x{heightCells} rectangle at ({centerX}, {centerY})");
+    }
 }

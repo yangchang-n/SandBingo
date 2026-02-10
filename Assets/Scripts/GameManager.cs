@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 using System.Collections;
 
 public class GameManager : MonoBehaviour
@@ -10,10 +9,11 @@ public class GameManager : MonoBehaviour
     // References
     private SandSimulator sandSimulator;
     private BotController botController;
+    private GameSceneUI gameUI;
 
     // Game Settings
     private int sandPerTurn;
-    private const int SAND_SPAWN_RATE = 5;
+    private const int SAND_SPAWN_RATE = 10;
 
     // Gauge Settings
     private int gaugeWidth;
@@ -29,6 +29,8 @@ public class GameManager : MonoBehaviour
 
     [Header("Game Mode")]
     public bool isBotMode = false;
+    [Range(1, 3)]
+    public int botDifficulty = 1;
 
     [Header("Game Over State")]
     public bool isGameOver = false;
@@ -39,12 +41,6 @@ public class GameManager : MonoBehaviour
     private GameObject gaugeObject;
     private SpriteRenderer gaugeRenderer;
     private Texture2D gaugeTexture;
-
-    [Header("UI References")]
-    public GameObject victoryPanel;
-    public GameObject oasisWinText;
-    public GameObject mudWinText;
-    public Button resetButton;
 
     [Header("Player Colors")]
     public Color skyColor = new Color(0.4f, 0.85f, 0.95f);
@@ -75,18 +71,33 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        LoadGameSettings();
         InitializeSettings();
-        FindSimulator();
-        FindBotController();
+        FindReferences();
         SetupCamera();
         SetupGauge();
-        SetupUI();
         StartNewTurn();
+    }
+
+    void LoadGameSettings()
+    {
+        // SelectScene에서 설정한 값 불러오기
+        if (PlayerPrefs.HasKey("BotMode"))
+        {
+            isBotMode = PlayerPrefs.GetInt("BotMode") == 1;
+        }
+
+        if (PlayerPrefs.HasKey("BotDifficulty"))
+        {
+            botDifficulty = PlayerPrefs.GetInt("BotDifficulty");
+        }
+
+        Debug.Log($"Game loaded with BotMode: {isBotMode}, Difficulty: {botDifficulty}");
     }
 
     void InitializeSettings()
     {
-        sandPerTurn = 400;
+        sandPerTurn = 800;
         gaugeWidth = 200;
         gaugeHeight = 20;
         gaugeYOffset = 25f;
@@ -101,23 +112,24 @@ public class GameManager : MonoBehaviour
         isMudWin = false;
     }
 
-    void FindSimulator()
+    void FindReferences()
     {
         sandSimulator = FindObjectOfType<SandSimulator>();
-
         if (sandSimulator == null)
         {
             Debug.LogError("SandSimulator not found in scene!");
         }
-    }
 
-    void FindBotController()
-    {
         botController = FindObjectOfType<BotController>();
-
-        if (botController == null)
+        if (botController == null && isBotMode)
         {
             Debug.LogWarning("BotController not found. Bot mode will not work.");
+        }
+
+        gameUI = FindObjectOfType<GameSceneUI>();
+        if (gameUI == null)
+        {
+            Debug.LogWarning("GameSceneUI not found in scene!");
         }
     }
 
@@ -149,21 +161,6 @@ public class GameManager : MonoBehaviour
         UpdateGauge();
     }
 
-    void SetupUI()
-    {
-        if (victoryPanel != null)
-            victoryPanel.SetActive(false);
-
-        if (oasisWinText != null)
-            oasisWinText.SetActive(false);
-
-        if (mudWinText != null)
-            mudWinText.SetActive(false);
-
-        if (resetButton != null)
-            resetButton.onClick.AddListener(ResetGame);
-    }
-
     void PositionGauge()
     {
         float boardTop = sandSimulator.GetHeight() / 2f;
@@ -176,7 +173,7 @@ public class GameManager : MonoBehaviour
             return;
 
         if (waitingForBotTurn)
-            return; // 봇 턴 대기 중
+            return;
 
         HandleTurnTransition();
         HandlePlayerInput();
@@ -188,7 +185,7 @@ public class GameManager : MonoBehaviour
         if (waitingForMouseRelease && !Input.GetMouseButton(0))
         {
             waitingForMouseRelease = false;
-            StartCoroutine(SwitchPlayerAfterDelay(1f));
+            StartCoroutine(SwitchPlayerAfterDelay(0.5f));
         }
     }
 
@@ -200,7 +197,6 @@ public class GameManager : MonoBehaviour
 
     void HandlePlayerInput()
     {
-        // 봇 모드이고 머드 팀(플레이어 1) 턴이면 입력 무시
         if (isBotMode && currentPlayer == 1)
         {
             return;
@@ -215,6 +211,8 @@ public class GameManager : MonoBehaviour
 
     void UpdateSimulation()
     {
+        sandSimulator.SimulatePhysics();
+        sandSimulator.SimulatePhysics();
         sandSimulator.SimulatePhysics();
         sandSimulator.SimulatePhysics();
         sandSimulator.UpdateTexture();
@@ -246,14 +244,10 @@ public class GameManager : MonoBehaviour
 
     void ShowVictoryScreen()
     {
-        if (victoryPanel != null)
-            victoryPanel.SetActive(true);
-
-        if (isOasisWin && oasisWinText != null)
-            oasisWinText.SetActive(true);
-
-        if (isMudWin && mudWinText != null)
-            mudWinText.SetActive(true);
+        if (gameUI != null)
+        {
+            gameUI.ShowVictoryScreen(isOasisWin);
+        }
     }
 
     void SpawnSandAtMouse()
@@ -271,7 +265,6 @@ public class GameManager : MonoBehaviour
 
         if (sandSimulator.SpawnSand(gridPos.x, gridPos.y, sandType, spawnAmount))
         {
-            // 봇 모드이고 오아시스 턴이면 좌표 기록
             if (isBotMode && currentPlayer == 0 && botController != null)
             {
                 botController.RecordOasisSandPosition(gridPos.x);
@@ -344,10 +337,9 @@ public class GameManager : MonoBehaviour
         string playerName = currentPlayer == 0 ? "Sky (하늘색)" : "Brown (갈색)";
         Debug.Log($"Player {currentPlayer + 1}'s turn ({playerName})");
 
-        // 봇 모드이고 머드 턴이면 봇 실행
         if (isBotMode && currentPlayer == 1 && botController != null)
         {
-            StartCoroutine(ExecuteBotTurnAfterDelay(1f));
+            StartCoroutine(ExecuteBotTurnAfterDelay(0.5f));
         }
     }
 
@@ -358,11 +350,11 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSeconds(delay);
 
-        botController.ExecuteBotTurn();
+        botController.ExecuteBotTurn(botDifficulty);
         remainingSand = 0;
         UpdateGauge();
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
 
         waitingForBotTurn = false;
         SwitchPlayer();
@@ -392,15 +384,6 @@ public class GameManager : MonoBehaviour
         isGameOver = false;
         isOasisWin = false;
         isMudWin = false;
-
-        if (victoryPanel != null)
-            victoryPanel.SetActive(false);
-
-        if (oasisWinText != null)
-            oasisWinText.SetActive(false);
-
-        if (mudWinText != null)
-            mudWinText.SetActive(false);
 
         if (botController != null)
             botController.ClearOasisData();

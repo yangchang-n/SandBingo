@@ -6,7 +6,6 @@ public class BotController : MonoBehaviour
     private SandSimulator sandSimulator;
     private List<int> oasisSandXPositions = new List<int>();
 
-    // 통계 데이터
     private float averageX;
     private float standardDeviation;
 
@@ -34,7 +33,6 @@ public class BotController : MonoBehaviour
             return;
         }
 
-        // 평균 계산
         float sum = 0;
         foreach (int x in oasisSandXPositions)
         {
@@ -42,7 +40,6 @@ public class BotController : MonoBehaviour
         }
         averageX = sum / oasisSandXPositions.Count;
 
-        // 표준편차 계산
         float varianceSum = 0;
         foreach (int x in oasisSandXPositions)
         {
@@ -54,39 +51,111 @@ public class BotController : MonoBehaviour
         Debug.Log($"Bot Analysis - Average X: {averageX:F2}, StdDev: {standardDeviation:F2}, Samples: {oasisSandXPositions.Count}");
     }
 
-    public void ExecuteBotTurn()
+    public void ExecuteBotTurn(int difficulty)
     {
         CalculateStatistics();
 
-        int cellPixelSize = sandSimulator.GetCellPixelSize();
-        int gridSize = 15; // sandSimulator에서 가져올 수 있으면 더 좋음
+        switch (difficulty)
+        {
+            case 1:
+                ExecuteEasyBot();
+                break;
+            case 2:
+                ExecuteMediumBot();
+                break;
+            case 3:
+                ExecuteHardBot();
+                break;
+        }
 
-        // 최소 오프셋: 0.5칸 (두 덩이가 겹치지 않도록)
+        ClearOasisData();
+    }
+
+    void ExecuteEasyBot()
+    {
+        // 0.8칸 덩이 2개 (세로 0.8칸 x 가로 1칸)
+        int cellPixelSize = sandSimulator.GetCellPixelSize();
         float minOffset = cellPixelSize * 0.5f;
         float offset = Mathf.Max(standardDeviation, minOffset);
 
-        // 두 위치 계산
         float leftX = averageX - offset;
         float rightX = averageX + offset;
 
-        // 화면 경계 계산
-        float leftBoundary = 1 + cellPixelSize / 2f;
-        float rightBoundary = 1 + (gridSize - 1) * cellPixelSize + cellPixelSize / 2f;
+        AdjustPositionsForBoundary(ref leftX, ref rightX, cellPixelSize);
 
-        // 경계 보정
+        int targetY = GetThirdRowY();
+
+        Debug.Log($"Easy Bot: Dropping 0.8-cell chunks at X: {leftX:F1}, {rightX:F1}");
+
+        sandSimulator.DropSandRectangle(Mathf.RoundToInt(leftX), targetY,
+            1.0f, 0.8f, SandSimulator.CellType.BrownSand);
+        sandSimulator.DropSandRectangle(Mathf.RoundToInt(rightX), targetY,
+            1.0f, 0.8f, SandSimulator.CellType.BrownSand);
+    }
+
+    void ExecuteMediumBot()
+    {
+        // 1.2칸 덩이 2개 (세로 1.2칸 x 가로 1칸)
+        int cellPixelSize = sandSimulator.GetCellPixelSize();
+        float minOffset = cellPixelSize * 0.5f;
+        float offset = Mathf.Max(standardDeviation, minOffset);
+
+        float leftX = averageX - offset;
+        float rightX = averageX + offset;
+
+        AdjustPositionsForBoundary(ref leftX, ref rightX, cellPixelSize);
+
+        int targetY = GetThirdRowY();
+
+        Debug.Log($"Medium Bot: Dropping 1.2-cell chunks at X: {leftX:F1}, {rightX:F1}");
+
+        sandSimulator.DropSandRectangle(Mathf.RoundToInt(leftX), targetY,
+            1.0f, 1.2f, SandSimulator.CellType.BrownSand);
+        sandSimulator.DropSandRectangle(Mathf.RoundToInt(rightX), targetY,
+            1.0f, 1.2f, SandSimulator.CellType.BrownSand);
+    }
+
+    void ExecuteHardBot()
+    {
+        // 1칸 덩이 3개 (정사각형)
+        int cellPixelSize = sandSimulator.GetCellPixelSize();
+        float minOffset = cellPixelSize * 0.5f;
+        float offset = Mathf.Max(standardDeviation, minOffset);
+
+        float leftX = averageX - offset;
+        float centerX = averageX;
+        float rightX = averageX + offset;
+
+        // 3개 위치 조정
+        AdjustThreePositionsForBoundary(ref leftX, ref centerX, ref rightX, cellPixelSize);
+
+        int targetY = GetThirdRowY();
+
+        Debug.Log($"Hard Bot: Dropping 3 chunks at X: {leftX:F1}, {centerX:F1}, {rightX:F1}");
+
+        sandSimulator.DropSandChunk(Mathf.RoundToInt(leftX), targetY,
+            SandSimulator.CellType.BrownSand);
+        sandSimulator.DropSandChunk(Mathf.RoundToInt(centerX), targetY,
+            SandSimulator.CellType.BrownSand);
+        sandSimulator.DropSandChunk(Mathf.RoundToInt(rightX), targetY,
+            SandSimulator.CellType.BrownSand);
+    }
+
+    void AdjustPositionsForBoundary(ref float leftX, ref float rightX, int cellPixelSize)
+    {
+        float leftBoundary = 1 + cellPixelSize / 2f;
+        float rightBoundary = 1 + (15 - 1) * cellPixelSize + cellPixelSize / 2f;
+
         if (leftX < leftBoundary)
         {
-            // 왼쪽이 경계 밖으로 나감
             float shift = leftBoundary - leftX;
             leftX = leftBoundary;
             rightX += shift;
 
-            // 보정 후 오른쪽도 경계를 벗어나는지 확인
             if (rightX > rightBoundary)
             {
                 rightX = rightBoundary;
-                // 최소 간격 유지하면서 왼쪽도 조정
-                leftX = rightX - (cellPixelSize * 1.0f); // 최소 1칸 간격
+                leftX = rightX - cellPixelSize;
                 if (leftX < leftBoundary)
                 {
                     leftX = leftBoundary;
@@ -95,52 +164,109 @@ public class BotController : MonoBehaviour
         }
         else if (rightX > rightBoundary)
         {
-            // 오른쪽이 경계 밖으로 나감
             float shift = rightX - rightBoundary;
             rightX = rightBoundary;
             leftX -= shift;
 
-            // 보정 후 왼쪽도 경계를 벗어나는지 확인
             if (leftX < leftBoundary)
             {
                 leftX = leftBoundary;
-                // 최소 간격 유지하면서 오른쪽도 조정
-                rightX = leftX + (cellPixelSize * 1.0f); // 최소 1칸 간격
+                rightX = leftX + cellPixelSize;
                 if (rightX > rightBoundary)
                 {
                     rightX = rightBoundary;
                 }
             }
         }
+    }
 
-        int targetY = GetThirdRowY();
+    void AdjustThreePositionsForBoundary(ref float leftX, ref float centerX, ref float rightX, int cellPixelSize)
+    {
+        float leftBoundary = 1 + cellPixelSize / 2f;
+        float rightBoundary = 1 + (15 - 1) * cellPixelSize + cellPixelSize / 2f;
 
-        int leftXInt = Mathf.RoundToInt(leftX);
-        int rightXInt = Mathf.RoundToInt(rightX);
+        // 최소 간격: 1칸 (겹치지 않게)
+        float minGap = cellPixelSize;
 
-        Debug.Log($"Bot dropping 2 chunks at X: {leftXInt} and {rightXInt}, Y: {targetY}");
+        // 왼쪽 경계 체크
+        if (leftX < leftBoundary)
+        {
+            leftX = leftBoundary;
+            centerX = leftX + minGap;
+            rightX = centerX + minGap;
 
-        // 두 덩이 떨어뜨리기
-        sandSimulator.DropSandChunk(leftXInt, targetY, SandSimulator.CellType.BrownSand);
-        sandSimulator.DropSandChunk(rightXInt, targetY, SandSimulator.CellType.BrownSand);
+            if (rightX > rightBoundary)
+            {
+                // 오른쪽도 벗어남: 균등 분배
+                float totalWidth = rightBoundary - leftBoundary;
+                leftX = leftBoundary;
+                centerX = leftBoundary + totalWidth / 2f;
+                rightX = rightBoundary;
+            }
+        }
+        // 오른쪽 경계 체크
+        else if (rightX > rightBoundary)
+        {
+            rightX = rightBoundary;
+            centerX = rightX - minGap;
+            leftX = centerX - minGap;
 
-        // 다음 턴을 위해 데이터 초기화
-        ClearOasisData();
+            if (leftX < leftBoundary)
+            {
+                // 왼쪽도 벗어남: 균등 분배
+                float totalWidth = rightBoundary - leftBoundary;
+                leftX = leftBoundary;
+                centerX = leftBoundary + totalWidth / 2f;
+                rightX = rightBoundary;
+            }
+        }
+        // 겹침 체크
+        else
+        {
+            // 왼쪽-중앙 간격 체크
+            if (centerX - leftX < minGap)
+            {
+                centerX = leftX + minGap;
+                if (rightX - centerX < minGap)
+                {
+                    rightX = centerX + minGap;
+                }
+            }
+
+            // 중앙-오른쪽 간격 체크
+            if (rightX - centerX < minGap)
+            {
+                rightX = centerX + minGap;
+            }
+
+            // 재조정 후 경계 벗어남 체크
+            if (rightX > rightBoundary)
+            {
+                float overflow = rightX - rightBoundary;
+                leftX -= overflow;
+                centerX -= overflow;
+                rightX = rightBoundary;
+
+                if (leftX < leftBoundary)
+                {
+                    // 균등 분배
+                    float totalWidth = rightBoundary - leftBoundary;
+                    leftX = leftBoundary;
+                    centerX = leftBoundary + totalWidth / 2f;
+                    rightX = rightBoundary;
+                }
+            }
+        }
     }
 
     int GetThirdRowY()
     {
-        // 상단 3번째 줄의 Y 좌표 계산
         int cellPixelSize = sandSimulator.GetCellPixelSize();
         int height = sandSimulator.GetHeight();
 
-        // 위에서 3번째 줄 (인덱스는 2)
         int rowIndex = 2;
         int pixelY = height - 1 - (rowIndex * cellPixelSize) - cellPixelSize / 2;
 
         return pixelY;
     }
-
-    public float GetAverageX() => averageX;
-    public float GetStandardDeviation() => standardDeviation;
 }
