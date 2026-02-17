@@ -9,4 +9,3 @@
 ### Details
 
 - Unity version : 2022.3.62f3
-- Scripting AI : Claude Sonnet 4.5
