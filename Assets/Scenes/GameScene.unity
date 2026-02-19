@@ -1372,6 +1372,9 @@ MonoBehaviour:
   mudWinText: {fileID: 2016906149}
   resetButton: {fileID: 1423398741}
   mainMenuButton: {fileID: 2041080970}
+  easyBackground: {fileID: 708843411}
+  mediumBackground: {fileID: 1390905814}
+  hardBackground: {fileID: 1729330262}
 --- !u!4 &1991923120
 Transform:
   m_ObjectHideFlags: 0

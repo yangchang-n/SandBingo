@@ -20,12 +20,20 @@ public class GameManager : MonoBehaviour
     private int gaugeHeight;
     private float gaugeYOffset;
 
+    // 최적화: 게이지 캐싱
+    private int lastRemainingSand = -1;
+
     // Game State
     private int currentPlayer;
     private int remainingSand;
     private bool isPlayerTurn;
     private bool waitingForMouseRelease;
     private bool waitingForBotTurn;
+
+    // Settlement Detection
+    private bool isSandMoving = false;
+    private bool hasCheckedWinCondition = false;
+    private bool isWaitingForSettlement = false;
 
     [Header("Game Mode")]
     public bool isBotMode = false;
@@ -43,14 +51,14 @@ public class GameManager : MonoBehaviour
     private Texture2D gaugeTexture;
 
     [Header("Player Colors")]
-    public Color skyColor = new Color(0x85 / 255f, 0xBE / 255f, 0xC9 / 255f); // #85BEC9
-    public Color brownColor = new Color(0x3C / 255f, 0x25 / 255f, 0x16 / 255f); // #3C2516
+    public Color skyColor = new Color(0x85 / 255f, 0xBE / 255f, 0xC9 / 255f);
+    public Color brownColor = new Color(0x3C / 255f, 0x25 / 255f, 0x16 / 255f);
 
     [Header("Board Colors")]
-    public Color boardBackgroundColor = new Color(0xDE / 255f, 0x9E / 255f, 0x4A / 255f); // #DE9E4A
-    public Color clickableAreaColor = new Color(0xFF / 255f, 0xD7 / 255f, 0x98 / 255f); // #FFD798
+    public Color boardBackgroundColor = new Color(0xDE / 255f, 0x9E / 255f, 0x4A / 255f);
+    public Color clickableAreaColor = new Color(0xFF / 255f, 0xD7 / 255f, 0x98 / 255f);
     public Color gridLineColor = Color.black;
-    public Color wallColor = new Color(0f, 0f, 0f, 0f); // 투명한 검정
+    public Color wallColor = new Color(0f, 0f, 0f, 0f);
 
     [Header("Gauge Colors")]
     public Color emptyGaugeColor = new Color(0.2f, 0.2f, 0.2f);
@@ -106,9 +114,15 @@ public class GameManager : MonoBehaviour
         waitingForMouseRelease = false;
         waitingForBotTurn = false;
 
+        isSandMoving = false;
+        hasCheckedWinCondition = false;
+        isWaitingForSettlement = false;
+
         isGameOver = false;
         isOasisWin = false;
         isMudWin = false;
+
+        lastRemainingSand = -1;
     }
 
     void FindReferences()
@@ -184,13 +198,67 @@ public class GameManager : MonoBehaviour
         if (waitingForMouseRelease && !Input.GetMouseButton(0))
         {
             waitingForMouseRelease = false;
-            StartCoroutine(SwitchPlayerAfterDelay(0.5f));
+            StartCoroutine(WaitForSandSettlement());
         }
     }
 
-    IEnumerator SwitchPlayerAfterDelay(float delay)
+    IEnumerator WaitForSandSettlement()
     {
-        yield return new WaitForSeconds(delay);
+        isWaitingForSettlement = true;
+        isSandMoving = false;
+        hasCheckedWinCondition = false;
+
+        Debug.Log("Waiting for sand to settle...");
+
+        // 1단계: 모래 안착 대기 (0.25초)
+        float settlementTimer = 0f;
+        while (settlementTimer < 0.25f)
+        {
+            if (isSandMoving)
+            {
+                settlementTimer = 0f;
+                isSandMoving = false;
+                Debug.Log("Sand moved - resetting settlement timer");
+            }
+            else
+            {
+                settlementTimer += Time.deltaTime;
+            }
+            yield return null;
+        }
+
+        Debug.Log("Sand settled - checking win condition");
+
+        CheckVictoryCondition();
+        hasCheckedWinCondition = true;
+
+        if (isGameOver)
+        {
+            isWaitingForSettlement = false;
+            yield break;
+        }
+
+        // 2단계: 추가 대기 (0.25초)
+        float postCheckTimer = 0f;
+        while (postCheckTimer < 0.25f)
+        {
+            if (isSandMoving)
+            {
+                Debug.Log("Sand moved after check - restarting settlement wait");
+                isSandMoving = false;
+                StartCoroutine(WaitForSandSettlement());
+                yield break;
+            }
+            else
+            {
+                postCheckTimer += Time.deltaTime;
+            }
+            yield return null;
+        }
+
+        Debug.Log("Settlement complete - switching player");
+        isWaitingForSettlement = false;
+
         SwitchPlayer();
     }
 
@@ -204,19 +272,24 @@ public class GameManager : MonoBehaviour
         if (isPlayerTurn && Input.GetMouseButton(0) && remainingSand > 0)
         {
             SpawnSandAtMouse();
-            UpdateGauge();
+            UpdateGaugeIfNeeded(); // 최적화: 필요시만 업데이트
         }
     }
 
     void UpdateSimulation()
     {
-        sandSimulator.SimulatePhysics();
-        sandSimulator.SimulatePhysics();
-        sandSimulator.SimulatePhysics();
-        sandSimulator.SimulatePhysics();
-        sandSimulator.UpdateTexture();
+        // 최적화: 4번에서 2번으로 감소
+        bool movedThisFrame = false;
 
-        CheckVictoryCondition();
+        movedThisFrame |= sandSimulator.SimulatePhysics();
+        movedThisFrame |= sandSimulator.SimulatePhysics();
+
+        if (movedThisFrame)
+        {
+            isSandMoving = true;
+        }
+
+        sandSimulator.UpdateTexture();
     }
 
     void CheckVictoryCondition()
@@ -295,6 +368,16 @@ public class GameManager : MonoBehaviour
             : SandSimulator.CellType.BrownSand;
     }
 
+    void UpdateGaugeIfNeeded()
+    {
+        // 최적화 5: 값이 실제로 바뀌었을 때만 업데이트
+        if (remainingSand != lastRemainingSand)
+        {
+            UpdateGauge();
+            lastRemainingSand = remainingSand;
+        }
+    }
+
     void UpdateGauge()
     {
         float fillRatio = (float)remainingSand / sandPerTurn;
@@ -331,6 +414,10 @@ public class GameManager : MonoBehaviour
     {
         remainingSand = sandPerTurn;
         isPlayerTurn = true;
+        isSandMoving = false;
+        hasCheckedWinCondition = false;
+        isWaitingForSettlement = false;
+        lastRemainingSand = -1; // 게이지 강제 업데이트
         UpdateGauge();
 
         string playerName = currentPlayer == 0 ? "Sky (하늘색)" : "Brown (갈색)";
@@ -351,12 +438,14 @@ public class GameManager : MonoBehaviour
 
         botController.ExecuteBotTurn(botDifficulty);
         remainingSand = 0;
+        lastRemainingSand = -1; // 게이지 강제 업데이트
         UpdateGauge();
 
         yield return new WaitForSeconds(0.5f);
 
         waitingForBotTurn = false;
-        SwitchPlayer();
+
+        StartCoroutine(WaitForSandSettlement());
     }
 
     void EndTurn()
@@ -364,6 +453,7 @@ public class GameManager : MonoBehaviour
         isPlayerTurn = false;
         waitingForMouseRelease = true;
         remainingSand = 0;
+        lastRemainingSand = -1; // 게이지 강제 업데이트
         UpdateGauge();
 
         Debug.Log("Turn ended. Release mouse to continue.");
@@ -377,12 +467,18 @@ public class GameManager : MonoBehaviour
 
     public void ResetGame()
     {
+        StopAllCoroutines();
+
         currentPlayer = 0;
         waitingForMouseRelease = false;
         waitingForBotTurn = false;
+        isWaitingForSettlement = false;
+        isSandMoving = false;
+        hasCheckedWinCondition = false;
         isGameOver = false;
         isOasisWin = false;
         isMudWin = false;
+        lastRemainingSand = -1;
 
         if (botController != null)
             botController.ClearOasisData();

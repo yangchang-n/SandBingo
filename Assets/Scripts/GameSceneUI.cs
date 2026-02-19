@@ -12,6 +12,11 @@ public class GameSceneUI : MonoBehaviour
     public Button resetButton;
     public Button mainMenuButton;
 
+    [Header("Backgrounds")]
+    public GameObject easyBackground;
+    public GameObject mediumBackground;
+    public GameObject hardBackground;
+
     private GameManager gameManager;
     private bool isMenuOpen = false;
 
@@ -19,12 +24,15 @@ public class GameSceneUI : MonoBehaviour
     {
         gameManager = GameManager.Instance;
 
+        // 배경화면 설정
+        SetupBackgrounds();
+
         // 초기 UI 설정
         if (menuPanel != null)
             menuPanel.SetActive(false);
 
         if (menuText != null)
-            menuText.SetActive(true); // MENU 텍스트는 기본 활성화
+            menuText.SetActive(true);
 
         if (oasisWinText != null)
             oasisWinText.SetActive(false);
@@ -38,6 +46,57 @@ public class GameSceneUI : MonoBehaviour
 
         if (mainMenuButton != null)
             mainMenuButton.onClick.AddListener(OnMainMenuClicked);
+    }
+
+    void SetupBackgrounds()
+    {
+        // 모든 배경 비활성화
+        if (easyBackground != null)
+            easyBackground.SetActive(false);
+
+        if (mediumBackground != null)
+            mediumBackground.SetActive(false);
+
+        if (hardBackground != null)
+            hardBackground.SetActive(false);
+
+        // 난이도에 맞는 배경만 활성화
+        if (gameManager != null && gameManager.isBotMode)
+        {
+            switch (gameManager.botDifficulty)
+            {
+                case 1:
+                    if (easyBackground != null)
+                    {
+                        easyBackground.SetActive(true);
+                        Debug.Log("Easy background activated");
+                    }
+                    break;
+                case 2:
+                    if (mediumBackground != null)
+                    {
+                        mediumBackground.SetActive(true);
+                        Debug.Log("Medium background activated");
+                    }
+                    break;
+                case 3:
+                    if (hardBackground != null)
+                    {
+                        hardBackground.SetActive(true);
+                        Debug.Log("Hard background activated");
+                    }
+                    break;
+            }
+        }
+        else
+        {
+            // 봇 모드가 아닐 경우 기본 배경 (예: Easy)
+            if (easyBackground != null)
+            {
+                easyBackground.SetActive(true);
+                Debug.Log("Default background activated (Easy)");
+            }
+        }
     }
 
     void Update()
