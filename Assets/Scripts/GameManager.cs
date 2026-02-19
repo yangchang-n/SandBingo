@@ -43,14 +43,14 @@ public class GameManager : MonoBehaviour
     private Texture2D gaugeTexture;
 
     [Header("Player Colors")]
-    public Color skyColor = new Color(0.4f, 0.85f, 0.95f);
-    public Color brownColor = new Color(0.6f, 0.4f, 0.2f);
+    public Color skyColor = new Color(0x85 / 255f, 0xBE / 255f, 0xC9 / 255f); // #85BEC9
+    public Color brownColor = new Color(0x3C / 255f, 0x25 / 255f, 0x16 / 255f); // #3C2516
 
     [Header("Board Colors")]
-    public Color boardBackgroundColor = new Color(0.85f, 0.75f, 0.6f);
-    public Color clickableAreaColor = new Color(0.95f, 0.9f, 0.8f);
+    public Color boardBackgroundColor = new Color(0xDE / 255f, 0x9E / 255f, 0x4A / 255f); // #DE9E4A
+    public Color clickableAreaColor = new Color(0xFF / 255f, 0xD7 / 255f, 0x98 / 255f); // #FFD798
     public Color gridLineColor = Color.black;
-    public Color wallColor = new Color(0.3f, 0.3f, 0.3f);
+    public Color wallColor = new Color(0f, 0f, 0f, 0f); // 투명한 검정
 
     [Header("Gauge Colors")]
     public Color emptyGaugeColor = new Color(0.2f, 0.2f, 0.2f);
@@ -81,7 +81,6 @@ public class GameManager : MonoBehaviour
 
     void LoadGameSettings()
     {
-        // SelectScene에서 설정한 값 불러오기
         if (PlayerPrefs.HasKey("BotMode"))
         {
             isBotMode = PlayerPrefs.GetInt("BotMode") == 1;

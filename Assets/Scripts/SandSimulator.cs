@@ -8,7 +8,7 @@ public class SandSimulator : MonoBehaviour
 
     [Header("Clickable Area Settings")]
     [Range(1, 15)]
-    public int clickableStartRow = 2;
+    public int clickableStartRow = 3;
     [Range(1, 15)]
     public int clickableEndRow = 5;
 

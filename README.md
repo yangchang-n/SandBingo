@@ -1,11 +1,36 @@
 # SandBingo
 
-<div align = center>
+<div align="center">
   <br>
-  <img src = 'https://github.com/user-attachments/assets/fb6ecf20-0cfb-4751-a620-d2e6a4097e14', width = '80%'>
+  <img src="https://github.com/user-attachments/assets/6c741215-beed-476e-b056-1f2d236a0726" style="width:80%" />
+  <br><br>
+  <img src="https://github.com/user-attachments/assets/b264fb07-3b2d-4b36-845d-acf159768923" style="width:80%" />
   <h3>Sandbox-style bingo game</h3>
+  <br>
 </div>
 
-### Details
+## Characters
 
+<div align="center">
+  <br>
+  <table border="0" cellspacing="0" cellpadding="0" style="border-collapse:collapse;">
+    <tr>
+      <td align="center" style="border:none;">
+        <img src="https://github.com/user-attachments/assets/e7583c4f-bc1b-48fb-8e95-c62131517c63" width="300" />
+        <h3>Tessa</h3>
+      </td>
+      <td width="50" style="border:none;"></td>
+      <td align="center" style="border:none;">
+        <img src="https://github.com/user-attachments/assets/6cdc27fa-646b-408c-a6da-914105fb6d0b" width="300" />
+        <h3>Piper</h3>
+      </td>
+    </tr>
+  </table>
+  <br>
+</div>
+
+## Details
+
+- Started on 2026-02-09
 - Unity version : 2022.3.62f3
+- Last  version : v0.3
