@@ -274,11 +274,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3377ef3e9ce56e2468814e48b75a7579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clickableStartRow: 3
+  clickableStartRow: 2
   clickableEndRow: 5
-  ownershipTextColor: {r: 1, g: 1, b: 1, a: 0.7}
-  ownershipCharacterSize: 100
-  ownershipFontSize: 14
 --- !u!4 &254848386
 Transform:
   m_ObjectHideFlags: 0
@@ -374,6 +371,55 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 307737993}
   m_CullTransparentMesh: 1
+--- !u!1 &322940754
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 322940756}
+  - component: {fileID: 322940755}
+  m_Layer: 0
+  m_Name: SandGaugeRenderer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &322940755
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 322940754}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 137309bfc5558ce4d857a286dcbc850a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gaugeWidth: 200
+  gaugeHeight: 20
+  gaugeYOffset: 25
+  emptyGaugeColor: {r: 0, g: 0, b: 0, a: 1}
+  gaugeBorderColor: {r: 0, g: 0, b: 0, a: 1}
+--- !u!4 &322940756
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 322940754}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -708,6 +754,61 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 820043952}
   m_CullTransparentMesh: 1
+--- !u!1 &914007666
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 914007668}
+  - component: {fileID: 914007667}
+  m_Layer: 0
+  m_Name: SandBoardRenderer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &914007667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 914007666}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a5e387ebe001a640a840c8fae3edee1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boardBackgroundColor: {r: 0, g: 0, b: 0, a: 0}
+  clickableAreaColor: {r: 0, g: 0, b: 0, a: 0}
+  gridLineColor: {r: 0, g: 0, b: 0, a: 0}
+  wallColor: {r: 0, g: 0, b: 0, a: 0}
+  borderThickness: 2
+  clickableTextSize: 12
+  borderColor: {r: 1, g: 1, b: 1, a: 1}
+  textColor: {r: 1, g: 1, b: 1, a: 1}
+  ownershipTextColor: {r: 1, g: 1, b: 1, a: 0.8}
+  ownershipCharacterSize: 100
+  ownershipFontSize: 14
+--- !u!4 &914007668
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 914007666}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1078086198
 GameObject:
   m_ObjectHideFlags: 0
@@ -737,6 +838,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11f250c1f9e095b4ebada1ba60ee40a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetPhysicsRate: 240
+  simulationsPerStep: 2
   isBotMode: 1
   botDifficulty: 1
   isGameOver: 0
@@ -744,12 +847,6 @@ MonoBehaviour:
   isMudWin: 0
   skyColor: {r: 0.52156866, g: 0.74509805, b: 0.78823537, a: 1}
   brownColor: {r: 0.23529413, g: 0.14509805, b: 0.08627451, a: 1}
-  boardBackgroundColor: {r: 0.8705883, g: 0.61960787, b: 0.2901961, a: 1}
-  clickableAreaColor: {r: 1, g: 0.8431373, b: 0.59607846, a: 1}
-  gridLineColor: {r: 0, g: 0, b: 0, a: 1}
-  wallColor: {r: 0, g: 0, b: 0, a: 0}
-  emptyGaugeColor: {r: 0, g: 0, b: 0, a: 0}
-  gaugeBorderColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!4 &1078086200
 Transform:
   m_ObjectHideFlags: 0
@@ -1598,6 +1695,8 @@ SceneRoots:
   - {fileID: 1078086200}
   - {fileID: 1991923120}
   - {fileID: 254848386}
+  - {fileID: 914007668}
+  - {fileID: 322940756}
   - {fileID: 680961}
   - {fileID: 1577852894}
   - {fileID: 1977604043}

@@ -10,18 +10,23 @@ public class GameManager : MonoBehaviour
     private SandSimulator sandSimulator;
     private BotController botController;
     private GameSceneUI gameUI;
+    private SandGaugeRenderer sandGaugeRenderer;
 
     // Game Settings
     private int sandPerTurn;
     private const int SAND_SPAWN_RATE = 10;
 
-    // Gauge Settings
-    private int gaugeWidth;
-    private int gaugeHeight;
-    private float gaugeYOffset;
+    // Physics Settings
+    [Header("Physics Settings")]
+    [Tooltip("물리 시뮬레이션 목표 프레임레이트 (권장: 60-240)")]
+    public int targetPhysicsRate = 240;
 
-    // 최적화: 게이지 캐싱
-    private int lastRemainingSand = -1;
+    [Range(1, 10)]
+    [Tooltip("한 물리 스텝당 시뮬레이션 반복 횟수 (권장: 2-4)")]
+    public int simulationsPerStep = 2;
+
+    private float physicsAccumulator = 0f;
+    private float PhysicsTimestep => 1f / targetPhysicsRate;
 
     // Game State
     private int currentPlayer;
@@ -45,24 +50,9 @@ public class GameManager : MonoBehaviour
     public bool isOasisWin = false;
     public bool isMudWin = false;
 
-    // Gauge Objects
-    private GameObject gaugeObject;
-    private SpriteRenderer gaugeRenderer;
-    private Texture2D gaugeTexture;
-
     [Header("Player Colors")]
     public Color skyColor = new Color(0x85 / 255f, 0xBE / 255f, 0xC9 / 255f);
     public Color brownColor = new Color(0x3C / 255f, 0x25 / 255f, 0x16 / 255f);
-
-    [Header("Board Colors")]
-    public Color boardBackgroundColor = new Color(0xDE / 255f, 0x9E / 255f, 0x4A / 255f);
-    public Color clickableAreaColor = new Color(0xFF / 255f, 0xD7 / 255f, 0x98 / 255f);
-    public Color gridLineColor = Color.black;
-    public Color wallColor = new Color(0f, 0f, 0f, 0f);
-
-    [Header("Gauge Colors")]
-    public Color emptyGaugeColor = new Color(0.2f, 0.2f, 0.2f);
-    public Color gaugeBorderColor = new Color(0.6f, 0.6f, 0.6f);
 
     void Awake()
     {
@@ -85,6 +75,9 @@ public class GameManager : MonoBehaviour
         SetupCamera();
         SetupGauge();
         StartNewTurn();
+
+        int totalSimulations = targetPhysicsRate * simulationsPerStep;
+        Debug.Log($"Physics: {targetPhysicsRate} FPS × {simulationsPerStep} sims = {totalSimulations} simulations/sec");
     }
 
     void LoadGameSettings()
@@ -105,10 +98,6 @@ public class GameManager : MonoBehaviour
     void InitializeSettings()
     {
         sandPerTurn = 800;
-        gaugeWidth = 200;
-        gaugeHeight = 20;
-        gaugeYOffset = 25f;
-
         currentPlayer = 0;
         isPlayerTurn = true;
         waitingForMouseRelease = false;
@@ -122,7 +111,7 @@ public class GameManager : MonoBehaviour
         isOasisWin = false;
         isMudWin = false;
 
-        lastRemainingSand = -1;
+        physicsAccumulator = 0f;
     }
 
     void FindReferences()
@@ -155,29 +144,9 @@ public class GameManager : MonoBehaviour
 
     void SetupGauge()
     {
-        gaugeObject = new GameObject("SandGauge");
-        gaugeRenderer = gaugeObject.AddComponent<SpriteRenderer>();
-        gaugeRenderer.sortingOrder = 10;
-
-        gaugeTexture = new Texture2D(gaugeWidth, gaugeHeight);
-        gaugeTexture.filterMode = FilterMode.Point;
-
-        Sprite gaugeSprite = Sprite.Create(
-            gaugeTexture,
-            new Rect(0, 0, gaugeWidth, gaugeHeight),
-            new Vector2(0.5f, 0.5f),
-            1f
-        );
-        gaugeRenderer.sprite = gaugeSprite;
-
-        PositionGauge();
-        UpdateGauge();
-    }
-
-    void PositionGauge()
-    {
-        float boardTop = sandSimulator.GetHeight() / 2f;
-        gaugeObject.transform.position = new Vector3(0, boardTop + gaugeYOffset, 0);
+        GameObject gaugeHolder = new GameObject("GaugeHolder");
+        sandGaugeRenderer = gaugeHolder.AddComponent<SandGaugeRenderer>();
+        sandGaugeRenderer.Initialize(sandSimulator.GetHeight());
     }
 
     void Update()
@@ -190,7 +159,25 @@ public class GameManager : MonoBehaviour
 
         HandleTurnTransition();
         HandlePlayerInput();
-        UpdateSimulation();
+
+        UpdatePhysicsWithFixedTimestep();
+    }
+
+    void UpdatePhysicsWithFixedTimestep()
+    {
+        physicsAccumulator += Time.deltaTime;
+
+        if (physicsAccumulator > PhysicsTimestep * 3)
+        {
+            physicsAccumulator = PhysicsTimestep * 3;
+            Debug.LogWarning($"Physics accumulator clamped! FPS too low. Current FPS: {1f / Time.deltaTime:F1}");
+        }
+
+        while (physicsAccumulator >= PhysicsTimestep)
+        {
+            UpdateSimulation();
+            physicsAccumulator -= PhysicsTimestep;
+        }
     }
 
     void HandleTurnTransition()
@@ -210,7 +197,6 @@ public class GameManager : MonoBehaviour
 
         Debug.Log("Waiting for sand to settle...");
 
-        // 1단계: 모래 안착 대기 (0.25초)
         float settlementTimer = 0f;
         while (settlementTimer < 0.25f)
         {
@@ -218,7 +204,7 @@ public class GameManager : MonoBehaviour
             {
                 settlementTimer = 0f;
                 isSandMoving = false;
-                Debug.Log("Sand moved - resetting settlement timer");
+                // 디버그 로그 제거
             }
             else
             {
@@ -238,7 +224,6 @@ public class GameManager : MonoBehaviour
             yield break;
         }
 
-        // 2단계: 추가 대기 (0.25초)
         float postCheckTimer = 0f;
         while (postCheckTimer < 0.25f)
         {
@@ -272,17 +257,18 @@ public class GameManager : MonoBehaviour
         if (isPlayerTurn && Input.GetMouseButton(0) && remainingSand > 0)
         {
             SpawnSandAtMouse();
-            UpdateGaugeIfNeeded(); // 최적화: 필요시만 업데이트
+            UpdateGauge();
         }
     }
 
     void UpdateSimulation()
     {
-        // 최적화: 4번에서 2번으로 감소
         bool movedThisFrame = false;
 
-        movedThisFrame |= sandSimulator.SimulatePhysics();
-        movedThisFrame |= sandSimulator.SimulatePhysics();
+        for (int i = 0; i < simulationsPerStep; i++)
+        {
+            movedThisFrame |= sandSimulator.SimulatePhysics();
+        }
 
         if (movedThisFrame)
         {
@@ -335,14 +321,16 @@ public class GameManager : MonoBehaviour
         SandSimulator.CellType sandType = GetCurrentPlayerSandType();
         int spawnAmount = Mathf.Min(SAND_SPAWN_RATE, remainingSand);
 
-        if (sandSimulator.SpawnSand(gridPos.x, gridPos.y, sandType, spawnAmount))
+        int actualSpawned = sandSimulator.SpawnSand(gridPos.x, gridPos.y, sandType, spawnAmount);
+
+        if (actualSpawned > 0)
         {
             if (isBotMode && currentPlayer == 0 && botController != null)
             {
                 botController.RecordOasisSandPosition(gridPos.x);
             }
 
-            remainingSand -= spawnAmount;
+            remainingSand -= actualSpawned;
 
             if (remainingSand <= 0)
             {
@@ -368,46 +356,10 @@ public class GameManager : MonoBehaviour
             : SandSimulator.CellType.BrownSand;
     }
 
-    void UpdateGaugeIfNeeded()
-    {
-        // 최적화 5: 값이 실제로 바뀌었을 때만 업데이트
-        if (remainingSand != lastRemainingSand)
-        {
-            UpdateGauge();
-            lastRemainingSand = remainingSand;
-        }
-    }
-
     void UpdateGauge()
     {
-        float fillRatio = (float)remainingSand / sandPerTurn;
-        int fillWidth = Mathf.RoundToInt((gaugeWidth - 4) * fillRatio);
         Color currentColor = currentPlayer == 0 ? skyColor : brownColor;
-
-        for (int x = 0; x < gaugeWidth; x++)
-        {
-            for (int y = 0; y < gaugeHeight; y++)
-            {
-                gaugeTexture.SetPixel(x, y, GetGaugePixelColor(x, y, fillWidth, currentColor));
-            }
-        }
-
-        gaugeTexture.Apply();
-    }
-
-    Color GetGaugePixelColor(int x, int y, int fillWidth, Color fillColor)
-    {
-        if (x == 0 || x == gaugeWidth - 1 || y == 0 || y == gaugeHeight - 1)
-        {
-            return gaugeBorderColor;
-        }
-
-        if (x >= 2 && x < fillWidth + 2)
-        {
-            return fillColor;
-        }
-
-        return emptyGaugeColor;
+        sandGaugeRenderer.UpdateGaugeIfNeeded(remainingSand, sandPerTurn, currentColor);
     }
 
     void StartNewTurn()
@@ -417,8 +369,9 @@ public class GameManager : MonoBehaviour
         isSandMoving = false;
         hasCheckedWinCondition = false;
         isWaitingForSettlement = false;
-        lastRemainingSand = -1; // 게이지 강제 업데이트
-        UpdateGauge();
+
+        Color currentColor = currentPlayer == 0 ? skyColor : brownColor;
+        sandGaugeRenderer.ForceUpdate(remainingSand, sandPerTurn, currentColor);
 
         string playerName = currentPlayer == 0 ? "Sky (하늘색)" : "Brown (갈색)";
         Debug.Log($"Player {currentPlayer + 1}'s turn ({playerName})");
@@ -438,7 +391,6 @@ public class GameManager : MonoBehaviour
 
         botController.ExecuteBotTurn(botDifficulty);
         remainingSand = 0;
-        lastRemainingSand = -1; // 게이지 강제 업데이트
         UpdateGauge();
 
         yield return new WaitForSeconds(0.5f);
@@ -453,7 +405,6 @@ public class GameManager : MonoBehaviour
         isPlayerTurn = false;
         waitingForMouseRelease = true;
         remainingSand = 0;
-        lastRemainingSand = -1; // 게이지 강제 업데이트
         UpdateGauge();
 
         Debug.Log("Turn ended. Release mouse to continue.");
@@ -478,7 +429,7 @@ public class GameManager : MonoBehaviour
         isGameOver = false;
         isOasisWin = false;
         isMudWin = false;
-        lastRemainingSand = -1;
+        physicsAccumulator = 0f;
 
         if (botController != null)
             botController.ClearOasisData();

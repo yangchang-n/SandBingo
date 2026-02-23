@@ -1,4 +1,4 @@
-# SandBingo
+# Sand Bingo
 
 <div align="center">
   <br>
@@ -6,7 +6,6 @@
   <br><br>
   <img src="https://github.com/user-attachments/assets/b264fb07-3b2d-4b36-845d-acf159768923" style="width:80%" />
   <h3>Sandbox-style bingo game</h3>
-  <br>
 </div>
 
 ## Characters
@@ -26,11 +25,10 @@
       </td>
     </tr>
   </table>
-  <br>
 </div>
 
 ## Details
 
 - Started on 2026-02-09
 - Unity version : 2022.3.62f3
-- Last  version : v0.4
+- All arts and images were AI-generated with GPT-Image and Aurora(Grok).
