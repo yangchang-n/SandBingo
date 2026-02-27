@@ -302,7 +302,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 268245055}
-  - component: {fileID: 268245054}
+  - component: {fileID: 268245056}
   m_Layer: 0
   m_Name: SelectSceneUI
   m_TagString: Untagged
@@ -310,22 +310,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &268245054
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 268245053}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 99245dd760fd7124bb95135970539517, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  easyButton: {fileID: 1241377795}
-  mediumButton: {fileID: 485820955}
-  hardButton: {fileID: 1757677511}
-  backButton: {fileID: 2041648755}
 --- !u!4 &268245055
 Transform:
   m_ObjectHideFlags: 0
@@ -341,6 +325,24 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &268245056
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 268245053}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99245dd760fd7124bb95135970539517, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  easyButton: {fileID: 1241377795}
+  normalButton: {fileID: 485820955}
+  hardButton: {fileID: 1757677511}
+  backButton: {fileID: 2041648755}
+  lockedBrightness: 1
+  lockedAlpha: 1
 --- !u!1 &485820953
 GameObject:
   m_ObjectHideFlags: 0
@@ -354,7 +356,7 @@ GameObject:
   - component: {fileID: 485820956}
   - component: {fileID: 485820955}
   m_Layer: 5
-  m_Name: MediumButton
+  m_Name: NormalButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1315,7 +1317,7 @@ CanvasRenderer:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 263326234}
   - {fileID: 268245055}
+  - {fileID: 263326234}
   - {fileID: 1903525519}
   - {fileID: 1273293760}

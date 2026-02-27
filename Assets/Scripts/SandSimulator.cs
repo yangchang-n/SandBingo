@@ -37,6 +37,14 @@ public class SandSimulator : MonoBehaviour
         Brown
     }
 
+    // 점수 계산 결과
+    public struct ScoreResult
+    {
+        public int oasisScore;
+        public int mudScore;
+        public HashSet<Vector2Int> cellsToRemove;
+    }
+
     private CellType[,] grid;
     private CellOwnership[,] ownership;
 
@@ -117,7 +125,6 @@ public class SandSimulator : MonoBehaviour
 
     void SetupRenderer()
     {
-        // SandBoardRenderer 컴포넌트 추가
         boardRenderer = gameObject.AddComponent<SandBoardRenderer>();
         boardRenderer.Initialize(
             width, height, gridSize, cellPixelSize,
@@ -294,101 +301,189 @@ public class SandSimulator : MonoBehaviour
         }
     }
 
-    public int CheckWinCondition()
+    public ScoreResult CalculateScoreAndGetCells()
     {
-        // 가로
+        ScoreResult result = new ScoreResult
+        {
+            oasisScore = 0,
+            mudScore = 0,
+            cellsToRemove = new HashSet<Vector2Int>()
+        };
+
+        // 가로 체크
         for (int y = 0; y < gridSize; y++)
         {
-            for (int x = 0; x <= gridSize - 5; x++)
+            for (int x = 0; x < gridSize; x++)
             {
-                CellOwnership first = ownership[x, y];
-                if (first == CellOwnership.None) continue;
+                CellOwnership owner = ownership[x, y];
+                if (owner == CellOwnership.None) continue;
 
-                bool isWin = true;
-                for (int i = 1; i < 5; i++)
+                int count = 1;
+                while (x + count < gridSize && ownership[x + count, y] == owner)
                 {
-                    if (ownership[x + i, y] != first)
-                    {
-                        isWin = false;
-                        break;
-                    }
+                    count++;
                 }
 
-                if (isWin)
-                    return first == CellOwnership.Sky ? 1 : 2;
+                if (count >= 5)
+                {
+                    int score = 100 + (count - 5) * 50;
+
+                    if (owner == CellOwnership.Sky)
+                        result.oasisScore += score;
+                    else
+                        result.mudScore += score;
+
+                    for (int i = 0; i < count; i++)
+                    {
+                        result.cellsToRemove.Add(new Vector2Int(x + i, y));
+                    }
+
+                    x += count - 1;
+                }
             }
         }
 
-        // 세로
+        // 세로 체크
         for (int x = 0; x < gridSize; x++)
         {
-            for (int y = 0; y <= gridSize - 5; y++)
+            for (int y = 0; y < gridSize; y++)
             {
-                CellOwnership first = ownership[x, y];
-                if (first == CellOwnership.None) continue;
+                CellOwnership owner = ownership[x, y];
+                if (owner == CellOwnership.None) continue;
 
-                bool isWin = true;
-                for (int i = 1; i < 5; i++)
+                int count = 1;
+                while (y + count < gridSize && ownership[x, y + count] == owner)
                 {
-                    if (ownership[x, y + i] != first)
-                    {
-                        isWin = false;
-                        break;
-                    }
+                    count++;
                 }
 
-                if (isWin)
-                    return first == CellOwnership.Sky ? 1 : 2;
+                if (count >= 5)
+                {
+                    int score = 100 + (count - 5) * 50;
+
+                    if (owner == CellOwnership.Sky)
+                        result.oasisScore += score;
+                    else
+                        result.mudScore += score;
+
+                    for (int i = 0; i < count; i++)
+                    {
+                        result.cellsToRemove.Add(new Vector2Int(x, y + i));
+                    }
+
+                    y += count - 1;
+                }
             }
         }
 
-        // 대각선 (\)
-        for (int x = 0; x <= gridSize - 5; x++)
+        // 대각선 체크 (\)
+        for (int y = 0; y < gridSize; y++)
         {
-            for (int y = 0; y <= gridSize - 5; y++)
+            for (int x = 0; x < gridSize; x++)
             {
-                CellOwnership first = ownership[x, y];
-                if (first == CellOwnership.None) continue;
+                CellOwnership owner = ownership[x, y];
+                if (owner == CellOwnership.None) continue;
 
-                bool isWin = true;
-                for (int i = 1; i < 5; i++)
+                int count = 1;
+                while (x + count < gridSize && y + count < gridSize &&
+                       ownership[x + count, y + count] == owner)
                 {
-                    if (ownership[x + i, y + i] != first)
-                    {
-                        isWin = false;
-                        break;
-                    }
+                    count++;
                 }
 
-                if (isWin)
-                    return first == CellOwnership.Sky ? 1 : 2;
+                if (count >= 5)
+                {
+                    int score = 100 + (count - 5) * 50;
+
+                    if (owner == CellOwnership.Sky)
+                        result.oasisScore += score;
+                    else
+                        result.mudScore += score;
+
+                    for (int i = 0; i < count; i++)
+                    {
+                        result.cellsToRemove.Add(new Vector2Int(x + i, y + i));
+                    }
+
+                    x += count - 1;
+                }
             }
         }
 
-        // 대각선 (/)
-        for (int x = 0; x <= gridSize - 5; x++)
+        // 대각선 체크 (/)
+        for (int y = 0; y < gridSize; y++)
         {
-            for (int y = 4; y < gridSize; y++)
+            for (int x = 0; x < gridSize; x++)
             {
-                CellOwnership first = ownership[x, y];
-                if (first == CellOwnership.None) continue;
+                CellOwnership owner = ownership[x, y];
+                if (owner == CellOwnership.None) continue;
 
-                bool isWin = true;
-                for (int i = 1; i < 5; i++)
+                int count = 1;
+                while (x + count < gridSize && y - count >= 0 &&
+                       ownership[x + count, y - count] == owner)
                 {
-                    if (ownership[x + i, y - i] != first)
-                    {
-                        isWin = false;
-                        break;
-                    }
+                    count++;
                 }
 
-                if (isWin)
-                    return first == CellOwnership.Sky ? 1 : 2;
+                if (count >= 5)
+                {
+                    int score = 100 + (count - 5) * 50;
+
+                    if (owner == CellOwnership.Sky)
+                        result.oasisScore += score;
+                    else
+                        result.mudScore += score;
+
+                    for (int i = 0; i < count; i++)
+                    {
+                        result.cellsToRemove.Add(new Vector2Int(x + i, y - i));
+                    }
+
+                    x += count - 1;
+                }
             }
         }
 
-        return 0;
+        // 통합 로그 (개별 방향 로그 제거)
+        if (result.cellsToRemove.Count > 0)
+        {
+            Debug.Log($"Score Calculation: Oasis +{result.oasisScore}, Mud +{result.mudScore}, Removed {result.cellsToRemove.Count} cells");
+        }
+
+        return result;
+    }
+
+    public void RemoveCells(HashSet<Vector2Int> cells)
+    {
+        foreach (Vector2Int cell in cells)
+        {
+            int cellX = cell.x;
+            int cellY = cell.y;
+
+            int startX = 1 + cellX * cellPixelSize;
+            int startY = 1 + cellY * cellPixelSize;
+            int endX = startX + cellPixelSize;
+            int endY = startY + cellPixelSize;
+
+            for (int x = startX; x < endX; x++)
+            {
+                for (int y = startY; y < endY; y++)
+                {
+                    if (grid[x, y] != CellType.Wall)
+                    {
+                        grid[x, y] = CellType.Empty;
+                        MarkPixelDirty(x, y);
+                    }
+                }
+            }
+
+            ownership[cellX, cellY] = CellOwnership.None;
+            MarkCellDirtyByPixel(startX, startY);
+        }
+
+        UpdateTexture();
+
+        // 로그 제거 (위의 CalculateScoreAndGetCells에서 이미 로그됨)
     }
 
     public int SpawnSand(int gridX, int gridY, CellType sandType, int amount)

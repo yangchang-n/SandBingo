@@ -818,7 +818,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1078086200}
-  - component: {fileID: 1078086199}
+  - component: {fileID: 1078086201}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -826,27 +826,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1078086199
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1078086198}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 11f250c1f9e095b4ebada1ba60ee40a8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetPhysicsRate: 240
-  simulationsPerStep: 2
-  isBotMode: 1
-  botDifficulty: 1
-  isGameOver: 0
-  isOasisWin: 0
-  isMudWin: 0
-  skyColor: {r: 0.52156866, g: 0.74509805, b: 0.78823537, a: 1}
-  brownColor: {r: 0.23529413, g: 0.14509805, b: 0.08627451, a: 1}
 --- !u!4 &1078086200
 Transform:
   m_ObjectHideFlags: 0
@@ -862,6 +841,33 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1078086201
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1078086198}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11f250c1f9e095b4ebada1ba60ee40a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetPhysicsRate: 240
+  simulationsPerStep: 2
+  stage1CurrentScore: 0
+  stage1TargetScore: 300
+  stage2CurrentScore: 0
+  stage2TargetScore: 300
+  stage3CurrentScore: 0
+  stage3TargetScore: 300
+  isBotMode: 0
+  botDifficulty: 1
+  isGameOver: 0
+  isOasisWin: 0
+  isMudWin: 0
+  skyColor: {r: 0.52156866, g: 0.74509805, b: 0.7882353, a: 1}
+  brownColor: {r: 0.23529412, g: 0.14509805, b: 0.08627451, a: 1}
 --- !u!1 &1390905814
 GameObject:
   m_ObjectHideFlags: 0
@@ -1691,13 +1697,13 @@ CanvasRenderer:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 519420032}
   - {fileID: 1078086200}
   - {fileID: 1991923120}
   - {fileID: 254848386}
   - {fileID: 914007668}
   - {fileID: 322940756}
   - {fileID: 680961}
+  - {fileID: 519420032}
   - {fileID: 1577852894}
   - {fileID: 1977604043}
   - {fileID: 1845554387}

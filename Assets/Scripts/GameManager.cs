@@ -28,6 +28,15 @@ public class GameManager : MonoBehaviour
     private float physicsAccumulator = 0f;
     private float PhysicsTimestep => 1f / targetPhysicsRate;
 
+    // Score System
+    [Header("Score System")]
+    public int stage1CurrentScore = 0;
+    public int stage1TargetScore = 300;  // 1000 → 300
+    public int stage2CurrentScore = 0;
+    public int stage2TargetScore = 300;  // 1000 → 300
+    public int stage3CurrentScore = 0;
+    public int stage3TargetScore = 300;  // 1000 → 300
+
     // Game State
     private int currentPlayer;
     private int remainingSand;
@@ -38,7 +47,6 @@ public class GameManager : MonoBehaviour
     // Settlement Detection
     private bool isSandMoving = false;
     private bool hasCheckedWinCondition = false;
-    private bool isWaitingForSettlement = false;
 
     [Header("Game Mode")]
     public bool isBotMode = false;
@@ -75,9 +83,6 @@ public class GameManager : MonoBehaviour
         SetupCamera();
         SetupGauge();
         StartNewTurn();
-
-        int totalSimulations = targetPhysicsRate * simulationsPerStep;
-        Debug.Log($"Physics: {targetPhysicsRate} FPS × {simulationsPerStep} sims = {totalSimulations} simulations/sec");
     }
 
     void LoadGameSettings()
@@ -91,8 +96,6 @@ public class GameManager : MonoBehaviour
         {
             botDifficulty = PlayerPrefs.GetInt("BotDifficulty");
         }
-
-        Debug.Log($"Game loaded with BotMode: {isBotMode}, Difficulty: {botDifficulty}");
     }
 
     void InitializeSettings()
@@ -105,13 +108,17 @@ public class GameManager : MonoBehaviour
 
         isSandMoving = false;
         hasCheckedWinCondition = false;
-        isWaitingForSettlement = false;
 
         isGameOver = false;
         isOasisWin = false;
         isMudWin = false;
 
         physicsAccumulator = 0f;
+
+        // 씬 진입 시 현재 점수 초기화
+        stage1CurrentScore = 0;
+        stage2CurrentScore = 0;
+        stage3CurrentScore = 0;
     }
 
     void FindReferences()
@@ -151,15 +158,18 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        // 승리 후에도 물리는 계속 (시각 효과)
         if (isGameOver)
+        {
+            UpdatePhysicsWithFixedTimestep();
             return;
+        }
 
         if (waitingForBotTurn)
             return;
 
         HandleTurnTransition();
         HandlePlayerInput();
-
         UpdatePhysicsWithFixedTimestep();
     }
 
@@ -191,20 +201,17 @@ public class GameManager : MonoBehaviour
 
     IEnumerator WaitForSandSettlement()
     {
-        isWaitingForSettlement = true;
         isSandMoving = false;
         hasCheckedWinCondition = false;
 
-        Debug.Log("Waiting for sand to settle...");
-
+        // 1단계: 첫 안착 대기 (0.5초)
         float settlementTimer = 0f;
-        while (settlementTimer < 0.25f)
+        while (settlementTimer < 0.5f)
         {
             if (isSandMoving)
             {
                 settlementTimer = 0f;
                 isSandMoving = false;
-                // 디버그 로그 제거
             }
             else
             {
@@ -213,23 +220,56 @@ public class GameManager : MonoBehaviour
             yield return null;
         }
 
-        Debug.Log("Sand settled - checking win condition");
+        // 점수 계산 & 칸 제거 (승리 후에는 실행 안됨)
+        if (!isGameOver)
+        {
+            SandSimulator.ScoreResult scoreResult = sandSimulator.CalculateScoreAndGetCells();
 
-        CheckVictoryCondition();
-        hasCheckedWinCondition = true;
+            if (scoreResult.cellsToRemove.Count > 0)
+            {
+                // 점수 가감
+                int currentScore = GetCurrentStageScore();
+                int netScore = scoreResult.oasisScore - scoreResult.mudScore;
+                int newScore = currentScore + netScore;
+                SetCurrentStageScore(newScore);
+
+                Debug.Log($"Score Update: {currentScore} + ({scoreResult.oasisScore} - {scoreResult.mudScore}) = {newScore}");
+
+                // 칸 제거
+                sandSimulator.RemoveCells(scoreResult.cellsToRemove);
+
+                // 승리 체크 (칸 제거 직후)
+                CheckVictoryCondition();
+
+                if (isGameOver)
+                {
+                    hasCheckedWinCondition = true;
+                }
+
+                // 모래가 떨어질 것임 → 다시 안착 대기 (연쇄)
+                StartCoroutine(WaitForSandSettlement());
+                yield break;
+            }
+        }
+
+        // 더 이상 점수 변화 없음
+        if (!hasCheckedWinCondition)
+        {
+            CheckVictoryCondition();
+            hasCheckedWinCondition = true;
+        }
 
         if (isGameOver)
         {
-            isWaitingForSettlement = false;
             yield break;
         }
 
+        // 2단계: 추가 대기 (0.5초)
         float postCheckTimer = 0f;
-        while (postCheckTimer < 0.25f)
+        while (postCheckTimer < 0.5f)
         {
             if (isSandMoving)
             {
-                Debug.Log("Sand moved after check - restarting settlement wait");
                 isSandMoving = false;
                 StartCoroutine(WaitForSandSettlement());
                 yield break;
@@ -240,9 +280,6 @@ public class GameManager : MonoBehaviour
             }
             yield return null;
         }
-
-        Debug.Log("Settlement complete - switching player");
-        isWaitingForSettlement = false;
 
         SwitchPlayer();
     }
@@ -282,21 +319,31 @@ public class GameManager : MonoBehaviour
     {
         if (isGameOver) return;
 
-        int winner = sandSimulator.CheckWinCondition();
+        int currentScore = GetCurrentStageScore();
+        int targetScore = GetCurrentStageTargetScore();
 
-        if (winner == 1)
+        // 오아시스 승리: 목표 점수 도달
+        if (currentScore >= targetScore)
         {
             isGameOver = true;
             isOasisWin = true;
+
+            // GlobalManager에 클리어 전달 및 최고 점수 갱신
+            if (GlobalManager.Instance != null)
+            {
+                GlobalManager.Instance.CompleteStage(botDifficulty, currentScore);
+            }
+
             ShowVictoryScreen();
-            Debug.Log("Oasis (Sky) Wins!");
+            Debug.Log($"STAGE {botDifficulty} CLEARED! Final Score: {currentScore}");
         }
-        else if (winner == 2)
+        // 머드 승리: -목표 점수 이하
+        else if (currentScore <= -targetScore)
         {
             isGameOver = true;
             isMudWin = true;
             ShowVictoryScreen();
-            Debug.Log("Mud (Brown) Wins!");
+            Debug.Log($"GAME OVER - Stage {botDifficulty} Failed. Score: {currentScore}");
         }
     }
 
@@ -362,19 +409,57 @@ public class GameManager : MonoBehaviour
         sandGaugeRenderer.UpdateGaugeIfNeeded(remainingSand, sandPerTurn, currentColor);
     }
 
+    // 점수 헬퍼 메서드
+    int GetCurrentStageScore()
+    {
+        return botDifficulty switch
+        {
+            1 => stage1CurrentScore,
+            2 => stage2CurrentScore,
+            3 => stage3CurrentScore,
+            _ => 0
+        };
+    }
+
+    int GetCurrentStageTargetScore()
+    {
+        return botDifficulty switch
+        {
+            1 => stage1TargetScore,
+            2 => stage2TargetScore,
+            3 => stage3TargetScore,
+            _ => 1000
+        };
+    }
+
+    void SetCurrentStageScore(int score)
+    {
+        switch (botDifficulty)
+        {
+            case 1:
+                stage1CurrentScore = score;
+                break;
+            case 2:
+                stage2CurrentScore = score;
+                break;
+            case 3:
+                stage3CurrentScore = score;
+                break;
+        }
+    }
+
     void StartNewTurn()
     {
         remainingSand = sandPerTurn;
         isPlayerTurn = true;
         isSandMoving = false;
         hasCheckedWinCondition = false;
-        isWaitingForSettlement = false;
 
         Color currentColor = currentPlayer == 0 ? skyColor : brownColor;
         sandGaugeRenderer.ForceUpdate(remainingSand, sandPerTurn, currentColor);
 
-        string playerName = currentPlayer == 0 ? "Sky (하늘색)" : "Brown (갈색)";
-        Debug.Log($"Player {currentPlayer + 1}'s turn ({playerName})");
+        string playerName = currentPlayer == 0 ? "Oasis" : "Mud";
+        Debug.Log($"{playerName} Turn - Stage {botDifficulty}");
 
         if (isBotMode && currentPlayer == 1 && botController != null)
         {
@@ -406,8 +491,6 @@ public class GameManager : MonoBehaviour
         waitingForMouseRelease = true;
         remainingSand = 0;
         UpdateGauge();
-
-        Debug.Log("Turn ended. Release mouse to continue.");
     }
 
     void SwitchPlayer()
@@ -423,13 +506,17 @@ public class GameManager : MonoBehaviour
         currentPlayer = 0;
         waitingForMouseRelease = false;
         waitingForBotTurn = false;
-        isWaitingForSettlement = false;
         isSandMoving = false;
         hasCheckedWinCondition = false;
         isGameOver = false;
         isOasisWin = false;
         isMudWin = false;
         physicsAccumulator = 0f;
+
+        // 모든 스테이지 현재 점수 초기화
+        stage1CurrentScore = 0;
+        stage2CurrentScore = 0;
+        stage3CurrentScore = 0;
 
         if (botController != null)
             botController.ClearOasisData();

@@ -14,7 +14,6 @@ public class CreditsSceneUI : MonoBehaviour
 
     void ReturnToTitle()
     {
-        Debug.Log("Returning to TitleScene");
         SceneManager.LoadScene("TitleScene");
     }
 }

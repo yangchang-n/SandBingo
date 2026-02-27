@@ -15,7 +15,7 @@ public class TitleSceneUI : MonoBehaviour
 
     void Start()
     {
-        // 버튼 이벤트 연결
+        // 버튼 이벤트 설정
         if (startButton != null)
             startButton.onClick.AddListener(OnStartClicked);
 
@@ -35,14 +35,13 @@ public class TitleSceneUI : MonoBehaviour
 
     void OnStartClicked()
     {
-        Debug.Log("Start button clicked - Loading SelectScene");
         SceneManager.LoadScene("SelectScene");
     }
 
     void OnOptionsClicked()
     {
         Debug.Log("Options button clicked - Feature not implemented yet");
-        // 나중에 구현
+
         if (optionsPanel != null)
         {
             optionsPanel.SetActive(true);
@@ -51,7 +50,6 @@ public class TitleSceneUI : MonoBehaviour
 
     void OnCreditsClicked()
     {
-        Debug.Log("Credits button clicked - Loading CreditsScene");
         SceneManager.LoadScene("CreditsScene");
     }
 

@@ -24,10 +24,9 @@ public class GameSceneUI : MonoBehaviour
     {
         gameManager = GameManager.Instance;
 
-        // 배경화면 설정
         SetupBackgrounds();
 
-        // 초기 UI 설정
+        // 초기 UI 상태
         if (menuPanel != null)
             menuPanel.SetActive(false);
 
@@ -40,7 +39,7 @@ public class GameSceneUI : MonoBehaviour
         if (mudWinText != null)
             mudWinText.SetActive(false);
 
-        // 버튼 이벤트 연결
+        // 버튼 이벤트 설정
         if (resetButton != null)
             resetButton.onClick.AddListener(OnResetClicked);
 
@@ -60,48 +59,36 @@ public class GameSceneUI : MonoBehaviour
         if (hardBackground != null)
             hardBackground.SetActive(false);
 
-        // 난이도에 맞는 배경만 활성화
+        // 난이도에 맞는 배경 활성화
         if (gameManager != null && gameManager.isBotMode)
         {
             switch (gameManager.botDifficulty)
             {
                 case 1:
                     if (easyBackground != null)
-                    {
                         easyBackground.SetActive(true);
-                        Debug.Log("Easy background activated");
-                    }
                     break;
                 case 2:
                     if (mediumBackground != null)
-                    {
                         mediumBackground.SetActive(true);
-                        Debug.Log("Medium background activated");
-                    }
                     break;
                 case 3:
                     if (hardBackground != null)
-                    {
                         hardBackground.SetActive(true);
-                        Debug.Log("Hard background activated");
-                    }
                     break;
             }
         }
         else
         {
-            // 봇 모드가 아닐 경우 기본 배경 (예: Easy)
+            // 봇 모드가 아닌 경우 기본 배경 (예: Easy)
             if (easyBackground != null)
-            {
                 easyBackground.SetActive(true);
-                Debug.Log("Default background activated (Easy)");
-            }
         }
     }
 
     void Update()
     {
-        // ESC 키로 메뉴 토글 (게임 오버가 아닐 때만)
+        // ESC 키로 메뉴 토글 (게임 종료가 아닌 경우)
         if (Input.GetKeyDown(KeyCode.Escape) && gameManager != null && !gameManager.isGameOver)
         {
             ToggleMenu();
@@ -115,7 +102,7 @@ public class GameSceneUI : MonoBehaviour
         if (menuPanel != null)
             menuPanel.SetActive(isMenuOpen);
 
-        // 메뉴가 열릴 때는 MENU 텍스트만 표시
+        // 메뉴가 열린 경우 MENU 텍스트만 표시
         if (isMenuOpen)
         {
             if (menuText != null)
@@ -127,8 +114,6 @@ public class GameSceneUI : MonoBehaviour
             if (mudWinText != null)
                 mudWinText.SetActive(false);
         }
-
-        Debug.Log($"Menu {(isMenuOpen ? "opened" : "closed")}");
     }
 
     public void ShowVictoryScreen(bool isOasisWin)
