@@ -4,11 +4,11 @@
   <br>
   <img src="https://github.com/user-attachments/assets/6c741215-beed-476e-b056-1f2d236a0726" style="width:80%" />
   <br><br>
-  <img src="https://github.com/user-attachments/assets/b264fb07-3b2d-4b36-845d-acf159768923" style="width:80%" />
+  <img src="https://github.com/user-attachments/assets/eb39304c-41ab-4e70-91ca-67729864532b" style="width:80%" />
   <h3>Sandbox-style bingo game</h3>
 </div>
 
-## Characters
+## Characters (to be updated)
 
 <div align="center">
   <br>

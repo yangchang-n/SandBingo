@@ -10,6 +10,7 @@ public class GameSceneUI : MonoBehaviour
     public GameObject oasisWinText;
     public GameObject mudWinText;
     public Button resetButton;
+    public Button optionsButton;
     public Button mainMenuButton;
 
     [Header("Backgrounds")]
@@ -18,11 +19,13 @@ public class GameSceneUI : MonoBehaviour
     public GameObject hardBackground;
 
     private GameManager gameManager;
+    private OptionsUI optionsUI;
     private bool isMenuOpen = false;
 
     void Start()
     {
         gameManager = GameManager.Instance;
+        optionsUI = FindObjectOfType<OptionsUI>();
 
         SetupBackgrounds();
 
@@ -42,6 +45,9 @@ public class GameSceneUI : MonoBehaviour
         // 버튼 이벤트 설정
         if (resetButton != null)
             resetButton.onClick.AddListener(OnResetClicked);
+
+        if (optionsButton != null)
+            optionsButton.onClick.AddListener(OnOptionsClicked);
 
         if (mainMenuButton != null)
             mainMenuButton.onClick.AddListener(OnMainMenuClicked);
@@ -88,9 +94,17 @@ public class GameSceneUI : MonoBehaviour
 
     void Update()
     {
-        // ESC 키로 메뉴 토글 (게임 종료가 아닌 경우)
+        // ESC 키 처리
         if (Input.GetKeyDown(KeyCode.Escape) && gameManager != null && !gameManager.isGameOver)
         {
+            // 먼저 OptionsUI가 ESC를 처리했는지 확인
+            if (optionsUI != null && optionsUI.HandleEscapeKey())
+            {
+                // OptionsUI가 ESC를 처리했으면 여기서 종료
+                return;
+            }
+
+            // OptionsUI가 처리하지 않았으면 메뉴 패널 토글
             ToggleMenu();
         }
     }
@@ -157,6 +171,20 @@ public class GameSceneUI : MonoBehaviour
 
         if (gameManager != null)
             gameManager.ResetGame();
+    }
+
+    void OnOptionsClicked()
+    {
+        Debug.Log("Options button clicked");
+
+        if (optionsUI != null)
+        {
+            optionsUI.OpenOptions();
+        }
+        else
+        {
+            Debug.LogWarning("OptionsUI not found!");
+        }
     }
 
     void OnMainMenuClicked()

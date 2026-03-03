@@ -10,11 +10,13 @@ public class TitleSceneUI : MonoBehaviour
     public Button creditsButton;
     public Button quitButton;
 
-    [Header("Panels")]
-    public GameObject optionsPanel;
+    private OptionsUI optionsUI;
 
     void Start()
     {
+        // OptionsUI 찾기
+        optionsUI = FindObjectOfType<OptionsUI>();
+
         // 버튼 이벤트 설정
         if (startButton != null)
             startButton.onClick.AddListener(OnStartClicked);
@@ -27,10 +29,18 @@ public class TitleSceneUI : MonoBehaviour
 
         if (quitButton != null)
             quitButton.onClick.AddListener(OnQuitClicked);
+    }
 
-        // 옵션 패널 초기 비활성화
-        if (optionsPanel != null)
-            optionsPanel.SetActive(false);
+    void Update()
+    {
+        // ESC 키로 Options 패널 닫기
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (optionsUI != null)
+            {
+                optionsUI.HandleEscapeKey();
+            }
+        }
     }
 
     void OnStartClicked()
@@ -40,11 +50,13 @@ public class TitleSceneUI : MonoBehaviour
 
     void OnOptionsClicked()
     {
-        Debug.Log("Options button clicked - Feature not implemented yet");
-
-        if (optionsPanel != null)
+        if (optionsUI != null)
         {
-            optionsPanel.SetActive(true);
+            optionsUI.OpenOptions();
+        }
+        else
+        {
+            Debug.LogWarning("OptionsUI not found!");
         }
     }
 
