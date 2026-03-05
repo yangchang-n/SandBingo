@@ -37,9 +37,16 @@ public class SandSimulator : MonoBehaviour
         Brown
     }
 
-    // 점수 계산 결과
+    public struct ScoreLine
+    {
+        public List<Vector2Int> cells;
+        public int score;
+        public CellOwnership ownership;
+    }
+
     public struct ScoreResult
     {
+        public List<ScoreLine> scoreLines;
         public int oasisScore;
         public int mudScore;
         public HashSet<Vector2Int> cellsToRemove;
@@ -305,6 +312,7 @@ public class SandSimulator : MonoBehaviour
     {
         ScoreResult result = new ScoreResult
         {
+            scoreLines = new List<ScoreLine>(),
             oasisScore = 0,
             mudScore = 0,
             cellsToRemove = new HashSet<Vector2Int>()
@@ -328,15 +336,26 @@ public class SandSimulator : MonoBehaviour
                 {
                     int score = 100 + (count - 5) * 50;
 
+                    ScoreLine line = new ScoreLine
+                    {
+                        cells = new List<Vector2Int>(),
+                        score = owner == CellOwnership.Sky ? score : -score,
+                        ownership = owner
+                    };
+
+                    for (int i = 0; i < count; i++)
+                    {
+                        Vector2Int cell = new Vector2Int(x + i, y);
+                        line.cells.Add(cell);
+                        result.cellsToRemove.Add(cell);
+                    }
+
+                    result.scoreLines.Add(line);
+
                     if (owner == CellOwnership.Sky)
                         result.oasisScore += score;
                     else
                         result.mudScore += score;
-
-                    for (int i = 0; i < count; i++)
-                    {
-                        result.cellsToRemove.Add(new Vector2Int(x + i, y));
-                    }
 
                     x += count - 1;
                 }
@@ -361,15 +380,26 @@ public class SandSimulator : MonoBehaviour
                 {
                     int score = 100 + (count - 5) * 50;
 
+                    ScoreLine line = new ScoreLine
+                    {
+                        cells = new List<Vector2Int>(),
+                        score = owner == CellOwnership.Sky ? score : -score,
+                        ownership = owner
+                    };
+
+                    for (int i = 0; i < count; i++)
+                    {
+                        Vector2Int cell = new Vector2Int(x, y + i);
+                        line.cells.Add(cell);
+                        result.cellsToRemove.Add(cell);
+                    }
+
+                    result.scoreLines.Add(line);
+
                     if (owner == CellOwnership.Sky)
                         result.oasisScore += score;
                     else
                         result.mudScore += score;
-
-                    for (int i = 0; i < count; i++)
-                    {
-                        result.cellsToRemove.Add(new Vector2Int(x, y + i));
-                    }
 
                     y += count - 1;
                 }
@@ -395,15 +425,26 @@ public class SandSimulator : MonoBehaviour
                 {
                     int score = 100 + (count - 5) * 50;
 
+                    ScoreLine line = new ScoreLine
+                    {
+                        cells = new List<Vector2Int>(),
+                        score = owner == CellOwnership.Sky ? score : -score,
+                        ownership = owner
+                    };
+
+                    for (int i = 0; i < count; i++)
+                    {
+                        Vector2Int cell = new Vector2Int(x + i, y + i);
+                        line.cells.Add(cell);
+                        result.cellsToRemove.Add(cell);
+                    }
+
+                    result.scoreLines.Add(line);
+
                     if (owner == CellOwnership.Sky)
                         result.oasisScore += score;
                     else
                         result.mudScore += score;
-
-                    for (int i = 0; i < count; i++)
-                    {
-                        result.cellsToRemove.Add(new Vector2Int(x + i, y + i));
-                    }
 
                     x += count - 1;
                 }
@@ -429,22 +470,32 @@ public class SandSimulator : MonoBehaviour
                 {
                     int score = 100 + (count - 5) * 50;
 
+                    ScoreLine line = new ScoreLine
+                    {
+                        cells = new List<Vector2Int>(),
+                        score = owner == CellOwnership.Sky ? score : -score,
+                        ownership = owner
+                    };
+
+                    for (int i = 0; i < count; i++)
+                    {
+                        Vector2Int cell = new Vector2Int(x + i, y - i);
+                        line.cells.Add(cell);
+                        result.cellsToRemove.Add(cell);
+                    }
+
+                    result.scoreLines.Add(line);
+
                     if (owner == CellOwnership.Sky)
                         result.oasisScore += score;
                     else
                         result.mudScore += score;
-
-                    for (int i = 0; i < count; i++)
-                    {
-                        result.cellsToRemove.Add(new Vector2Int(x + i, y - i));
-                    }
 
                     x += count - 1;
                 }
             }
         }
 
-        // 통합 로그 (개별 방향 로그 제거)
         if (result.cellsToRemove.Count > 0)
         {
             Debug.Log($"Score Calculation: Oasis +{result.oasisScore}, Mud +{result.mudScore}, Removed {result.cellsToRemove.Count} cells");

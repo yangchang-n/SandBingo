@@ -13,6 +13,9 @@ public class GameSceneUI : MonoBehaviour
     public Button optionsButton;
     public Button mainMenuButton;
 
+    [Header("Score Display")]
+    public Text scoreText;
+
     [Header("Backgrounds")]
     public GameObject easyBackground;
     public GameObject mediumBackground;
@@ -29,7 +32,6 @@ public class GameSceneUI : MonoBehaviour
 
         SetupBackgrounds();
 
-        // 초기 UI 상태
         if (menuPanel != null)
             menuPanel.SetActive(false);
 
@@ -42,7 +44,6 @@ public class GameSceneUI : MonoBehaviour
         if (mudWinText != null)
             mudWinText.SetActive(false);
 
-        // 버튼 이벤트 설정
         if (resetButton != null)
             resetButton.onClick.AddListener(OnResetClicked);
 
@@ -51,11 +52,12 @@ public class GameSceneUI : MonoBehaviour
 
         if (mainMenuButton != null)
             mainMenuButton.onClick.AddListener(OnMainMenuClicked);
+
+        InitializeScoreDisplay();
     }
 
     void SetupBackgrounds()
     {
-        // 모든 배경 비활성화
         if (easyBackground != null)
             easyBackground.SetActive(false);
 
@@ -65,7 +67,6 @@ public class GameSceneUI : MonoBehaviour
         if (hardBackground != null)
             hardBackground.SetActive(false);
 
-        // 난이도에 맞는 배경 활성화
         if (gameManager != null && gameManager.isBotMode)
         {
             switch (gameManager.botDifficulty)
@@ -86,7 +87,6 @@ public class GameSceneUI : MonoBehaviour
         }
         else
         {
-            // 봇 모드가 아닌 경우 기본 배경 (예: Easy)
             if (easyBackground != null)
                 easyBackground.SetActive(true);
         }
@@ -94,19 +94,44 @@ public class GameSceneUI : MonoBehaviour
 
     void Update()
     {
-        // ESC 키 처리
         if (Input.GetKeyDown(KeyCode.Escape) && gameManager != null && !gameManager.isGameOver)
         {
-            // 먼저 OptionsUI가 ESC를 처리했는지 확인
             if (optionsUI != null && optionsUI.HandleEscapeKey())
             {
-                // OptionsUI가 ESC를 처리했으면 여기서 종료
                 return;
             }
 
-            // OptionsUI가 처리하지 않았으면 메뉴 패널 토글
             ToggleMenu();
         }
+    }
+
+    void InitializeScoreDisplay()
+    {
+        if (scoreText == null || gameManager == null)
+            return;
+
+        int difficulty = gameManager.isBotMode ? gameManager.botDifficulty : 1;
+        int currentScore = gameManager.GetCurrentStageScore();
+        int targetScore = gameManager.GetCurrentStageTargetScore();
+
+        UpdateScoreText(currentScore, targetScore);
+    }
+
+    public void UpdateScoreDisplay()
+    {
+        if (scoreText == null || gameManager == null)
+            return;
+
+        int currentScore = gameManager.GetCurrentStageScore();
+        int targetScore = gameManager.GetCurrentStageTargetScore();
+
+        UpdateScoreText(currentScore, targetScore);
+    }
+
+    void UpdateScoreText(int currentScore, int targetScore)
+    {
+        string scoreString = currentScore >= 0 ? currentScore.ToString() : currentScore.ToString();
+        scoreText.text = $"{scoreString} / {targetScore}";
     }
 
     void ToggleMenu()
@@ -116,7 +141,6 @@ public class GameSceneUI : MonoBehaviour
         if (menuPanel != null)
             menuPanel.SetActive(isMenuOpen);
 
-        // 메뉴가 열린 경우 MENU 텍스트만 표시
         if (isMenuOpen)
         {
             if (menuText != null)
@@ -137,7 +161,6 @@ public class GameSceneUI : MonoBehaviour
         if (menuPanel != null)
             menuPanel.SetActive(true);
 
-        // 승리 시: MENU 텍스트 비활성화, WIN 텍스트 활성화
         if (menuText != null)
             menuText.SetActive(false);
 
@@ -170,7 +193,10 @@ public class GameSceneUI : MonoBehaviour
         HideMenu();
 
         if (gameManager != null)
+        {
             gameManager.ResetGame();
+            InitializeScoreDisplay();
+        }
     }
 
     void OnOptionsClicked()

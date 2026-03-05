@@ -1,5 +1,7 @@
-using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
@@ -18,11 +20,11 @@ public class GameManager : MonoBehaviour
 
     // Physics Settings
     [Header("Physics Settings")]
-    [Tooltip("물리 시뮬레이션 목표 프레임레이트 (권장: 60-240)")]
+    [Tooltip("목표 물리 시뮬레이션 프레임레이트 (권장: 60-240)")]
     public int targetPhysicsRate = 240;
 
     [Range(1, 10)]
-    [Tooltip("한 물리 스텝당 시뮬레이션 반복 횟수 (권장: 2-4)")]
+    [Tooltip("각 단계 당 실행되는 시뮬레이션 반복 횟수 (권장: 2-4)")]
     public int simulationsPerStep = 2;
 
     private float physicsAccumulator = 0f;
@@ -31,11 +33,11 @@ public class GameManager : MonoBehaviour
     // Score System
     [Header("Score System")]
     public int stage1CurrentScore = 0;
-    public int stage1TargetScore = 300;  // 1000 → 300
+    public int stage1TargetScore = 300;
     public int stage2CurrentScore = 0;
-    public int stage2TargetScore = 300;  // 1000 → 300
+    public int stage2TargetScore = 300;
     public int stage3CurrentScore = 0;
-    public int stage3TargetScore = 300;  // 1000 → 300
+    public int stage3TargetScore = 300;
 
     // Game State
     private int currentPlayer;
@@ -49,7 +51,7 @@ public class GameManager : MonoBehaviour
     private bool hasCheckedWinCondition = false;
 
     [Header("Game Mode")]
-    public bool isBotMode = false;
+    public bool isBotMode = true;  // true로 변경
     [Range(1, 3)]
     public int botDifficulty = 1;
 
@@ -61,6 +63,9 @@ public class GameManager : MonoBehaviour
     [Header("Player Colors")]
     public Color skyColor = new Color(0x85 / 255f, 0xBE / 255f, 0xC9 / 255f);
     public Color brownColor = new Color(0x3C / 255f, 0x25 / 255f, 0x16 / 255f);
+
+    [Header("Visual Effects")]
+    public GameObject cellRemovalParticlePrefab;
 
     void Awake()
     {
@@ -115,7 +120,6 @@ public class GameManager : MonoBehaviour
 
         physicsAccumulator = 0f;
 
-        // 씬 진입 시 현재 점수 초기화
         stage1CurrentScore = 0;
         stage2CurrentScore = 0;
         stage3CurrentScore = 0;
@@ -158,7 +162,6 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        // 승리 후에도 물리는 계속 (시각 효과)
         if (isGameOver)
         {
             UpdatePhysicsWithFixedTimestep();
@@ -204,9 +207,8 @@ public class GameManager : MonoBehaviour
         isSandMoving = false;
         hasCheckedWinCondition = false;
 
-        // 1단계: 첫 안착 대기 (0.5초)
         float settlementTimer = 0f;
-        while (settlementTimer < 0.5f)
+        while (settlementTimer < 0.4f)
         {
             if (isSandMoving)
             {
@@ -220,14 +222,12 @@ public class GameManager : MonoBehaviour
             yield return null;
         }
 
-        // 점수 계산 & 칸 제거 (승리 후에는 실행 안됨)
         if (!isGameOver)
         {
             SandSimulator.ScoreResult scoreResult = sandSimulator.CalculateScoreAndGetCells();
 
             if (scoreResult.cellsToRemove.Count > 0)
             {
-                // 점수 가감
                 int currentScore = GetCurrentStageScore();
                 int netScore = scoreResult.oasisScore - scoreResult.mudScore;
                 int newScore = currentScore + netScore;
@@ -235,10 +235,18 @@ public class GameManager : MonoBehaviour
 
                 Debug.Log($"Score Update: {currentScore} + ({scoreResult.oasisScore} - {scoreResult.mudScore}) = {newScore}");
 
-                // 칸 제거
+                SpawnScoreTexts(scoreResult.scoreLines);
+                SpawnRemovalParticles(scoreResult.cellsToRemove);
+
+                if (gameUI != null)
+                {
+                    gameUI.UpdateScoreDisplay();
+                }
+
+                yield return new WaitForSeconds(0.6f);
+
                 sandSimulator.RemoveCells(scoreResult.cellsToRemove);
 
-                // 승리 체크 (칸 제거 직후)
                 CheckVictoryCondition();
 
                 if (isGameOver)
@@ -246,13 +254,11 @@ public class GameManager : MonoBehaviour
                     hasCheckedWinCondition = true;
                 }
 
-                // 모래가 떨어질 것임 → 다시 안착 대기 (연쇄)
                 StartCoroutine(WaitForSandSettlement());
                 yield break;
             }
         }
 
-        // 더 이상 점수 변화 없음
         if (!hasCheckedWinCondition)
         {
             CheckVictoryCondition();
@@ -264,9 +270,8 @@ public class GameManager : MonoBehaviour
             yield break;
         }
 
-        // 2단계: 추가 대기 (0.5초)
         float postCheckTimer = 0f;
-        while (postCheckTimer < 0.5f)
+        while (postCheckTimer < 0.4f)
         {
             if (isSandMoving)
             {
@@ -282,6 +287,109 @@ public class GameManager : MonoBehaviour
         }
 
         SwitchPlayer();
+    }
+
+    void SpawnRemovalParticles(HashSet<Vector2Int> cellsToRemove)
+    {
+        if (cellRemovalParticlePrefab == null)
+        {
+            Debug.LogWarning("Cell removal particle prefab not assigned!");
+            return;
+        }
+
+        int cellPixelSize = sandSimulator.GetCellPixelSize();
+        int boardWidth = sandSimulator.GetWidth();
+        int boardHeight = sandSimulator.GetHeight();
+
+        foreach (Vector2Int cell in cellsToRemove)
+        {
+            // 칸의 픽셀 중심 좌표 계산
+            int pixelCenterX = 1 + cell.x * cellPixelSize + cellPixelSize / 2;
+            int pixelCenterY = 1 + cell.y * cellPixelSize + cellPixelSize / 2;
+
+            // 월드 좌표로 변환
+            float worldX = pixelCenterX - boardWidth / 2f;
+            float worldY = pixelCenterY - boardHeight / 2f;
+            Vector3 worldPos = new Vector3(worldX, worldY, -1f);
+
+            // 파티클 생성
+            GameObject particle = Instantiate(cellRemovalParticlePrefab, worldPos, Quaternion.identity);
+
+            // 자동 파괴
+            Destroy(particle, 1.5f);
+        }
+
+        Debug.Log($"Spawned {cellsToRemove.Count} removal particles");
+    }
+
+    void SpawnScoreTexts(List<SandSimulator.ScoreLine> scoreLines)
+    {
+        int cellPixelSize = sandSimulator.GetCellPixelSize();
+        int boardWidth = sandSimulator.GetWidth();
+        int boardHeight = sandSimulator.GetHeight();
+
+        foreach (var line in scoreLines)
+        {
+            Vector2Int firstCell = line.cells[0];
+            Vector2Int lastCell = line.cells[line.cells.Count - 1];
+
+            int firstCenterX = 1 + firstCell.x * cellPixelSize + cellPixelSize / 2;
+            int firstCenterY = 1 + firstCell.y * cellPixelSize + cellPixelSize / 2;
+            int lastCenterX = 1 + lastCell.x * cellPixelSize + cellPixelSize / 2;
+            int lastCenterY = 1 + lastCell.y * cellPixelSize + cellPixelSize / 2;
+
+            float avgPixelX = (firstCenterX + lastCenterX) / 2f;
+            float avgPixelY = (firstCenterY + lastCenterY) / 2f;
+
+            float worldX = avgPixelX - boardWidth / 2f;
+            float worldY = avgPixelY - boardHeight / 2f + cellPixelSize;
+
+            Vector3 startPos = new Vector3(worldX, worldY, -1f);
+
+            GameObject textObj = new GameObject("ScoreText");
+            textObj.transform.position = startPos;
+
+            TextMesh textMesh = textObj.AddComponent<TextMesh>();
+            textMesh.text = line.score >= 0 ? $"+{line.score}" : $"{line.score}";
+            textMesh.fontSize = 12;
+            textMesh.characterSize = 100;
+            textMesh.color = Color.white;
+            textMesh.anchor = TextAnchor.MiddleCenter;
+            textMesh.alignment = TextAlignment.Center;
+            textMesh.fontStyle = FontStyle.Bold;
+
+            MeshRenderer meshRenderer = textObj.GetComponent<MeshRenderer>();
+            meshRenderer.sortingOrder = 10;
+
+            textObj.transform.localScale = Vector3.one * 0.1f;
+
+            StartCoroutine(AnimateScoreText(textObj, startPos, cellPixelSize));
+        }
+    }
+
+    IEnumerator AnimateScoreText(GameObject textObj, Vector3 startPos, int cellPixelSize)
+    {
+        float duration = 1f;
+        float elapsed = 0f;
+        Vector3 endPos = startPos + new Vector3(0, cellPixelSize * 2, 0);
+        TextMesh textMesh = textObj.GetComponent<TextMesh>();
+        Color startColor = textMesh.color;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / duration;
+
+            textObj.transform.position = Vector3.Lerp(startPos, endPos, t);
+
+            Color newColor = startColor;
+            newColor.a = 1f - t;
+            textMesh.color = newColor;
+
+            yield return null;
+        }
+
+        Destroy(textObj);
     }
 
     void HandlePlayerInput()
@@ -322,13 +430,11 @@ public class GameManager : MonoBehaviour
         int currentScore = GetCurrentStageScore();
         int targetScore = GetCurrentStageTargetScore();
 
-        // 오아시스 승리: 목표 점수 도달
         if (currentScore >= targetScore)
         {
             isGameOver = true;
             isOasisWin = true;
 
-            // GlobalManager에 클리어 전달 및 최고 점수 갱신
             if (GlobalManager.Instance != null)
             {
                 GlobalManager.Instance.CompleteStage(botDifficulty, currentScore);
@@ -337,7 +443,6 @@ public class GameManager : MonoBehaviour
             ShowVictoryScreen();
             Debug.Log($"STAGE {botDifficulty} CLEARED! Final Score: {currentScore}");
         }
-        // 머드 승리: -목표 점수 이하
         else if (currentScore <= -targetScore)
         {
             isGameOver = true;
@@ -409,8 +514,7 @@ public class GameManager : MonoBehaviour
         sandGaugeRenderer.UpdateGaugeIfNeeded(remainingSand, sandPerTurn, currentColor);
     }
 
-    // 점수 헬퍼 메서드
-    int GetCurrentStageScore()
+    public int GetCurrentStageScore()
     {
         return botDifficulty switch
         {
@@ -421,7 +525,7 @@ public class GameManager : MonoBehaviour
         };
     }
 
-    int GetCurrentStageTargetScore()
+    public int GetCurrentStageTargetScore()
     {
         return botDifficulty switch
         {
@@ -513,7 +617,6 @@ public class GameManager : MonoBehaviour
         isMudWin = false;
         physicsAccumulator = 0f;
 
-        // 모든 스테이지 현재 점수 초기화
         stage1CurrentScore = 0;
         stage2CurrentScore = 0;
         stage3CurrentScore = 0;
