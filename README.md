@@ -1,3 +1,7 @@
+### Download Link (GitHub Release) :
+- [v0.8](https://github.com/yangchang-n/SandBingo/releases/download/v0.8/SandBingo-v0.8.zip)
+- no virus
+
 # Sand Bingo
 
 <div align="center">
