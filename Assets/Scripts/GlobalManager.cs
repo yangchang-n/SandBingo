@@ -27,6 +27,10 @@ public class GlobalManager : MonoBehaviour
     public bool isMuted = false;
     public int volumePercentage = 50;
 
+    // SelectScene -> GameScene 씬 간 전달용 (레지스트리에 남지 않음)
+    [HideInInspector]
+    public int pendingBotDifficulty = 1;
+
     // 저장 파일 경로
     private string SaveFilePath
     {

@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -20,11 +19,11 @@ public class GameManager : MonoBehaviour
 
     // Physics Settings
     [Header("Physics Settings")]
-    [Tooltip("¸ñÇ¥ ¹°¸® ½Ã¹Ä·¹ÀÌ¼Ç ÇÁ·¹ÀÓ·¹ÀÌÆ® (±ÇÀå: 60-240)")]
+    [Tooltip("ëª©í‘œ ë¬¼ë¦¬ ì‹œë®¬ë ˆì´ì…˜ í”„ë ˆì„ë ˆì´íŠ¸ (ê¶Œì¥: 60-240)")]
     public int targetPhysicsRate = 240;
 
     [Range(1, 10)]
-    [Tooltip("°¢ ´Ü°è ´ç ½ÇÇàµÇ´Â ½Ã¹Ä·¹ÀÌ¼Ç ¹İº¹ È½¼ö (±ÇÀå: 2-4)")]
+    [Tooltip("í•œ ë‹¨ê³„ ë‹¹ ì‹¤í–‰ë˜ëŠ” ì‹œë®¬ë ˆì´ì…˜ ë°˜ë³µ íšŸìˆ˜ (ê¶Œì¥: 2-4)")]
     public int simulationsPerStep = 2;
 
     private float physicsAccumulator = 0f;
@@ -51,7 +50,7 @@ public class GameManager : MonoBehaviour
     private bool hasCheckedWinCondition = false;
 
     [Header("Game Mode")]
-    public bool isBotMode = true;  // true·Î º¯°æ
+    public bool isBotMode = true;
     [Range(1, 3)]
     public int botDifficulty = 1;
 
@@ -92,14 +91,12 @@ public class GameManager : MonoBehaviour
 
     void LoadGameSettings()
     {
-        if (PlayerPrefs.HasKey("BotMode"))
+        // GlobalManager ì‹±ê¸€í†¤ì—ì„œ ì”¬ ê°„ ì „ë‹¬ê°’ì„ ì½ìŒ
+        // GlobalManagerê°€ ì—†ì„ ê²½ìš° Inspector ê¸°ë³¸ê°’(isBotMode=true, botDifficulty=1) ìœ ì§€
+        if (GlobalManager.Instance != null)
         {
-            isBotMode = PlayerPrefs.GetInt("BotMode") == 1;
-        }
-
-        if (PlayerPrefs.HasKey("BotDifficulty"))
-        {
-            botDifficulty = PlayerPrefs.GetInt("BotDifficulty");
+            isBotMode = true;
+            botDifficulty = Mathf.Clamp(GlobalManager.Instance.pendingBotDifficulty, 1, 3);
         }
     }
 
@@ -303,19 +300,19 @@ public class GameManager : MonoBehaviour
 
         foreach (Vector2Int cell in cellsToRemove)
         {
-            // Ä­ÀÇ ÇÈ¼¿ Áß½É ÁÂÇ¥ °è»ê
+            // ì…€ì˜ í”½ì…€ ì¤‘ì‹¬ ì¢Œí‘œ ê³„ì‚°
             int pixelCenterX = 1 + cell.x * cellPixelSize + cellPixelSize / 2;
             int pixelCenterY = 1 + cell.y * cellPixelSize + cellPixelSize / 2;
 
-            // ¿ùµå ÁÂÇ¥·Î º¯È¯
+            // ì›”ë“œ ì¢Œí‘œë¡œ ë³€í™˜
             float worldX = pixelCenterX - boardWidth / 2f;
             float worldY = pixelCenterY - boardHeight / 2f;
             Vector3 worldPos = new Vector3(worldX, worldY, -1f);
 
-            // ÆÄÆ¼Å¬ »ı¼º
+            // íŒŒí‹°í´ ìƒì„±
             GameObject particle = Instantiate(cellRemovalParticlePrefab, worldPos, Quaternion.identity);
 
-            // ÀÚµ¿ ÆÄ±«
+            // ìë™ ì œê±°
             Destroy(particle, 1.5f);
         }
 

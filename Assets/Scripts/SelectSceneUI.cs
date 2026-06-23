@@ -42,20 +42,20 @@ public class SelectSceneUI : MonoBehaviour
             return;
         }
 
-        // Easy´Â Ç×»ó È°¼ºÈ­
+        // EasyëŠ” í•­ìƒ í™œì„±í™”
         if (easyButton != null)
         {
             easyButton.interactable = true;
         }
 
-        // NormalÀº Stage 1 Å¬¸®¾î ½Ã È°¼ºÈ­
+        // Normalì€ Stage 1 í´ë¦¬ì–´ í›„ í™œì„±í™”
         if (normalButton != null)
         {
             bool stage1Cleared = GlobalManager.Instance.IsStageCleared(1);
             normalButton.interactable = stage1Cleared;
         }
 
-        // Hard´Â Stage 2 Å¬¸®¾î ½Ã È°¼ºÈ­
+        // HardëŠ” Stage 2 í´ë¦¬ì–´ í›„ í™œì„±í™”
         if (hardButton != null)
         {
             bool stage2Cleared = GlobalManager.Instance.IsStageCleared(2);
@@ -75,28 +75,36 @@ public class SelectSceneUI : MonoBehaviour
             hardButton.interactable = true;
     }
 
+    // ë‚œì´ë„ë¥¼ GlobalManagerì— ê¸°ë¡í•˜ê³  ì”¬ ì „í™˜
+    void StartGame(int difficulty)
+    {
+        if (GlobalManager.Instance != null)
+        {
+            GlobalManager.Instance.pendingBotDifficulty = difficulty;
+        }
+        else
+        {
+            Debug.LogWarning("GlobalManager not found! Difficulty may not be set correctly.");
+        }
+        SceneManager.LoadScene("GameScene");
+    }
+
     public void OnEasyButtonClick()
     {
         Debug.Log("Easy difficulty selected (Stage 1)");
-        PlayerPrefs.SetInt("BotMode", 1);
-        PlayerPrefs.SetInt("BotDifficulty", 1);
-        SceneManager.LoadScene("GameScene");
+        StartGame(1);
     }
 
     public void OnNormalButtonClick()
     {
         Debug.Log("Normal difficulty selected (Stage 2)");
-        PlayerPrefs.SetInt("BotMode", 1);
-        PlayerPrefs.SetInt("BotDifficulty", 2);
-        SceneManager.LoadScene("GameScene");
+        StartGame(2);
     }
 
     public void OnHardButtonClick()
     {
         Debug.Log("Hard difficulty selected (Stage 3)");
-        PlayerPrefs.SetInt("BotMode", 1);
-        PlayerPrefs.SetInt("BotDifficulty", 3);
-        SceneManager.LoadScene("GameScene");
+        StartGame(3);
     }
 
     public void OnBackButtonClick()
