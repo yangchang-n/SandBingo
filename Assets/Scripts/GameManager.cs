@@ -457,6 +457,39 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // 게임 종료 후 씬 전환: 오아시스 승리 시 후 스토리, 패배 시 SelectScene
+    public void LeaveGameScene()
+    {
+        if (GlobalManager.Instance == null)
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene("SelectScene");
+            return;
+        }
+
+        GlobalManager gm = GlobalManager.Instance;
+
+        if (isOasisWin)
+        {
+            // 클리어 후 스토리가 있고 아직 미감상이면 스토리로
+            StoryChapter postChapter = botDifficulty switch
+            {
+                1 => gm.stage1PostChapter,
+                2 => gm.stage2PostChapter,
+                3 => gm.stage3PostChapter,
+                _ => null
+            };
+
+            if (postChapter != null && !gm.IsStorySeen(postChapter))
+            {
+                gm.GoToStory(postChapter, "SelectScene");
+                return;
+            }
+        }
+
+        // 패배이거나 후 스토리 없음/이미 감상: SelectScene으로 바로 이동
+        UnityEngine.SceneManagement.SceneManager.LoadScene("SelectScene");
+    }
+
     void SpawnSandAtMouse()
     {
         Vector3 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);

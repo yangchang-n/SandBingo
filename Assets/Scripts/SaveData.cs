@@ -13,6 +13,15 @@ public class SaveData
     public int stage2BestScore;
     public int stage3BestScore;
 
+    // 스토리 감상 여부
+    public bool stage1PreSeen;
+    public bool stage1TutorialSeen;
+    public bool stage1PostSeen;
+    public bool stage2PreSeen;
+    public bool stage2PostSeen;
+    public bool stage3PreSeen;
+    public bool stage3PostSeen;
+
     // 오디오 설정
     public int volumePercentage;
     public bool isMuted;
@@ -32,6 +41,14 @@ public class SaveData
         stage1BestScore = 0;
         stage2BestScore = 0;
         stage3BestScore = 0;
+
+        stage1PreSeen = false;
+        stage1TutorialSeen = false;
+        stage1PostSeen = false;
+        stage2PreSeen = false;
+        stage2PostSeen = false;
+        stage3PreSeen = false;
+        stage3PostSeen = false;
 
         volumePercentage = 50;
         isMuted = false;

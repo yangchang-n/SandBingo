@@ -16,41 +16,42 @@ public class GlobalManager : MonoBehaviour
     public int stage2BestScore = 0;
     public int stage3BestScore = 0;
 
+    [Header("Story Chapters")]
+    public StoryChapter stage1PreChapter;
+    public StoryChapter stage1TutorialChapter;
+    public StoryChapter stage1PostChapter;
+    public StoryChapter stage2PreChapter;
+    public StoryChapter stage2PostChapter;
+    public StoryChapter stage3PreChapter;
+    public StoryChapter stage3PostChapter;
+
     [Header("Audio Settings")]
     public AudioClip bgmClip;
     [Range(0f, 1f)]
     public float bgmVolume = 0.5f;
 
-    private AudioSource audioSource;
-
     [Header("Game Settings")]
     public bool isMuted = false;
     public int volumePercentage = 50;
 
-    // SelectScene -> GameScene 씬 간 전달용 (레지스트리에 남지 않음)
-    [HideInInspector]
-    public int pendingBotDifficulty = 1;
+    private AudioSource audioSource;
 
-    // 저장 파일 경로
-    private string SaveFilePath
-    {
-        get
-        {
-#if UNITY_EDITOR
-            // 에디터: Assets 폴더와 같은 레벨에 SaveData 폴더 생성
-            string saveFolder = Path.Combine(Application.dataPath, "..", "SaveData");
-            if (!Directory.Exists(saveFolder))
-            {
-                Directory.CreateDirectory(saveFolder);
-            }
-            return Path.Combine(saveFolder, "savedata.json");
-#else
-            // 빌드: 실행 파일과 같은 폴더에 저장
-            string exeFolder = Path.GetDirectoryName(Application.dataPath);
-            return Path.Combine(exeFolder, "savedata.json");
-#endif
-        }
-    }
+    // 스토리 감상 여부 (저장 파일에서 로드, Inspector 편집 불필요)
+    [HideInInspector] public bool stage1PreSeen = false;
+    [HideInInspector] public bool stage1TutorialSeen = false;
+    [HideInInspector] public bool stage1PostSeen = false;
+    [HideInInspector] public bool stage2PreSeen = false;
+    [HideInInspector] public bool stage2PostSeen = false;
+    [HideInInspector] public bool stage3PreSeen = false;
+    [HideInInspector] public bool stage3PostSeen = false;
+
+    // 씬 간 전달용 (레지스트리에 남지 않음)
+    [HideInInspector] public int pendingBotDifficulty = 1;
+    [HideInInspector] public StoryChapter pendingStoryChapter = null;
+    [HideInInspector] public string pendingNextScene = "";
+
+    // 저장 파일 경로 (Awake에서 한 번만 계산)
+    private string _saveFilePath;
 
     void Awake()
     {
@@ -58,24 +59,34 @@ public class GlobalManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-
+            InitializeSaveFilePath();
             LoadProgress();
             InitializeBGM();
-
             Debug.Log("GlobalManager initialized");
-            Debug.Log($"Save file location: {SaveFilePath}");
+            Debug.Log($"Save file location: {_saveFilePath}");
         }
         else
         {
             Destroy(gameObject);
-            return;
         }
+    }
+
+    void InitializeSaveFilePath()
+    {
+#if UNITY_EDITOR
+        string saveFolder = Path.Combine(Application.dataPath, "..", "SaveData");
+        if (!Directory.Exists(saveFolder))
+            Directory.CreateDirectory(saveFolder);
+        _saveFilePath = Path.Combine(saveFolder, "savedata.json");
+#else
+        string exeFolder = Path.GetDirectoryName(Application.dataPath);
+        _saveFilePath = Path.Combine(exeFolder, "savedata.json");
+#endif
     }
 
     void InitializeBGM()
     {
         audioSource = gameObject.AddComponent<AudioSource>();
-
         audioSource.clip = bgmClip;
         audioSource.loop = true;
         audioSource.playOnAwake = false;
@@ -95,43 +106,45 @@ public class GlobalManager : MonoBehaviour
 
     void LoadProgress()
     {
-        if (File.Exists(SaveFilePath))
-        {
-            try
-            {
-                string json = File.ReadAllText(SaveFilePath);
-                SaveData data = JsonUtility.FromJson<SaveData>(json);
-
-                // 진행 상황
-                stage1Cleared = data.stage1Cleared;
-                stage2Cleared = data.stage2Cleared;
-                stage3Cleared = data.stage3Cleared;
-
-                stage1BestScore = data.stage1BestScore;
-                stage2BestScore = data.stage2BestScore;
-                stage3BestScore = data.stage3BestScore;
-
-                // 오디오 설정
-                volumePercentage = data.volumePercentage;
-                bgmVolume = volumePercentage / 100f;
-                isMuted = data.isMuted;
-
-                // 해상도 설정
-                if (data.screenWidth > 0 && data.screenHeight > 0)
-                {
-                    ApplyResolution(data.screenWidth, data.screenHeight, data.isFullscreen);
-                }
-
-                Debug.Log($"Progress loaded from: {SaveFilePath}");
-            }
-            catch (System.Exception e)
-            {
-                Debug.LogError($"Failed to load save file: {e.Message}");
-            }
-        }
-        else
+        if (!File.Exists(_saveFilePath))
         {
             Debug.Log("No save file found. Using default values.");
+            return;
+        }
+
+        try
+        {
+            string json = File.ReadAllText(_saveFilePath);
+            SaveData data = JsonUtility.FromJson<SaveData>(json);
+
+            stage1Cleared = data.stage1Cleared;
+            stage2Cleared = data.stage2Cleared;
+            stage3Cleared = data.stage3Cleared;
+
+            stage1BestScore = data.stage1BestScore;
+            stage2BestScore = data.stage2BestScore;
+            stage3BestScore = data.stage3BestScore;
+
+            stage1PreSeen      = data.stage1PreSeen;
+            stage1TutorialSeen = data.stage1TutorialSeen;
+            stage1PostSeen     = data.stage1PostSeen;
+            stage2PreSeen      = data.stage2PreSeen;
+            stage2PostSeen     = data.stage2PostSeen;
+            stage3PreSeen      = data.stage3PreSeen;
+            stage3PostSeen     = data.stage3PostSeen;
+
+            volumePercentage = data.volumePercentage;
+            bgmVolume = volumePercentage / 100f;
+            isMuted = data.isMuted;
+
+            if (data.screenWidth > 0 && data.screenHeight > 0)
+                ApplyResolution(data.screenWidth, data.screenHeight, data.isFullscreen);
+
+            Debug.Log($"Progress loaded from: {_saveFilePath}");
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"Failed to load save file: {e.Message}");
         }
     }
 
@@ -141,7 +154,6 @@ public class GlobalManager : MonoBehaviour
         {
             SaveData data = new SaveData
             {
-                // 진행 상황
                 stage1Cleared = this.stage1Cleared,
                 stage2Cleared = this.stage2Cleared,
                 stage3Cleared = this.stage3Cleared,
@@ -150,26 +162,78 @@ public class GlobalManager : MonoBehaviour
                 stage2BestScore = this.stage2BestScore,
                 stage3BestScore = this.stage3BestScore,
 
-                // 오디오 설정
+                stage1PreSeen      = this.stage1PreSeen,
+                stage1TutorialSeen = this.stage1TutorialSeen,
+                stage1PostSeen     = this.stage1PostSeen,
+                stage2PreSeen      = this.stage2PreSeen,
+                stage2PostSeen     = this.stage2PostSeen,
+                stage3PreSeen      = this.stage3PreSeen,
+                stage3PostSeen     = this.stage3PostSeen,
+
                 volumePercentage = this.volumePercentage,
                 isMuted = this.isMuted,
 
-                // 해상도 설정
-                screenWidth = Screen.width,
+                screenWidth  = Screen.width,
                 screenHeight = Screen.height,
                 isFullscreen = Screen.fullScreen
             };
 
             string json = JsonUtility.ToJson(data, true);
-            File.WriteAllText(SaveFilePath, json);
-
-            Debug.Log($"Progress saved to: {SaveFilePath}");
+            File.WriteAllText(_saveFilePath, json);
+            Debug.Log($"Progress saved to: {_saveFilePath}");
         }
         catch (System.Exception e)
         {
             Debug.LogError($"Failed to save progress: {e.Message}");
         }
     }
+
+    // ===== Story Control =====
+
+    public void GoToStory(StoryChapter chapter, string nextScene)
+    {
+        pendingStoryChapter = chapter;
+        pendingNextScene    = nextScene;
+        UnityEngine.SceneManagement.SceneManager.LoadScene("StoryScene");
+    }
+
+    public void MarkStoryAsSeen(StoryChapter chapter)
+    {
+        if (chapter == null) return;
+
+        if      (chapter == stage1PreChapter)       stage1PreSeen      = true;
+        else if (chapter == stage1TutorialChapter)  stage1TutorialSeen = true;
+        else if (chapter == stage1PostChapter)      stage1PostSeen     = true;
+        else if (chapter == stage2PreChapter)       stage2PreSeen      = true;
+        else if (chapter == stage2PostChapter)      stage2PostSeen     = true;
+        else if (chapter == stage3PreChapter)       stage3PreSeen      = true;
+        else if (chapter == stage3PostChapter)      stage3PostSeen     = true;
+        else
+        {
+            Debug.LogWarning($"MarkStoryAsSeen: Unknown chapter '{chapter.name}'");
+            return;
+        }
+
+        SaveProgress();
+    }
+
+    public bool IsStorySeen(StoryChapter chapter)
+    {
+        if (chapter == null) return false;
+
+        if (chapter == stage1PreChapter)      return stage1PreSeen;
+        if (chapter == stage1TutorialChapter) return stage1TutorialSeen;
+        if (chapter == stage1PostChapter)     return stage1PostSeen;
+        if (chapter == stage2PreChapter)      return stage2PreSeen;
+        if (chapter == stage2PostChapter)     return stage2PostSeen;
+        if (chapter == stage3PreChapter)      return stage3PreSeen;
+        if (chapter == stage3PostChapter)     return stage3PostSeen;
+
+        Debug.LogWarning($"IsStorySeen: Unknown chapter '{chapter.name}'");
+        return false;
+    }
+
+    // ===== Stage Control =====
 
     public void CompleteStage(int stageNumber, int finalScore)
     {
@@ -179,32 +243,26 @@ public class GlobalManager : MonoBehaviour
                 stage1Cleared = true;
                 if (finalScore > stage1BestScore)
                 {
-                    int oldScore = stage1BestScore;
+                    Debug.Log($"Stage 1 Best Score Updated: {stage1BestScore} -> {finalScore}");
                     stage1BestScore = finalScore;
-                    Debug.Log($"Stage 1 Best Score Updated: {oldScore} -> {finalScore}");
                 }
                 break;
-
             case 2:
                 stage2Cleared = true;
                 if (finalScore > stage2BestScore)
                 {
-                    int oldScore = stage2BestScore;
+                    Debug.Log($"Stage 2 Best Score Updated: {stage2BestScore} -> {finalScore}");
                     stage2BestScore = finalScore;
-                    Debug.Log($"Stage 2 Best Score Updated: {oldScore} -> {finalScore}");
                 }
                 break;
-
             case 3:
                 stage3Cleared = true;
                 if (finalScore > stage3BestScore)
                 {
-                    int oldScore = stage3BestScore;
+                    Debug.Log($"Stage 3 Best Score Updated: {stage3BestScore} -> {finalScore}");
                     stage3BestScore = finalScore;
-                    Debug.Log($"Stage 3 Best Score Updated: {oldScore} -> {finalScore}");
                 }
                 break;
-
             default:
                 Debug.LogWarning($"Invalid stage number: {stageNumber}");
                 break;
@@ -237,16 +295,14 @@ public class GlobalManager : MonoBehaviour
 
     public void ResetAllProgress()
     {
-        // 진행 상황만 초기화 (볼륨/해상도는 유지)
-        stage1Cleared = false;
-        stage2Cleared = false;
-        stage3Cleared = false;
+        stage1Cleared = stage2Cleared = stage3Cleared = false;
+        stage1BestScore = stage2BestScore = stage3BestScore = 0;
 
-        stage1BestScore = 0;
-        stage2BestScore = 0;
-        stage3BestScore = 0;
+        stage1PreSeen = stage1TutorialSeen = stage1PostSeen = false;
+        stage2PreSeen = stage2PostSeen = false;
+        stage3PreSeen = stage3PostSeen = false;
 
-        SaveProgress();  // 볼륨/해상도는 현재 값 그대로 저장됨
+        SaveProgress();
         Debug.Log("Progress has been reset! (Settings preserved)");
     }
 
@@ -256,7 +312,7 @@ public class GlobalManager : MonoBehaviour
         Debug.Log($"Stage 1: {(stage1Cleared ? "CLEARED" : "NOT CLEARED")} - Best: {stage1BestScore}");
         Debug.Log($"Stage 2: {(stage2Cleared ? "CLEARED" : "NOT CLEARED")} - Best: {stage2BestScore}");
         Debug.Log($"Stage 3: {(stage3Cleared ? "CLEARED" : "NOT CLEARED")} - Best: {stage3BestScore}");
-        Debug.Log($"Save file: {SaveFilePath}");
+        Debug.Log($"Save file: {_saveFilePath}");
         Debug.Log("========================");
     }
 
@@ -268,9 +324,7 @@ public class GlobalManager : MonoBehaviour
         bgmVolume = volumePercentage / 100f;
 
         if (audioSource != null)
-        {
             audioSource.volume = bgmVolume;
-        }
 
         SaveProgress();
         Debug.Log($"Volume set to: {volumePercentage}%");
@@ -281,28 +335,15 @@ public class GlobalManager : MonoBehaviour
         isMuted = mute;
 
         if (audioSource != null)
-        {
             audioSource.mute = isMuted;
-        }
 
         SaveProgress();
         Debug.Log($"Mute: {isMuted}");
     }
 
-    public void ToggleMute()
-    {
-        SetMute(!isMuted);
-    }
-
-    public bool IsMuted()
-    {
-        return isMuted;
-    }
-
-    public int GetVolumePercentage()
-    {
-        return volumePercentage;
-    }
+    public void ToggleMute() => SetMute(!isMuted);
+    public bool IsMuted() => isMuted;
+    public int GetVolumePercentage() => volumePercentage;
 
     // ===== Resolution Control =====
 
@@ -330,29 +371,19 @@ public class GlobalManager : MonoBehaviour
         }
     }
 
-    public Resolution GetCurrentMonitorResolution()
-    {
-        return Screen.currentResolution;
-    }
+    public Resolution GetCurrentMonitorResolution() => Screen.currentResolution;
 
     // ===== Save File Management =====
 
-    public string GetSaveFilePath()
-    {
-        return SaveFilePath;
-    }
-
-    public bool SaveFileExists()
-    {
-        return File.Exists(SaveFilePath);
-    }
+    public string GetSaveFilePath() => _saveFilePath;
+    public bool SaveFileExists() => File.Exists(_saveFilePath);
 
     public void DeleteSaveFile()
     {
-        if (File.Exists(SaveFilePath))
+        if (File.Exists(_saveFilePath))
         {
-            File.Delete(SaveFilePath);
-            Debug.Log($"Save file deleted: {SaveFilePath}");
+            File.Delete(_saveFilePath);
+            Debug.Log($"Save file deleted: {_saveFilePath}");
         }
     }
 }

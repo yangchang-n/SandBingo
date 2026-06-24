@@ -12,6 +12,18 @@ public class SelectSceneUI : MonoBehaviour
     [Header("Navigation")]
     public Button backButton;
 
+    [Header("Story Buttons - Stage 1")]
+    public Button stage1PreStoryButton;
+    public Button stage1PostStoryButton;
+
+    [Header("Story Buttons - Stage 2")]
+    public Button stage2PreStoryButton;
+    public Button stage2PostStoryButton;
+
+    [Header("Story Buttons - Stage 3")]
+    public Button stage3PreStoryButton;
+    public Button stage3PostStoryButton;
+
     void Start()
     {
         SetupButtons();
@@ -20,17 +32,25 @@ public class SelectSceneUI : MonoBehaviour
 
     void SetupButtons()
     {
-        if (easyButton != null)
-            easyButton.onClick.AddListener(OnEasyButtonClick);
+        if (easyButton != null)   easyButton.onClick.AddListener(OnEasyButtonClick);
+        if (normalButton != null) normalButton.onClick.AddListener(OnNormalButtonClick);
+        if (hardButton != null)   hardButton.onClick.AddListener(OnHardButtonClick);
+        if (backButton != null)   backButton.onClick.AddListener(OnBackButtonClick);
 
-        if (normalButton != null)
-            normalButton.onClick.AddListener(OnNormalButtonClick);
+        if (stage1PreStoryButton != null)
+            stage1PreStoryButton.onClick.AddListener(() => OnStoryButtonClick(1, isPre: true));
+        if (stage1PostStoryButton != null)
+            stage1PostStoryButton.onClick.AddListener(() => OnStoryButtonClick(1, isPre: false));
 
-        if (hardButton != null)
-            hardButton.onClick.AddListener(OnHardButtonClick);
+        if (stage2PreStoryButton != null)
+            stage2PreStoryButton.onClick.AddListener(() => OnStoryButtonClick(2, isPre: true));
+        if (stage2PostStoryButton != null)
+            stage2PostStoryButton.onClick.AddListener(() => OnStoryButtonClick(2, isPre: false));
 
-        if (backButton != null)
-            backButton.onClick.AddListener(OnBackButtonClick);
+        if (stage3PreStoryButton != null)
+            stage3PreStoryButton.onClick.AddListener(() => OnStoryButtonClick(3, isPre: true));
+        if (stage3PostStoryButton != null)
+            stage3PostStoryButton.onClick.AddListener(() => OnStoryButtonClick(3, isPre: false));
     }
 
     void UpdateButtonStates()
@@ -38,73 +58,135 @@ public class SelectSceneUI : MonoBehaviour
         if (GlobalManager.Instance == null)
         {
             Debug.LogWarning("GlobalManager not found! All buttons enabled by default.");
-            EnableAllButtons();
+            EnableAllStageButtons();
+            HideAllStoryButtons();
             return;
         }
 
-        // Easy는 항상 활성화
-        if (easyButton != null)
-        {
-            easyButton.interactable = true;
-        }
+        GlobalManager gm = GlobalManager.Instance;
 
-        // Normal은 Stage 1 클리어 후 활성화
-        if (normalButton != null)
-        {
-            bool stage1Cleared = GlobalManager.Instance.IsStageCleared(1);
-            normalButton.interactable = stage1Cleared;
-        }
+        // 스테이지 버튼: 잠금 시 반투명(interactable=false), 항상 보임
+        if (easyButton != null)   easyButton.interactable = true;
+        if (normalButton != null) normalButton.interactable = gm.IsStageCleared(1);
+        if (hardButton != null)   hardButton.interactable   = gm.IsStageCleared(2);
 
-        // Hard는 Stage 2 클리어 후 활성화
-        if (hardButton != null)
-        {
-            bool stage2Cleared = GlobalManager.Instance.IsStageCleared(2);
-            hardButton.interactable = stage2Cleared;
-        }
+        // 스토리 버튼: 미감상 시 숨김, 감상 완료 시 표시
+        SetStoryButtonVisible(stage1PreStoryButton,  gm.IsStorySeen(gm.stage1PreChapter));
+        SetStoryButtonVisible(stage1PostStoryButton, gm.IsStorySeen(gm.stage1PostChapter));
+        SetStoryButtonVisible(stage2PreStoryButton,  gm.IsStorySeen(gm.stage2PreChapter));
+        SetStoryButtonVisible(stage2PostStoryButton, gm.IsStorySeen(gm.stage2PostChapter));
+        SetStoryButtonVisible(stage3PreStoryButton,  gm.IsStorySeen(gm.stage3PreChapter));
+        SetStoryButtonVisible(stage3PostStoryButton, gm.IsStorySeen(gm.stage3PostChapter));
     }
 
-    void EnableAllButtons()
+    void SetStoryButtonVisible(Button button, bool visible)
     {
-        if (easyButton != null)
-            easyButton.interactable = true;
-
-        if (normalButton != null)
-            normalButton.interactable = true;
-
-        if (hardButton != null)
-            hardButton.interactable = true;
+        if (button != null)
+            button.gameObject.SetActive(visible);
     }
 
-    // 난이도를 GlobalManager에 기록하고 씬 전환
-    void StartGame(int difficulty)
+    void EnableAllStageButtons()
     {
-        if (GlobalManager.Instance != null)
+        if (easyButton != null)   easyButton.interactable = true;
+        if (normalButton != null) normalButton.interactable = true;
+        if (hardButton != null)   hardButton.interactable = true;
+    }
+
+    void HideAllStoryButtons()
+    {
+        SetStoryButtonVisible(stage1PreStoryButton,  false);
+        SetStoryButtonVisible(stage1PostStoryButton, false);
+        SetStoryButtonVisible(stage2PreStoryButton,  false);
+        SetStoryButtonVisible(stage2PostStoryButton, false);
+        SetStoryButtonVisible(stage3PreStoryButton,  false);
+        SetStoryButtonVisible(stage3PostStoryButton, false);
+    }
+
+    // 스테이지 버튼 클릭: 전 스토리 미감상이면 스토리 먼저, 감상 완료면 바로 게임
+    void OnStageButtonClick(int difficulty)
+    {
+        if (GlobalManager.Instance == null)
         {
-            GlobalManager.Instance.pendingBotDifficulty = difficulty;
+            StartGame(difficulty);
+            return;
+        }
+
+        GlobalManager gm = GlobalManager.Instance;
+        StoryChapter preChapter = GetPreChapter(gm, difficulty);
+        bool preUnseen = preChapter != null && !gm.IsStorySeen(preChapter);
+
+        if (preUnseen)
+        {
+            gm.pendingBotDifficulty = difficulty;
+            gm.GoToStory(preChapter, "GameScene");
         }
         else
         {
-            Debug.LogWarning("GlobalManager not found! Difficulty may not be set correctly.");
+            StartGame(difficulty);
         }
+    }
+
+    // 난이도를 GlobalManager에 기록하고 GameScene으로 전환
+    void StartGame(int difficulty)
+    {
+        if (GlobalManager.Instance != null)
+            GlobalManager.Instance.pendingBotDifficulty = difficulty;
+        else
+            Debug.LogWarning("GlobalManager not found! Difficulty may not be set correctly.");
+
         SceneManager.LoadScene("GameScene");
+    }
+
+    // 스토리 버튼 클릭: 해당 챕터를 단독 감상 후 SelectScene으로 복귀
+    void OnStoryButtonClick(int stageNumber, bool isPre)
+    {
+        if (GlobalManager.Instance == null) return;
+
+        GlobalManager gm = GlobalManager.Instance;
+        StoryChapter chapter = isPre ? GetPreChapter(gm, stageNumber) : GetPostChapter(gm, stageNumber);
+
+        if (chapter != null)
+            gm.GoToStory(chapter, "SelectScene");
+    }
+
+    StoryChapter GetPreChapter(GlobalManager gm, int difficulty)
+    {
+        return difficulty switch
+        {
+            1 => gm.stage1PreChapter,
+            2 => gm.stage2PreChapter,
+            3 => gm.stage3PreChapter,
+            _ => null
+        };
+    }
+
+    StoryChapter GetPostChapter(GlobalManager gm, int difficulty)
+    {
+        return difficulty switch
+        {
+            1 => gm.stage1PostChapter,
+            2 => gm.stage2PostChapter,
+            3 => gm.stage3PostChapter,
+            _ => null
+        };
     }
 
     public void OnEasyButtonClick()
     {
         Debug.Log("Easy difficulty selected (Stage 1)");
-        StartGame(1);
+        OnStageButtonClick(1);
     }
 
     public void OnNormalButtonClick()
     {
         Debug.Log("Normal difficulty selected (Stage 2)");
-        StartGame(2);
+        OnStageButtonClick(2);
     }
 
     public void OnHardButtonClick()
     {
         Debug.Log("Hard difficulty selected (Stage 3)");
-        StartGame(3);
+        OnStageButtonClick(3);
     }
 
     public void OnBackButtonClick()

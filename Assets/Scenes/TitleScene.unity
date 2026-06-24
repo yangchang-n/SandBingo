@@ -247,10 +247,27 @@ MonoBehaviour:
   stage1BestScore: 0
   stage2BestScore: 0
   stage3BestScore: 0
+  stage1PreChapter: {fileID: 11400000, guid: 9adfacda38855ea4087d900cbf088033, type: 2}
+  stage1TutorialChapter: {fileID: 11400000, guid: c3dcba26adff6254e9c6934bcd98ca73, type: 2}
+  stage1PostChapter: {fileID: 11400000, guid: a5bf00f3fc657e44e83b157ad337ae31, type: 2}
+  stage2PreChapter: {fileID: 11400000, guid: 6fb8e0d9375efc14db08a6501f3101f9, type: 2}
+  stage2PostChapter: {fileID: 11400000, guid: 22fdb30425c49cf48b013456cf22b9eb, type: 2}
+  stage3PreChapter: {fileID: 11400000, guid: 4f89aeee25c0b0442af3fa25d96d9208, type: 2}
+  stage3PostChapter: {fileID: 11400000, guid: b667461247fc3524ebbc00017284ac94, type: 2}
   bgmClip: {fileID: 8300000, guid: 0f27606caa27b0f479ffa05f636dedbd, type: 3}
   bgmVolume: 0.5
   isMuted: 0
   volumePercentage: 50
+  stage1PreSeen: 0
+  stage1TutorialSeen: 0
+  stage1PostSeen: 0
+  stage2PreSeen: 0
+  stage2PostSeen: 0
+  stage3PreSeen: 0
+  stage3PostSeen: 0
+  pendingBotDifficulty: 1
+  pendingStoryChapter: {fileID: 0}
+  pendingNextScene: 
 --- !u!1 &267482499
 GameObject:
   m_ObjectHideFlags: 0

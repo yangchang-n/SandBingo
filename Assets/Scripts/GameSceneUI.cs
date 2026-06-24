@@ -6,12 +6,17 @@ public class GameSceneUI : MonoBehaviour
 {
     [Header("Menu Panel")]
     public GameObject menuPanel;
-    public GameObject menuText;
-    public GameObject oasisWinText;
-    public GameObject mudWinText;
     public Button resetButton;
     public Button optionsButton;
     public Button mainMenuButton;
+    public Button tutorialButton;
+
+    [Header("Victory Panel")]
+    public GameObject victoryPanel;
+    public GameObject oasisWinText;
+    public GameObject mudWinText;
+    public Button continueButton;
+    public Button retryButton;
 
     [Header("Score Display")]
     public Text scoreText;
@@ -20,6 +25,10 @@ public class GameSceneUI : MonoBehaviour
     public GameObject easyBackground;
     public GameObject mediumBackground;
     public GameObject hardBackground;
+
+    [Header("Tutorial")]
+    public GameObject tutorialPanel;
+    public Button tutorialSkipButton;
 
     private GameManager gameManager;
     private OptionsUI optionsUI;
@@ -32,63 +41,63 @@ public class GameSceneUI : MonoBehaviour
 
         SetupBackgrounds();
 
-        if (menuPanel != null)
-            menuPanel.SetActive(false);
+        if (menuPanel != null)    menuPanel.SetActive(false);
+        if (victoryPanel != null) victoryPanel.SetActive(false);
+        if (oasisWinText != null) oasisWinText.SetActive(false);
+        if (mudWinText != null)   mudWinText.SetActive(false);
 
-        if (menuText != null)
-            menuText.SetActive(true);
+        if (resetButton != null)    resetButton.onClick.AddListener(OnResetClicked);
+        if (optionsButton != null)  optionsButton.onClick.AddListener(OnOptionsClicked);
+        if (mainMenuButton != null) mainMenuButton.onClick.AddListener(OnMainMenuClicked);
+        if (tutorialButton != null) tutorialButton.onClick.AddListener(OnTutorialButtonClicked);
 
-        if (oasisWinText != null)
-            oasisWinText.SetActive(false);
+        if (continueButton != null)     continueButton.onClick.AddListener(OnContinueClicked);
+        if (retryButton != null)        retryButton.onClick.AddListener(OnRetryClicked);
+        if (tutorialSkipButton != null) tutorialSkipButton.onClick.AddListener(OnTutorialSkipClicked);
 
-        if (mudWinText != null)
-            mudWinText.SetActive(false);
-
-        if (resetButton != null)
-            resetButton.onClick.AddListener(OnResetClicked);
-
-        if (optionsButton != null)
-            optionsButton.onClick.AddListener(OnOptionsClicked);
-
-        if (mainMenuButton != null)
-            mainMenuButton.onClick.AddListener(OnMainMenuClicked);
-
+        SetupTutorial();
         InitializeScoreDisplay();
+    }
+
+    void SetupTutorial()
+    {
+        if (tutorialPanel == null) return;
+
+        GlobalManager gm = GlobalManager.Instance;
+
+        bool shouldShow = gm != null
+            && gameManager != null
+            && gameManager.botDifficulty == 1
+            && gm.stage1TutorialChapter != null
+            && !gm.IsStorySeen(gm.stage1TutorialChapter);
+
+        tutorialPanel.SetActive(shouldShow);
     }
 
     void SetupBackgrounds()
     {
-        if (easyBackground != null)
-            easyBackground.SetActive(false);
-
-        if (mediumBackground != null)
-            mediumBackground.SetActive(false);
-
-        if (hardBackground != null)
-            hardBackground.SetActive(false);
+        if (easyBackground != null)   easyBackground.SetActive(false);
+        if (mediumBackground != null) mediumBackground.SetActive(false);
+        if (hardBackground != null)   hardBackground.SetActive(false);
 
         if (gameManager != null && gameManager.isBotMode)
         {
             switch (gameManager.botDifficulty)
             {
                 case 1:
-                    if (easyBackground != null)
-                        easyBackground.SetActive(true);
+                    if (easyBackground != null)   easyBackground.SetActive(true);
                     break;
                 case 2:
-                    if (mediumBackground != null)
-                        mediumBackground.SetActive(true);
+                    if (mediumBackground != null) mediumBackground.SetActive(true);
                     break;
                 case 3:
-                    if (hardBackground != null)
-                        hardBackground.SetActive(true);
+                    if (hardBackground != null)   hardBackground.SetActive(true);
                     break;
             }
         }
         else
         {
-            if (easyBackground != null)
-                easyBackground.SetActive(true);
+            if (easyBackground != null) easyBackground.SetActive(true);
         }
     }
 
@@ -97,9 +106,7 @@ public class GameSceneUI : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape) && gameManager != null && !gameManager.isGameOver)
         {
             if (optionsUI != null && optionsUI.HandleEscapeKey())
-            {
                 return;
-            }
 
             ToggleMenu();
         }
@@ -107,62 +114,47 @@ public class GameSceneUI : MonoBehaviour
 
     void InitializeScoreDisplay()
     {
-        if (scoreText == null || gameManager == null)
-            return;
+        if (scoreText == null || gameManager == null) return;
 
-        int difficulty = gameManager.isBotMode ? gameManager.botDifficulty : 1;
-        int currentScore = gameManager.GetCurrentStageScore();
-        int targetScore = gameManager.GetCurrentStageTargetScore();
-
-        UpdateScoreText(currentScore, targetScore);
+        UpdateScoreText(gameManager.GetCurrentStageScore(), gameManager.GetCurrentStageTargetScore());
     }
 
     public void UpdateScoreDisplay()
     {
-        if (scoreText == null || gameManager == null)
-            return;
+        if (scoreText == null || gameManager == null) return;
 
-        int currentScore = gameManager.GetCurrentStageScore();
-        int targetScore = gameManager.GetCurrentStageTargetScore();
-
-        UpdateScoreText(currentScore, targetScore);
+        UpdateScoreText(gameManager.GetCurrentStageScore(), gameManager.GetCurrentStageTargetScore());
     }
 
     void UpdateScoreText(int currentScore, int targetScore)
     {
-        string scoreString = currentScore >= 0 ? currentScore.ToString() : currentScore.ToString();
-        scoreText.text = $"{scoreString} / {targetScore}";
+        scoreText.text = $"{currentScore} / {targetScore}";
     }
 
     void ToggleMenu()
     {
         isMenuOpen = !isMenuOpen;
 
-        if (menuPanel != null)
-            menuPanel.SetActive(isMenuOpen);
+        if (menuPanel != null) menuPanel.SetActive(isMenuOpen);
+    }
 
-        if (isMenuOpen)
-        {
-            if (menuText != null)
-                menuText.SetActive(true);
+    void HideMenu()
+    {
+        isMenuOpen = false;
 
-            if (oasisWinText != null)
-                oasisWinText.SetActive(false);
+        if (menuPanel != null) menuPanel.SetActive(false);
+    }
 
-            if (mudWinText != null)
-                mudWinText.SetActive(false);
-        }
+    void HideVictoryPanel()
+    {
+        if (victoryPanel != null) victoryPanel.SetActive(false);
+        if (oasisWinText != null) oasisWinText.SetActive(false);
+        if (mudWinText != null)   mudWinText.SetActive(false);
     }
 
     public void ShowVictoryScreen(bool isOasisWin)
     {
-        isMenuOpen = true;
-
-        if (menuPanel != null)
-            menuPanel.SetActive(true);
-
-        if (menuText != null)
-            menuText.SetActive(false);
+        if (victoryPanel != null) victoryPanel.SetActive(true);
 
         if (isOasisWin && oasisWinText != null)
             oasisWinText.SetActive(true);
@@ -170,27 +162,21 @@ public class GameSceneUI : MonoBehaviour
             mudWinText.SetActive(true);
     }
 
-    public void HideMenu()
-    {
-        isMenuOpen = false;
-
-        if (menuPanel != null)
-            menuPanel.SetActive(false);
-
-        if (menuText != null)
-            menuText.SetActive(true);
-
-        if (oasisWinText != null)
-            oasisWinText.SetActive(false);
-
-        if (mudWinText != null)
-            mudWinText.SetActive(false);
-    }
-
     void OnResetClicked()
     {
-        Debug.Log("Reset button clicked");
         HideMenu();
+        HideVictoryPanel();
+
+        if (gameManager != null)
+        {
+            gameManager.ResetGame();
+            InitializeScoreDisplay();
+        }
+    }
+
+    void OnRetryClicked()
+    {
+        HideVictoryPanel();
 
         if (gameManager != null)
         {
@@ -201,21 +187,40 @@ public class GameSceneUI : MonoBehaviour
 
     void OnOptionsClicked()
     {
-        Debug.Log("Options button clicked");
-
         if (optionsUI != null)
-        {
             optionsUI.OpenOptions();
-        }
         else
-        {
             Debug.LogWarning("OptionsUI not found!");
-        }
     }
 
     void OnMainMenuClicked()
     {
-        Debug.Log("Main Menu button clicked");
-        SceneManager.LoadScene("TitleScene");
+        SceneManager.LoadScene("SelectScene");
+    }
+
+    void OnTutorialButtonClicked()
+    {
+        HideMenu();
+
+        if (tutorialPanel != null)
+            tutorialPanel.SetActive(true);
+    }
+
+    void OnContinueClicked()
+    {
+        if (gameManager != null)
+            gameManager.LeaveGameScene();
+        else
+            SceneManager.LoadScene("SelectScene");
+    }
+
+    void OnTutorialSkipClicked()
+    {
+        if (tutorialPanel != null)
+            tutorialPanel.SetActive(false);
+
+        GlobalManager gm = GlobalManager.Instance;
+        if (gm != null && gm.stage1TutorialChapter != null)
+            gm.MarkStoryAsSeen(gm.stage1TutorialChapter);
     }
 }

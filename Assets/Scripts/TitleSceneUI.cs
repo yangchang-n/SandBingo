@@ -14,10 +14,8 @@ public class TitleSceneUI : MonoBehaviour
 
     void Start()
     {
-        // OptionsUI 찾기
         optionsUI = FindObjectOfType<OptionsUI>();
 
-        // 버튼 이벤트 설정
         if (startButton != null)
             startButton.onClick.AddListener(OnStartClicked);
 
@@ -33,13 +31,10 @@ public class TitleSceneUI : MonoBehaviour
 
     void Update()
     {
-        // ESC 키로 Options 패널 닫기
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (optionsUI != null)
-            {
                 optionsUI.HandleEscapeKey();
-            }
         }
     }
 
@@ -51,13 +46,9 @@ public class TitleSceneUI : MonoBehaviour
     void OnOptionsClicked()
     {
         if (optionsUI != null)
-        {
             optionsUI.OpenOptions();
-        }
         else
-        {
             Debug.LogWarning("OptionsUI not found!");
-        }
     }
 
     void OnCreditsClicked()
@@ -67,8 +58,6 @@ public class TitleSceneUI : MonoBehaviour
 
     void OnQuitClicked()
     {
-        Debug.Log("Quit button clicked - Exiting game");
-
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #else
