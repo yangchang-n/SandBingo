@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 public class OptionsUI : MonoBehaviour
 {
@@ -189,13 +188,10 @@ public class OptionsUI : MonoBehaviour
     {
         if (GlobalManager.Instance == null) return;
 
-        // 이미 같은 언어면 아무것도 하지 않음
         if (GlobalManager.Instance.GetCurrentLanguage() == code) return;
 
         GlobalManager.Instance.SetLanguage(code);
-
-        // 언어 변경 시 TitleScene으로 복귀
-        SceneManager.LoadScene("TitleScene");
+        GlobalManager.Instance.LoadScene("TitleScene");
     }
 
     void OnResolutionChanged(int index)
@@ -264,7 +260,7 @@ public class OptionsUI : MonoBehaviour
         if (GlobalManager.Instance != null)
         {
             GlobalManager.Instance.ResetAllProgress();
-            SceneManager.LoadScene("TitleScene");
+            GlobalManager.Instance.LoadScene("TitleScene");
         }
     }
 }

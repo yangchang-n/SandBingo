@@ -91,8 +91,6 @@ public class GameManager : MonoBehaviour
 
     void LoadGameSettings()
     {
-        // GlobalManager 싱글톤에서 씬 간 전달값을 읽음
-        // GlobalManager가 없을 경우 Inspector 기본값(isBotMode=true, botDifficulty=1) 유지
         if (GlobalManager.Instance != null)
         {
             isBotMode = true;
@@ -300,19 +298,14 @@ public class GameManager : MonoBehaviour
 
         foreach (Vector2Int cell in cellsToRemove)
         {
-            // 셀의 픽셀 중심 좌표 계산
             int pixelCenterX = 1 + cell.x * cellPixelSize + cellPixelSize / 2;
             int pixelCenterY = 1 + cell.y * cellPixelSize + cellPixelSize / 2;
 
-            // 월드 좌표로 변환
             float worldX = pixelCenterX - boardWidth / 2f;
             float worldY = pixelCenterY - boardHeight / 2f;
             Vector3 worldPos = new Vector3(worldX, worldY, -1f);
 
-            // 파티클 생성
             GameObject particle = Instantiate(cellRemovalParticlePrefab, worldPos, Quaternion.identity);
-
-            // 자동 제거
             Destroy(particle, 1.5f);
         }
 
@@ -457,7 +450,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // 게임 종료 후 씬 전환: 오아시스 승리 시 후 스토리, 패배 시 SelectScene
+    // 게임 종료 후 씬 전환 - 페이드 효과 포함
     public void LeaveGameScene()
     {
         if (GlobalManager.Instance == null)
@@ -470,7 +463,6 @@ public class GameManager : MonoBehaviour
 
         if (isOasisWin)
         {
-            // 클리어 후 스토리가 있고 아직 미감상이면 스토리로
             StoryChapter postChapter = botDifficulty switch
             {
                 1 => gm.stage1PostChapter,
@@ -486,8 +478,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        // 패배이거나 후 스토리 없음/이미 감상: SelectScene으로 바로 이동
-        UnityEngine.SceneManagement.SceneManager.LoadScene("SelectScene");
+        gm.LoadScene("SelectScene");
     }
 
     void SpawnSandAtMouse()

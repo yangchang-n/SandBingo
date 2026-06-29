@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class CreditsSceneUI : MonoBehaviour
 {
@@ -7,7 +6,7 @@ public class CreditsSceneUI : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Return))
         {
-            SceneManager.LoadScene("TitleScene");
+            GlobalManager.Instance.LoadScene("TitleScene");
         }
     }
 }

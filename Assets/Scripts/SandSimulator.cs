@@ -681,4 +681,5 @@ public class SandSimulator : MonoBehaviour
     public int GetWidth() => width;
     public int GetHeight() => height;
     public int GetCellPixelSize() => cellPixelSize;
+    public int GetGridSize() => gridSize;
 }

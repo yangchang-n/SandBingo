@@ -1,4 +1,7 @@
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using System.Collections;
 using System.IO;
 
 public class GlobalManager : MonoBehaviour
@@ -34,9 +37,6 @@ public class GlobalManager : MonoBehaviour
     public bool isMuted = false;
     public int volumePercentage = 50;
 
-    // 언어별 폰트 (Inspector에서 할당)
-    // EN 폰트가 null이면 폰트 변경 없이 기존 폰트 유지
-    // KR 폰트가 null이면 EN 폰트로 폴백
     [Header("Language Settings")]
     public Font enFont;
     public Font krFont;
@@ -64,6 +64,17 @@ public class GlobalManager : MonoBehaviour
 
     private string _saveFilePath;
 
+    // ===== Fade System =====
+
+    [Header("Fade Settings")]
+    [Tooltip("씬 전환 페이드 인/아웃 각각에 걸리는 시간 (초)")]
+    public float fadeDuration = 0.25f;
+
+    private Image _fadePanel;
+    private bool _isTransitioning = false;
+
+    // ===== Lifecycle =====
+
     void Awake()
     {
         if (Instance == null)
@@ -73,6 +84,7 @@ public class GlobalManager : MonoBehaviour
             InitializeSaveFilePath();
             LoadProgress();
             InitializeBGM();
+            InitializeFadePanel();
             Debug.Log("GlobalManager initialized");
             Debug.Log($"Save file location: {_saveFilePath}");
         }
@@ -81,6 +93,82 @@ public class GlobalManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+    // ===== Fade Setup =====
+
+    // DontDestroyOnLoad 오브젝트에 Canvas와 Image를 동적으로 생성
+    // 씬마다 배치할 필요 없이 항상 최상위에 표시됨
+    void InitializeFadePanel()
+    {
+        GameObject canvasObj = new GameObject("FadeCanvas");
+        canvasObj.transform.SetParent(transform);
+
+        Canvas canvas = canvasObj.AddComponent<Canvas>();
+        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        canvas.sortingOrder = 9999;
+
+        canvasObj.AddComponent<CanvasScaler>();
+        canvasObj.AddComponent<GraphicRaycaster>();
+
+        GameObject panelObj = new GameObject("FadePanel");
+        panelObj.transform.SetParent(canvasObj.transform, false);
+
+        RectTransform rect = panelObj.AddComponent<RectTransform>();
+        rect.anchorMin = Vector2.zero;
+        rect.anchorMax = Vector2.one;
+        rect.offsetMin = Vector2.zero;
+        rect.offsetMax = Vector2.zero;
+
+        _fadePanel = panelObj.AddComponent<Image>();
+        _fadePanel.color = new Color(0f, 0f, 0f, 0f);
+        _fadePanel.raycastTarget = false;
+    }
+
+    // ===== Scene Transition =====
+
+    // 모든 씬 전환의 단일 진입점
+    // 페이드 아웃 -> 씬 로드 -> 페이드 인 순서로 진행
+    public void LoadScene(string sceneName)
+    {
+        if (_isTransitioning) return;
+        StartCoroutine(TransitionCoroutine(sceneName));
+    }
+
+    IEnumerator TransitionCoroutine(string sceneName)
+    {
+        _isTransitioning = true;
+        _fadePanel.raycastTarget = true;
+
+        yield return StartCoroutine(FadeTo(1f));
+
+        SceneManager.LoadScene(sceneName);
+
+        // 씬 로드 완료 후 한 프레임 대기
+        yield return null;
+
+        yield return StartCoroutine(FadeTo(0f));
+
+        _fadePanel.raycastTarget = false;
+        _isTransitioning = false;
+    }
+
+    IEnumerator FadeTo(float targetAlpha)
+    {
+        float startAlpha = _fadePanel.color.a;
+        float elapsed = 0f;
+
+        while (elapsed < fadeDuration)
+        {
+            elapsed += Time.deltaTime;
+            float alpha = Mathf.Lerp(startAlpha, targetAlpha, elapsed / fadeDuration);
+            _fadePanel.color = new Color(0f, 0f, 0f, alpha);
+            yield return null;
+        }
+
+        _fadePanel.color = new Color(0f, 0f, 0f, targetAlpha);
+    }
+
+    // ===== Initialization =====
 
     void InitializeSaveFilePath()
     {
@@ -115,6 +203,8 @@ public class GlobalManager : MonoBehaviour
         }
     }
 
+    // ===== Save/Load =====
+
     void LoadProgress()
     {
         if (!File.Exists(_saveFilePath))
@@ -148,7 +238,6 @@ public class GlobalManager : MonoBehaviour
             bgmVolume = volumePercentage / 100f;
             isMuted = data.isMuted;
 
-            // 기존 저장 파일에 languageCode가 없으면 빈 문자열로 오므로 EN으로 처리
             currentLanguage = string.IsNullOrEmpty(data.languageCode) ? "EN" : data.languageCode;
 
             if (data.screenWidth > 0 && data.screenHeight > 0)
@@ -208,8 +297,6 @@ public class GlobalManager : MonoBehaviour
 
     public string GetCurrentLanguage() => currentLanguage;
 
-    // 언어 변경 - 저장 후 이벤트 발행
-    // TitleScene 전환은 호출 측(OptionsUI)에서 담당
     public void SetLanguage(string code)
     {
         if (code != "EN" && code != "KR")
@@ -224,8 +311,6 @@ public class GlobalManager : MonoBehaviour
         Debug.Log($"Language set to: {currentLanguage}");
     }
 
-    // 현재 언어에 맞는 폰트 반환
-    // KR 폰트가 없으면 EN 폰트로 폴백, EN도 없으면 null 반환 (LocalizedText에서 기존 폰트 유지)
     public Font GetCurrentFont()
     {
         if (currentLanguage == "KR")
@@ -236,11 +321,12 @@ public class GlobalManager : MonoBehaviour
 
     // ===== Story Control =====
 
+    // 스토리 씬으로 전환 - 페이드 효과 포함
     public void GoToStory(StoryChapter chapter, string nextScene)
     {
         pendingStoryChapter = chapter;
         pendingNextScene    = nextScene;
-        UnityEngine.SceneManagement.SceneManager.LoadScene("StoryScene");
+        LoadScene("StoryScene");
     }
 
     public void MarkStoryAsSeen(StoryChapter chapter)

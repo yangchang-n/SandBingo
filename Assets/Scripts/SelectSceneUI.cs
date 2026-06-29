@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 public class SelectSceneUI : MonoBehaviour
 {
@@ -65,12 +64,10 @@ public class SelectSceneUI : MonoBehaviour
 
         GlobalManager gm = GlobalManager.Instance;
 
-        // 스테이지 버튼: 잠금 시 반투명(interactable=false), 항상 보임
         if (easyButton != null)   easyButton.interactable = true;
         if (normalButton != null) normalButton.interactable = gm.IsStageCleared(1);
         if (hardButton != null)   hardButton.interactable   = gm.IsStageCleared(2);
 
-        // 스토리 버튼: 미감상 시 숨김, 감상 완료 시 표시
         SetStoryButtonVisible(stage1PreStoryButton,  gm.IsStorySeen(gm.stage1PreChapter));
         SetStoryButtonVisible(stage1PostStoryButton, gm.IsStorySeen(gm.stage1PostChapter));
         SetStoryButtonVisible(stage2PreStoryButton,  gm.IsStorySeen(gm.stage2PreChapter));
@@ -102,7 +99,6 @@ public class SelectSceneUI : MonoBehaviour
         SetStoryButtonVisible(stage3PostStoryButton, false);
     }
 
-    // 스테이지 버튼 클릭: 전 스토리 미감상이면 스토리 먼저, 감상 완료면 바로 게임
     void OnStageButtonClick(int difficulty)
     {
         if (GlobalManager.Instance == null)
@@ -126,7 +122,6 @@ public class SelectSceneUI : MonoBehaviour
         }
     }
 
-    // 난이도를 GlobalManager에 기록하고 GameScene으로 전환
     void StartGame(int difficulty)
     {
         if (GlobalManager.Instance != null)
@@ -134,10 +129,9 @@ public class SelectSceneUI : MonoBehaviour
         else
             Debug.LogWarning("GlobalManager not found! Difficulty may not be set correctly.");
 
-        SceneManager.LoadScene("GameScene");
+        GlobalManager.Instance.LoadScene("GameScene");
     }
 
-    // 스토리 버튼 클릭: 해당 챕터를 단독 감상 후 SelectScene으로 복귀
     void OnStoryButtonClick(int stageNumber, bool isPre)
     {
         if (GlobalManager.Instance == null) return;
@@ -192,7 +186,7 @@ public class SelectSceneUI : MonoBehaviour
     public void OnBackButtonClick()
     {
         Debug.Log("Returning to Title Scene");
-        SceneManager.LoadScene("TitleScene");
+        GlobalManager.Instance.LoadScene("TitleScene");
     }
 
 #if UNITY_EDITOR

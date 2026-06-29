@@ -214,6 +214,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &130669841 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3139087929754996945, guid: 632d25ef1a822eb4b8dc902c65648c62, type: 3}
+  m_PrefabInstance: {fileID: 422515855}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &193568350
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -422,7 +427,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3139087929754996945, guid: 632d25ef1a822eb4b8dc902c65648c62, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 422515861}
   m_SourcePrefab: {fileID: 100100000, guid: 632d25ef1a822eb4b8dc902c65648c62, type: 3}
 --- !u!224 &422515856 stripped
 RectTransform:
@@ -467,6 +475,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!225 &422515861
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 130669841}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1103346552
 GameObject:
   m_ObjectHideFlags: 0
@@ -764,7 +784,9 @@ MonoBehaviour:
   dialogueText: {fileID: 422515857}
   namePanel: {fileID: 422515859}
   skipButton: {fileID: 193568352}
+  dialoguePanel: {fileID: 130669841}
   typingSpeed: 0.04
+  dialogueFadeDuration: 0.25
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

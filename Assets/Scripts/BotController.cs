@@ -35,9 +35,7 @@ public class BotController : MonoBehaviour
 
         float sum = 0;
         foreach (int x in oasisSandXPositions)
-        {
             sum += x;
-        }
         averageX = sum / oasisSandXPositions.Count;
 
         float varianceSum = 0;
@@ -57,15 +55,9 @@ public class BotController : MonoBehaviour
 
         switch (difficulty)
         {
-            case 1:
-                ExecuteEasyBot();
-                break;
-            case 2:
-                ExecuteMediumBot();
-                break;
-            case 3:
-                ExecuteHardBot();
-                break;
+            case 1: ExecuteEasyBot();   break;
+            case 2: ExecuteMediumBot(); break;
+            case 3: ExecuteHardBot();   break;
         }
 
         ClearOasisData();
@@ -73,7 +65,6 @@ public class BotController : MonoBehaviour
 
     void ExecuteEasyBot()
     {
-        // 0.8ƒ≠ µ¢¿Ã 2∞≥ (ºº∑Œ 0.8ƒ≠ x ∞°∑Œ 1ƒ≠)
         int cellPixelSize = sandSimulator.GetCellPixelSize();
         float minOffset = cellPixelSize * 0.5f;
         float offset = Mathf.Max(standardDeviation, minOffset);
@@ -81,7 +72,7 @@ public class BotController : MonoBehaviour
         float leftX = averageX - offset;
         float rightX = averageX + offset;
 
-        AdjustPositionsForBoundary(ref leftX, ref rightX, cellPixelSize);
+        AdjustTwoPositionsForBoundary(ref leftX, ref rightX, cellPixelSize);
 
         int targetY = GetThirdRowY();
 
@@ -95,7 +86,6 @@ public class BotController : MonoBehaviour
 
     void ExecuteMediumBot()
     {
-        // 1.2ƒ≠ µ¢¿Ã 2∞≥ (ºº∑Œ 1.2ƒ≠ x ∞°∑Œ 1ƒ≠)
         int cellPixelSize = sandSimulator.GetCellPixelSize();
         float minOffset = cellPixelSize * 0.5f;
         float offset = Mathf.Max(standardDeviation, minOffset);
@@ -103,7 +93,7 @@ public class BotController : MonoBehaviour
         float leftX = averageX - offset;
         float rightX = averageX + offset;
 
-        AdjustPositionsForBoundary(ref leftX, ref rightX, cellPixelSize);
+        AdjustTwoPositionsForBoundary(ref leftX, ref rightX, cellPixelSize);
 
         int targetY = GetThirdRowY();
 
@@ -117,7 +107,6 @@ public class BotController : MonoBehaviour
 
     void ExecuteHardBot()
     {
-        // 1ƒ≠ µ¢¿Ã 3∞≥ (¡§ªÁ∞¢«¸)
         int cellPixelSize = sandSimulator.GetCellPixelSize();
         float minOffset = cellPixelSize * 0.5f;
         float offset = Mathf.Max(standardDeviation, minOffset);
@@ -126,25 +115,28 @@ public class BotController : MonoBehaviour
         float centerX = averageX;
         float rightX = averageX + offset;
 
-        // 3∞≥ ¿ßƒ° ¡∂¡§
         AdjustThreePositionsForBoundary(ref leftX, ref centerX, ref rightX, cellPixelSize);
 
         int targetY = GetThirdRowY();
 
         Debug.Log($"Hard Bot: Dropping 3 chunks at X: {leftX:F1}, {centerX:F1}, {rightX:F1}");
 
-        sandSimulator.DropSandChunk(Mathf.RoundToInt(leftX), targetY,
-            SandSimulator.CellType.BrownSand);
-        sandSimulator.DropSandChunk(Mathf.RoundToInt(centerX), targetY,
-            SandSimulator.CellType.BrownSand);
-        sandSimulator.DropSandChunk(Mathf.RoundToInt(rightX), targetY,
-            SandSimulator.CellType.BrownSand);
+        sandSimulator.DropSandChunk(Mathf.RoundToInt(leftX),   targetY, SandSimulator.CellType.BrownSand);
+        sandSimulator.DropSandChunk(Mathf.RoundToInt(centerX), targetY, SandSimulator.CellType.BrownSand);
+        sandSimulator.DropSandChunk(Mathf.RoundToInt(rightX),  targetY, SandSimulator.CellType.BrownSand);
     }
 
-    void AdjustPositionsForBoundary(ref float leftX, ref float rightX, int cellPixelSize)
+    // gridSizeÎäî SandSimulatorÏóêÏÑú ÏßÅÏ†ë ÏùΩÏñ¥ Í≥ÑÏÇ∞
+    void GetBoundaries(int cellPixelSize, out float leftBoundary, out float rightBoundary)
     {
-        float leftBoundary = 1 + cellPixelSize / 2f;
-        float rightBoundary = 1 + (15 - 1) * cellPixelSize + cellPixelSize / 2f;
+        int gridSize = sandSimulator.GetGridSize();
+        leftBoundary  = 1 + cellPixelSize / 2f;
+        rightBoundary = 1 + (gridSize - 1) * cellPixelSize + cellPixelSize / 2f;
+    }
+
+    void AdjustTwoPositionsForBoundary(ref float leftX, ref float rightX, int cellPixelSize)
+    {
+        GetBoundaries(cellPixelSize, out float leftBoundary, out float rightBoundary);
 
         if (leftX < leftBoundary)
         {
@@ -156,10 +148,7 @@ public class BotController : MonoBehaviour
             {
                 rightX = rightBoundary;
                 leftX = rightX - cellPixelSize;
-                if (leftX < leftBoundary)
-                {
-                    leftX = leftBoundary;
-                }
+                if (leftX < leftBoundary) leftX = leftBoundary;
             }
         }
         else if (rightX > rightBoundary)
@@ -172,88 +161,70 @@ public class BotController : MonoBehaviour
             {
                 leftX = leftBoundary;
                 rightX = leftX + cellPixelSize;
-                if (rightX > rightBoundary)
-                {
-                    rightX = rightBoundary;
-                }
+                if (rightX > rightBoundary) rightX = rightBoundary;
             }
         }
     }
 
     void AdjustThreePositionsForBoundary(ref float leftX, ref float centerX, ref float rightX, int cellPixelSize)
     {
-        float leftBoundary = 1 + cellPixelSize / 2f;
-        float rightBoundary = 1 + (15 - 1) * cellPixelSize + cellPixelSize / 2f;
+        GetBoundaries(cellPixelSize, out float leftBoundary, out float rightBoundary);
 
-        // √÷º“ ∞£∞›: 1ƒ≠ (∞„ƒ°¡ˆ æ ∞‘)
         float minGap = cellPixelSize;
 
-        // øﬁ¬  ∞Ê∞Ë √º≈©
         if (leftX < leftBoundary)
         {
-            leftX = leftBoundary;
+            leftX   = leftBoundary;
             centerX = leftX + minGap;
-            rightX = centerX + minGap;
+            rightX  = centerX + minGap;
 
             if (rightX > rightBoundary)
             {
-                // ø¿∏•¬ µµ π˛æÓ≥≤: ±’µÓ ∫–πË
                 float totalWidth = rightBoundary - leftBoundary;
-                leftX = leftBoundary;
+                leftX   = leftBoundary;
                 centerX = leftBoundary + totalWidth / 2f;
-                rightX = rightBoundary;
+                rightX  = rightBoundary;
             }
         }
-        // ø¿∏•¬  ∞Ê∞Ë √º≈©
         else if (rightX > rightBoundary)
         {
-            rightX = rightBoundary;
+            rightX  = rightBoundary;
             centerX = rightX - minGap;
-            leftX = centerX - minGap;
+            leftX   = centerX - minGap;
 
             if (leftX < leftBoundary)
             {
-                // øﬁ¬ µµ π˛æÓ≥≤: ±’µÓ ∫–πË
                 float totalWidth = rightBoundary - leftBoundary;
-                leftX = leftBoundary;
+                leftX   = leftBoundary;
                 centerX = leftBoundary + totalWidth / 2f;
-                rightX = rightBoundary;
+                rightX  = rightBoundary;
             }
         }
-        // ∞„ƒß √º≈©
         else
         {
-            // øﬁ¬ -¡ﬂæ” ∞£∞› √º≈©
             if (centerX - leftX < minGap)
             {
                 centerX = leftX + minGap;
                 if (rightX - centerX < minGap)
-                {
                     rightX = centerX + minGap;
-                }
             }
 
-            // ¡ﬂæ”-ø¿∏•¬  ∞£∞› √º≈©
             if (rightX - centerX < minGap)
-            {
                 rightX = centerX + minGap;
-            }
 
-            // ¿Á¡∂¡§ »ƒ ∞Ê∞Ë π˛æÓ≥≤ √º≈©
             if (rightX > rightBoundary)
             {
                 float overflow = rightX - rightBoundary;
-                leftX -= overflow;
+                leftX   -= overflow;
                 centerX -= overflow;
-                rightX = rightBoundary;
+                rightX   = rightBoundary;
 
                 if (leftX < leftBoundary)
                 {
-                    // ±’µÓ ∫–πË
                     float totalWidth = rightBoundary - leftBoundary;
-                    leftX = leftBoundary;
+                    leftX   = leftBoundary;
                     centerX = leftBoundary + totalWidth / 2f;
-                    rightX = rightBoundary;
+                    rightX  = rightBoundary;
                 }
             }
         }

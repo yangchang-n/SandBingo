@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 public class TitleSceneUI : MonoBehaviour
 {
@@ -40,7 +39,7 @@ public class TitleSceneUI : MonoBehaviour
 
     void OnStartClicked()
     {
-        SceneManager.LoadScene("SelectScene");
+        GlobalManager.Instance.LoadScene("SelectScene");
     }
 
     void OnOptionsClicked()
@@ -53,7 +52,7 @@ public class TitleSceneUI : MonoBehaviour
 
     void OnCreditsClicked()
     {
-        SceneManager.LoadScene("CreditsScene");
+        GlobalManager.Instance.LoadScene("CreditsScene");
     }
 
     void OnQuitClicked()

@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 public class GameSceneUI : MonoBehaviour
 {
@@ -195,7 +194,7 @@ public class GameSceneUI : MonoBehaviour
 
     void OnMainMenuClicked()
     {
-        SceneManager.LoadScene("SelectScene");
+        GlobalManager.Instance.LoadScene("SelectScene");
     }
 
     void OnTutorialButtonClicked()
@@ -211,7 +210,7 @@ public class GameSceneUI : MonoBehaviour
         if (gameManager != null)
             gameManager.LeaveGameScene();
         else
-            SceneManager.LoadScene("SelectScene");
+            GlobalManager.Instance.LoadScene("SelectScene");
     }
 
     void OnTutorialSkipClicked()
