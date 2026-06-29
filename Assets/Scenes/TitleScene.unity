@@ -258,6 +258,8 @@ MonoBehaviour:
   bgmVolume: 0.5
   isMuted: 0
   volumePercentage: 50
+  enFont: {fileID: 12800000, guid: 19b9bfe81b147ba4f91b639e7c1b07d9, type: 3}
+  krFont: {fileID: 0}
   stage1PreSeen: 0
   stage1TutorialSeen: 0
   stage1PostSeen: 0

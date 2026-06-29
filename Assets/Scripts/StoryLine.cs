@@ -1,12 +1,22 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 // 대사 한 줄의 데이터
 [System.Serializable]
 public class StoryLine
 {
-    public string speakerName;       // 이름 표시줄에 출력될 이름 (빈 문자열이면 이름창 숨김)
-    public Sprite portrait;          // 초상화 이미지 (null이면 초상화 숨김)
-    public Sprite background;        // 배경 이미지 (null이면 이전 배경 유지)
+    // EN 필드 - 기존 speakerName, dialogueText에서 이름 변경 (기존 .asset 데이터 자동 마이그레이션)
+    [FormerlySerializedAs("speakerName")]
+    public string speakerNameEN;
+    [FormerlySerializedAs("dialogueText")]
     [TextArea(3, 6)]
-    public string dialogueText;      // 대사 본문
+    public string dialogueTextEN;
+
+    // KR 필드
+    public string speakerNameKR;
+    [TextArea(3, 6)]
+    public string dialogueTextKR;
+
+    public Sprite portrait;
+    public Sprite background;
 }

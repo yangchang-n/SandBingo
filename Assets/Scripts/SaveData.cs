@@ -31,30 +31,14 @@ public class SaveData
     public int screenHeight;
     public bool isFullscreen;
 
-    // 기본값 생성자
+    // 언어 설정
+    public string languageCode;
+
+    // C# 기본값과 다른 항목만 명시적으로 초기화
     public SaveData()
     {
-        stage1Cleared = false;
-        stage2Cleared = false;
-        stage3Cleared = false;
-
-        stage1BestScore = 0;
-        stage2BestScore = 0;
-        stage3BestScore = 0;
-
-        stage1PreSeen = false;
-        stage1TutorialSeen = false;
-        stage1PostSeen = false;
-        stage2PreSeen = false;
-        stage2PostSeen = false;
-        stage3PreSeen = false;
-        stage3PostSeen = false;
-
         volumePercentage = 50;
-        isMuted = false;
-
-        screenWidth = 0;
-        screenHeight = 0;
         isFullscreen = true;
+        languageCode = "EN";
     }
 }

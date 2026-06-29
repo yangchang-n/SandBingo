@@ -10,21 +10,18 @@ public class StorySceneUI : MonoBehaviour
     public Image portraitImage;
     public Text speakerNameText;
     public Text dialogueText;
-    public GameObject namePanel;       // speakerName이 비면 숨김
+    public GameObject namePanel;
     public Button skipButton;
 
     [Header("Typing Settings")]
-    public float typingSpeed = 0.04f;  // 글자 하나당 출력 간격 (초)
+    public float typingSpeed = 0.04f;
 
-    // 현재 챕터 진행 상태
     private StoryChapter currentChapter;
     private int currentLineIndex = 0;
     private bool isTyping = false;
     private Coroutine typingCoroutine = null;
 
-    // 클릭 입력 처리: 마우스를 뗄 때 반응 (누르는 순간 X)
     private bool mouseWasDown = false;
-    // EndChapter 호출 여부 - 씬 전환 중 Advance() 재진입 방지
     private bool isChapterEnding = false;
 
     void Start()
@@ -48,7 +45,6 @@ public class StorySceneUI : MonoBehaviour
         if (skipButton != null)
             skipButton.onClick.AddListener(OnSkipClicked);
 
-        // 챕터 시작 시점에 감상 완료 기록
         GlobalManager.Instance.MarkStoryAsSeen(currentChapter);
 
         ShowLine(0);
@@ -56,20 +52,42 @@ public class StorySceneUI : MonoBehaviour
 
     void Update()
     {
-        // ESC: 추후 옵션 패널 연동 예정
-
         bool mouseDown = Input.GetMouseButton(0);
 
-        // 마우스를 뗐을 때만 진행, 단 챕터 종료가 이미 시작됐으면 무시
         if (mouseWasDown && !mouseDown && !isChapterEnding)
-        {
             Advance();
-        }
 
         mouseWasDown = mouseDown;
     }
 
-    // 지정 인덱스의 대사를 화면에 출력
+    // 현재 언어에 따라 speakerName 반환
+    // KR이 비어있으면 EN으로 폴백
+    string GetSpeakerName(StoryLine line)
+    {
+        string lang = GlobalManager.Instance != null
+            ? GlobalManager.Instance.GetCurrentLanguage()
+            : "EN";
+
+        if (lang == "KR")
+            return !string.IsNullOrEmpty(line.speakerNameKR) ? line.speakerNameKR : line.speakerNameEN;
+
+        return line.speakerNameEN;
+    }
+
+    // 현재 언어에 따라 dialogueText 반환
+    // KR이 비어있으면 EN으로 폴백
+    string GetDialogueText(StoryLine line)
+    {
+        string lang = GlobalManager.Instance != null
+            ? GlobalManager.Instance.GetCurrentLanguage()
+            : "EN";
+
+        if (lang == "KR")
+            return !string.IsNullOrEmpty(line.dialogueTextKR) ? line.dialogueTextKR : line.dialogueTextEN;
+
+        return line.dialogueTextEN;
+    }
+
     void ShowLine(int index)
     {
         if (currentChapter == null || index >= currentChapter.lines.Length)
@@ -81,11 +99,9 @@ public class StorySceneUI : MonoBehaviour
         currentLineIndex = index;
         StoryLine line = currentChapter.lines[index];
 
-        // 배경 교체 (null이면 이전 배경 유지)
         if (line.background != null && backgroundImage != null)
             backgroundImage.sprite = line.background;
 
-        // 초상화 교체
         if (portraitImage != null)
         {
             if (line.portrait != null)
@@ -99,18 +115,18 @@ public class StorySceneUI : MonoBehaviour
             }
         }
 
-        // 이름창 표시
-        bool hasSpeaker = !string.IsNullOrEmpty(line.speakerName);
+        string speakerName = GetSpeakerName(line);
+        bool hasSpeaker = !string.IsNullOrEmpty(speakerName);
+
         if (namePanel != null)
             namePanel.SetActive(hasSpeaker);
         if (speakerNameText != null)
-            speakerNameText.text = hasSpeaker ? line.speakerName : "";
+            speakerNameText.text = hasSpeaker ? speakerName : "";
 
-        // 대사 타이핑 시작
         if (typingCoroutine != null)
             StopCoroutine(typingCoroutine);
 
-        typingCoroutine = StartCoroutine(TypeDialogue(line.dialogueText));
+        typingCoroutine = StartCoroutine(TypeDialogue(GetDialogueText(line)));
     }
 
     IEnumerator TypeDialogue(string fullText)
@@ -132,7 +148,6 @@ public class StorySceneUI : MonoBehaviour
         typingCoroutine = null;
     }
 
-    // 클릭 동작: 타이핑 중이면 즉시 완성, 완성 상태면 다음 대사
     void Advance()
     {
         if (currentChapter == null) return;
@@ -146,8 +161,9 @@ public class StorySceneUI : MonoBehaviour
             }
             isTyping = false;
 
+            // 즉시완성 시에도 현재 언어에 맞는 텍스트 표시
             if (dialogueText != null)
-                dialogueText.text = currentChapter.lines[currentLineIndex].dialogueText;
+                dialogueText.text = GetDialogueText(currentChapter.lines[currentLineIndex]);
         }
         else
         {
@@ -155,13 +171,11 @@ public class StorySceneUI : MonoBehaviour
         }
     }
 
-    // 스킵 버튼: 현재 챕터 전체 건너뜀
     void OnSkipClicked()
     {
         EndChapter();
     }
 
-    // 챕터 종료 처리
     void EndChapter()
     {
         if (isChapterEnding) return;
@@ -175,7 +189,6 @@ public class StorySceneUI : MonoBehaviour
 
         GlobalManager gm = GlobalManager.Instance;
 
-        // pendingNextScene으로 이동
         string nextScene = string.IsNullOrEmpty(gm.pendingNextScene) ? "SelectScene" : gm.pendingNextScene;
         gm.pendingNextScene = "";
         SceneManager.LoadScene(nextScene);

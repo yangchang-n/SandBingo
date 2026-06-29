@@ -27,16 +27,28 @@ public class GlobalManager : MonoBehaviour
 
     [Header("Audio Settings")]
     public AudioClip bgmClip;
-    [Range(0f, 1f)]
+    [HideInInspector]
     public float bgmVolume = 0.5f;
 
     [Header("Game Settings")]
     public bool isMuted = false;
     public int volumePercentage = 50;
 
+    // 언어별 폰트 (Inspector에서 할당)
+    // EN 폰트가 null이면 폰트 변경 없이 기존 폰트 유지
+    // KR 폰트가 null이면 EN 폰트로 폴백
+    [Header("Language Settings")]
+    public Font enFont;
+    public Font krFont;
+
+    // 언어 변경 이벤트 - LocalizedText가 구독
+    public System.Action OnLanguageChanged;
+
+    private string currentLanguage = "EN";
+
     private AudioSource audioSource;
 
-    // 스토리 감상 여부 (저장 파일에서 로드, Inspector 편집 불필요)
+    // 스토리 감상 여부
     [HideInInspector] public bool stage1PreSeen = false;
     [HideInInspector] public bool stage1TutorialSeen = false;
     [HideInInspector] public bool stage1PostSeen = false;
@@ -45,12 +57,11 @@ public class GlobalManager : MonoBehaviour
     [HideInInspector] public bool stage3PreSeen = false;
     [HideInInspector] public bool stage3PostSeen = false;
 
-    // 씬 간 전달용 (레지스트리에 남지 않음)
+    // 씬 간 전달용
     [HideInInspector] public int pendingBotDifficulty = 1;
     [HideInInspector] public StoryChapter pendingStoryChapter = null;
     [HideInInspector] public string pendingNextScene = "";
 
-    // 저장 파일 경로 (Awake에서 한 번만 계산)
     private string _saveFilePath;
 
     void Awake()
@@ -137,6 +148,9 @@ public class GlobalManager : MonoBehaviour
             bgmVolume = volumePercentage / 100f;
             isMuted = data.isMuted;
 
+            // 기존 저장 파일에 languageCode가 없으면 빈 문자열로 오므로 EN으로 처리
+            currentLanguage = string.IsNullOrEmpty(data.languageCode) ? "EN" : data.languageCode;
+
             if (data.screenWidth > 0 && data.screenHeight > 0)
                 ApplyResolution(data.screenWidth, data.screenHeight, data.isFullscreen);
 
@@ -175,7 +189,9 @@ public class GlobalManager : MonoBehaviour
 
                 screenWidth  = Screen.width,
                 screenHeight = Screen.height,
-                isFullscreen = Screen.fullScreen
+                isFullscreen = Screen.fullScreen,
+
+                languageCode = this.currentLanguage
             };
 
             string json = JsonUtility.ToJson(data, true);
@@ -186,6 +202,36 @@ public class GlobalManager : MonoBehaviour
         {
             Debug.LogError($"Failed to save progress: {e.Message}");
         }
+    }
+
+    // ===== Language Control =====
+
+    public string GetCurrentLanguage() => currentLanguage;
+
+    // 언어 변경 - 저장 후 이벤트 발행
+    // TitleScene 전환은 호출 측(OptionsUI)에서 담당
+    public void SetLanguage(string code)
+    {
+        if (code != "EN" && code != "KR")
+        {
+            Debug.LogWarning($"SetLanguage: unknown language code '{code}'. Accepted: EN, KR");
+            return;
+        }
+
+        currentLanguage = code;
+        SaveProgress();
+        OnLanguageChanged?.Invoke();
+        Debug.Log($"Language set to: {currentLanguage}");
+    }
+
+    // 현재 언어에 맞는 폰트 반환
+    // KR 폰트가 없으면 EN 폰트로 폴백, EN도 없으면 null 반환 (LocalizedText에서 기존 폰트 유지)
+    public Font GetCurrentFont()
+    {
+        if (currentLanguage == "KR")
+            return krFont != null ? krFont : enFont;
+
+        return enFont;
     }
 
     // ===== Story Control =====
