@@ -161,6 +161,22 @@ public class GameSceneUI : MonoBehaviour
             mudWinText.SetActive(true);
     }
 
+    // 옵션, 튜토리얼, 메뉴 패널처럼 화면을 덮는 패널이 열려 있으면 true를 반환한다
+    // GameManager에서 이 값을 확인해서 패널이 열려있는 동안 모래 생성을 막는 용도로 쓴다
+    public bool IsInputBlocked()
+    {
+        if (optionsUI != null && optionsUI.IsOptionsOpen())
+            return true;
+
+        if (tutorialPanel != null && tutorialPanel.activeSelf)
+            return true;
+
+        if (menuPanel != null && menuPanel.activeSelf)
+            return true;
+
+        return false;
+    }
+
     void OnResetClicked()
     {
         HideMenu();

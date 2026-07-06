@@ -35,11 +35,11 @@ public class SandBoardRenderer : MonoBehaviour
     private int clickableMinY;
     private int clickableMaxY;
 
-    // �÷��̾� ���� (GameManager���� ������)
+    // 플레이어 색상 (GameManager에서 가져옴)
     private Color skyColor;
     private Color brownColor;
 
-    // ���� ���� ���� (Inspector���� ����)
+    // 보드 색상 설정 (Inspector에서 설정)
     [Header("Board Colors")]
     public Color boardBackgroundColor = new Color(0xDE / 255f, 0x9E / 255f, 0x4A / 255f);
     public Color clickableAreaColor = new Color(0xFF / 255f, 0xD7 / 255f, 0x98 / 255f);
@@ -57,6 +57,15 @@ public class SandBoardRenderer : MonoBehaviour
     public int ownershipCharacterSize = 100;
     public int ownershipFontSize = 14;
 
+    // 보드 프레임 오브젝트 참조 (Inspector에서 직접 원하는 프레임을 넣었다 뺐다 하면서 확인 가능)
+    // Initialize 시점에 생성된 보드 크기에 맞춰 자동으로 크기와 위치가 조정된다
+    [Header("Frame Overlay")]
+    public SpriteRenderer boardFrameRenderer;
+
+    // 프레임 테두리가 화면에서 실제로 보이길 원하는 두께이다. 단위는 보드와 동일한 월드 유닛이다
+    // 이 값이 0 이하이면 테두리 두께 보정 없이 원본 이미지를 그냥 늘린다
+    public float boardFrameBorderThickness = 4f;
+
     public void Initialize(int w, int h, int gs, int cps,
                           int cMinX, int cMaxX, int cMinY, int cMaxY)
     {
@@ -70,7 +79,7 @@ public class SandBoardRenderer : MonoBehaviour
         clickableMinY = cMinY;
         clickableMaxY = cMaxY;
 
-        // �÷��̾� ���� GameManager���� ������
+        // 플레이어 색상은 GameManager에서 가져옴
         skyColor = GameManager.Instance.skyColor;
         brownColor = GameManager.Instance.brownColor;
 
@@ -87,6 +96,7 @@ public class SandBoardRenderer : MonoBehaviour
         SetupGridLines();
         SetupClickableAreaVisuals();
         CreateOwnershipTexts();
+        SetupBoardFrame();
 
         Debug.Log("SandBoardRenderer initialized - colors cached");
     }
@@ -142,7 +152,7 @@ public class SandBoardRenderer : MonoBehaviour
 
     void DrawGridLinesOnce()
     {
-        // ���μ�
+        // 세로선
         for (int i = 0; i <= gridSize; i++)
         {
             int x = 1 + i * cellPixelSize;
@@ -152,7 +162,7 @@ public class SandBoardRenderer : MonoBehaviour
             }
         }
 
-        // ���μ�
+        // 가로선
         for (int i = 0; i <= gridSize; i++)
         {
             int y = 1 + i * cellPixelSize;
@@ -225,7 +235,7 @@ public class SandBoardRenderer : MonoBehaviour
 
         int thickness = Mathf.RoundToInt(borderThickness);
 
-        // ��� �� (�� �ȼ� ����)
+        // 상단 선 (한 픽셀 위쪽)
         for (int t = 0; t < thickness; t++)
         {
             int y = clickableMaxY + 1 - t;
@@ -241,7 +251,7 @@ public class SandBoardRenderer : MonoBehaviour
             }
         }
 
-        // �ϴ� ��
+        // 하단 선
         for (int t = 0; t < thickness; t++)
         {
             int y = clickableMinY + t;
@@ -257,7 +267,7 @@ public class SandBoardRenderer : MonoBehaviour
             }
         }
 
-        // ���� ��
+        // 좌측 선
         for (int t = 0; t < thickness; t++)
         {
             int x = clickableMinX + t;
@@ -273,7 +283,7 @@ public class SandBoardRenderer : MonoBehaviour
             }
         }
 
-        // ���� ��
+        // 우측 선
         for (int t = 0; t < thickness; t++)
         {
             int x = clickableMaxX - t;
@@ -337,6 +347,49 @@ public class SandBoardRenderer : MonoBehaviour
         Debug.Log("Ownership texts created");
     }
 
+    // 프레임 오브젝트를 실제 생성된 보드 크기에 맞춰 늘리고 보드 중앙에 위치시킨다
+    // 프레임에 어떤 스프라이트를 쓸지는 Inspector에서 자유롭게 정하면 된다
+    // 여러 크기의 프레임 이미지를 왜곡 없이 맞추기 위해 Sliced(9-slice) 방식으로 늘린다
+    //
+    // Sliced 방식은 전체 크기를 아무리 키워도 테두리 자체의 두께는 원본 이미지의
+    // 픽셀 값과 Pixels Per Unit에 따라 고정된 월드 유닛 크기로 그려진다
+    // 보드처럼 원본 이미지보다 훨씬 큰 크기로 늘리면 테두리가 상대적으로 매우 얇아 보이게 된다
+    // 그래서 원하는 테두리 두께를 먼저 정하고 그 두께가 나오도록 스케일을 거꾸로 계산한 다음
+    // 전체 크기는 스케일로 나눠서 최종 결과가 항상 보드 크기와 맞도록 만든다
+    void SetupBoardFrame()
+    {
+        if (boardFrameRenderer == null) return;
+
+        boardFrameRenderer.drawMode = SpriteDrawMode.Sliced;
+
+        Sprite frameSprite = boardFrameRenderer.sprite;
+        float scale = 1f;
+
+        if (frameSprite != null && boardFrameBorderThickness > 0f)
+        {
+            Vector4 border = frameSprite.border;
+            float averageBorderPixels = (border.x + border.y + border.z + border.w) / 4f;
+
+            if (averageBorderPixels > 0f)
+            {
+                float spritePixelsPerUnit = frameSprite.pixelsPerUnit;
+                scale = boardFrameBorderThickness * spritePixelsPerUnit / averageBorderPixels;
+            }
+        }
+
+        // 프레임 테두리의 중심이 보드 가장자리에 오도록 전체 크기를 테두리 두께만큼 크게 잡는다
+        // 2를 빼는 이유는 직접 확인해서 맞춘 보정값이다
+        float targetWidth = width + boardFrameBorderThickness - 2;
+        float targetHeight = height + boardFrameBorderThickness - 2;
+
+        boardFrameRenderer.transform.localScale = new Vector3(scale, scale, 1f);
+        boardFrameRenderer.size = new Vector2(targetWidth / scale, targetHeight / scale);
+        boardFrameRenderer.transform.position = transform.position;
+
+        // 보드의 다른 요소들(그리드선 5, 테두리 6, 글자 7, 소유권 텍스트 10)보다 앞에 그려지도록 설정
+        boardFrameRenderer.sortingOrder = 20;
+    }
+
     public void DrawBackground(HashSet<Vector2Int> dirtyPixels, SandSimulator.CellType[,] grid)
     {
         foreach (Vector2Int pixel in dirtyPixels)
@@ -354,7 +407,7 @@ public class SandBoardRenderer : MonoBehaviour
 
     Color GetPixelColor(int x, int y, SandSimulator.CellType[,] grid)
     {
-        // ĳ�õ� ���� ���
+        // 캐시된 색상 사용
         if (grid[x, y] != SandSimulator.CellType.Empty)
         {
             return grid[x, y] switch

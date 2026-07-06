@@ -13,6 +13,17 @@ public class SandSimulator : MonoBehaviour
     [Range(1, 15)]
     public int clickableEndRow = 5;
 
+    // 보드 프레임 오브젝트 참조
+    // 인스펙터에서 원하는 프레임 오브젝트를 넣었다 뺐다 하면서 확인하면 된다
+    // SetupRenderer에서 생성되는 SandBoardRenderer에게 그대로 전달된다
+    [Header("Frame Overlay")]
+    public SpriteRenderer boardFrameRenderer;
+
+    // 프레임 테두리가 실제로 보이길 원하는 두께이다. 값이 클수록 테두리가 두껍게 보인다
+    // 직접 조정해서 확인한 값으로 고정했다. 더 이상 조정할 필요가 없어서 인스펙터에는 숨긴다
+    [HideInInspector]
+    public float boardFrameBorderThickness = 4f;
+
     private int width;
     private int height;
 
@@ -58,7 +69,7 @@ public class SandSimulator : MonoBehaviour
     // Renderer
     private SandBoardRenderer boardRenderer;
 
-    // ����ȭ: ��Ƽ �÷���
+    // 최적화용 더티 플래그
     private HashSet<Vector2Int> dirtyPixels = new HashSet<Vector2Int>();
     private HashSet<Vector2Int> dirtyCells = new HashSet<Vector2Int>();
 
@@ -133,6 +144,11 @@ public class SandSimulator : MonoBehaviour
     void SetupRenderer()
     {
         boardRenderer = gameObject.AddComponent<SandBoardRenderer>();
+
+        // 인스펙터에서 지정한 프레임 오브젝트와 테두리 두께 값을 새로 생성된 렌더러에게 그대로 전달한다
+        boardRenderer.boardFrameRenderer = boardFrameRenderer;
+        boardRenderer.boardFrameBorderThickness = boardFrameBorderThickness;
+
         boardRenderer.Initialize(
             width, height, gridSize, cellPixelSize,
             clickableMinX, clickableMaxX, clickableMinY, clickableMaxY
@@ -318,7 +334,7 @@ public class SandSimulator : MonoBehaviour
             cellsToRemove = new HashSet<Vector2Int>()
         };
 
-        // ���� üũ
+        // 가로 체크
         for (int y = 0; y < gridSize; y++)
         {
             for (int x = 0; x < gridSize; x++)
@@ -362,7 +378,7 @@ public class SandSimulator : MonoBehaviour
             }
         }
 
-        // ���� üũ
+        // 세로 체크
         for (int x = 0; x < gridSize; x++)
         {
             for (int y = 0; y < gridSize; y++)
@@ -406,7 +422,7 @@ public class SandSimulator : MonoBehaviour
             }
         }
 
-        // �밢�� üũ (\)
+        // 대각선 체크 (역슬래시 방향)
         for (int y = 0; y < gridSize; y++)
         {
             for (int x = 0; x < gridSize; x++)
@@ -451,7 +467,7 @@ public class SandSimulator : MonoBehaviour
             }
         }
 
-        // �밢�� üũ (/)
+        // 대각선 체크 (슬래시 방향)
         for (int y = 0; y < gridSize; y++)
         {
             for (int x = 0; x < gridSize; x++)
@@ -533,8 +549,6 @@ public class SandSimulator : MonoBehaviour
         }
 
         UpdateTexture();
-
-        // �α� ���� (���� CalculateScoreAndGetCells���� �̹� �α׵�)
     }
 
     public int SpawnSand(int gridX, int gridY, CellType sandType, int amount)

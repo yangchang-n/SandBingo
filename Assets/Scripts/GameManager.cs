@@ -66,6 +66,17 @@ public class GameManager : MonoBehaviour
     [Header("Visual Effects")]
     public GameObject cellRemovalParticlePrefab;
 
+    // 게이지 프레임 오브젝트 참조
+    // 인스펙터에서 원하는 프레임 오브젝트를 넣었다 뺐다 하면서 확인하면 된다
+    // SetupGauge에서 생성되는 SandGaugeRenderer에게 그대로 전달된다
+    [Header("Frame Overlay")]
+    public SpriteRenderer gaugeFrameRenderer;
+
+    // 프레임 테두리가 실제로 보이길 원하는 두께이다. 값이 클수록 테두리가 두껍게 보인다
+    // 직접 조정해서 확인한 값으로 고정했다. 더 이상 조정할 필요가 없어서 인스펙터에는 숨긴다
+    [HideInInspector]
+    public float gaugeFrameBorderThickness = 3f;
+
     void Awake()
     {
         if (Instance == null)
@@ -152,6 +163,11 @@ public class GameManager : MonoBehaviour
     {
         GameObject gaugeHolder = new GameObject("GaugeHolder");
         sandGaugeRenderer = gaugeHolder.AddComponent<SandGaugeRenderer>();
+
+        // 인스펙터에서 지정한 프레임 오브젝트와 테두리 두께 값을 새로 생성된 렌더러에게 그대로 전달한다
+        sandGaugeRenderer.gaugeFrameRenderer = gaugeFrameRenderer;
+        sandGaugeRenderer.gaugeFrameBorderThickness = gaugeFrameBorderThickness;
+
         sandGaugeRenderer.Initialize(sandSimulator.GetHeight());
     }
 
@@ -385,6 +401,12 @@ public class GameManager : MonoBehaviour
     void HandlePlayerInput()
     {
         if (isBotMode && currentPlayer == 1)
+        {
+            return;
+        }
+
+        // 옵션, 튜토리얼, 메뉴 패널이 열려 있는 동안에는 모래를 생성하지 않는다
+        if (gameUI != null && gameUI.IsInputBlocked())
         {
             return;
         }
