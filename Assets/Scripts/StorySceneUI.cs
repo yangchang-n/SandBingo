@@ -5,7 +5,8 @@ using UnityEngine.UI;
 public class StorySceneUI : MonoBehaviour
 {
     [Header("UI References")]
-    public Image backgroundImage;
+    public Image backgroundImageA;
+    public Image backgroundImageB;
     public Image portraitImage;
     public Text speakerNameText;
     public Text dialogueText;
@@ -20,6 +21,7 @@ public class StorySceneUI : MonoBehaviour
 
     [Header("Fade Settings")]
     public float dialogueFadeDuration = 0.25f;
+    public float backgroundFadeDuration = 0.5f;
 
     private StoryChapter currentChapter;
     private int currentLineIndex = 0;
@@ -27,14 +29,26 @@ public class StorySceneUI : MonoBehaviour
     private bool isTyping = false;
     private bool isFading = false;
 
-    // showLineCoroutine: 전체 흐름 (아웃 -> 교체 -> 인 + 타이핑) 담당
-    // panelFadeCoroutine: 페이드만 별도 추적 (즉시 중단을 위해 분리)
+    // showLineCoroutine: 대사 패널 전체 흐름 담당
+    // panelFadeCoroutine: 대사 패널 페이드만 별도 추적 (즉시 완성을 위해 분리)
+    // backgroundFadeCoroutine: 배경 크로스페이드는 대사 패널과 독립적으로 진행된다
     private Coroutine showLineCoroutine = null;
     private Coroutine panelFadeCoroutine = null;
     private Coroutine typingCoroutine = null;
+    private Coroutine backgroundFadeCoroutine = null;
+    private bool isBackgroundAVisible = true;
+
+    // 챕터에서 배경이 처음 지정되는 순간에는 이어받을 이전 그림이 없으므로
+    // 그 첫 번째 지정만 페이드 없이 즉시 표시한다
+    private bool hasShownFirstBackground = false;
 
     private bool mouseWasDown = false;
     private bool isChapterEnding = false;
+
+    // 직전 줄의 화자와 비교해서 같으면 페이드 없이 내용만 갈아끼운다
+    // 나레이션(화자 없음)도 하나의 화자 상태로 취급한다
+    private string lastSpeakerKey = null;
+    private bool isFirstLine = true;
 
     private CanvasGroup dialogueCanvasGroup;
 
@@ -67,9 +81,13 @@ public class StorySceneUI : MonoBehaviour
 
         GlobalManager.Instance.MarkStoryAsSeen(currentChapter);
 
-        // 첫 줄 진입 전 패널을 완전히 투명하게
+        // 첫 줄 진입 전 대사 패널을 완전히 투명하게
         if (dialogueCanvasGroup != null)
             dialogueCanvasGroup.alpha = 0f;
+
+        // 배경 두 장 중 A를 기본으로 보이는 상태로 초기화
+        if (backgroundImageA != null) SetImageAlpha(backgroundImageA, 1f);
+        if (backgroundImageB != null) SetImageAlpha(backgroundImageB, 0f);
 
         ShowLine(0);
     }
@@ -84,7 +102,7 @@ public class StorySceneUI : MonoBehaviour
         mouseWasDown = mouseDown;
     }
 
-    // ===== 대사 전환 =====
+    // ===== 줄 전환 =====
 
     void ShowLine(int index)
     {
@@ -94,7 +112,7 @@ public class StorySceneUI : MonoBehaviour
             return;
         }
 
-        // 진행 중인 흐름 전부 중단 및 핸들 초기화
+        // 진행 중인 대사 흐름 전부 중단 및 핸들 초기화
         if (showLineCoroutine != null) StopCoroutine(showLineCoroutine);
         if (panelFadeCoroutine != null) StopCoroutine(panelFadeCoroutine);
         if (typingCoroutine != null) StopCoroutine(typingCoroutine);
@@ -105,23 +123,40 @@ public class StorySceneUI : MonoBehaviour
         isTyping = false;
         isFading = false;
 
+        StoryLine line = currentChapter.lines[index];
+
+        // 배경 변경은 대사 흐름과 독립적으로 시작된다 (클릭으로 넘기는 것을 막지 않음)
+        if (line.changeBackground)
+            StartBackgroundCrossfade(line.background);
+
         if (dialogueCanvasGroup != null)
         {
-            showLineCoroutine = StartCoroutine(ShowLineCoroutine(index));
+            showLineCoroutine = StartCoroutine(ShowLineCoroutine(index, line));
         }
         else
         {
-            // CanvasGroup 없으면 즉시 전환
-            ApplyLineContent(index);
-            typingCoroutine = StartCoroutine(TypeDialogue(GetDialogueText(currentChapter.lines[index])));
+            // CanvasGroup 없으면 페이드 없이 즉시 전환
+            currentLineIndex = index;
+
+            if (line.hasDialogue)
+            {
+                ApplyDialogueContent(line);
+                typingCoroutine = StartCoroutine(TypeDialogue(GetDialogueText(line)));
+            }
         }
     }
 
-    // 전체 줄 전환 흐름: 아웃 -> 내용 교체 -> 인 + 타이핑
-    IEnumerator ShowLineCoroutine(int index)
+    // 대사 패널 흐름: 화자가 바뀔 때만 페이드를 걸고, 화자가 같으면 페이드 없이 내용만 갈아끼운다
+    // 나레이션(화자 없음)과 대사 없는 줄도 화자 없음이라는 하나의 상태로 취급한다
+    IEnumerator ShowLineCoroutine(int index, StoryLine line)
     {
-        // alpha가 거의 0이면 (첫 줄 또는 즉시완성 후 재진입 등) 아웃 스킵
-        if (dialogueCanvasGroup.alpha > 0.01f)
+        string newSpeakerKey = GetSpeakerKey(line);
+        bool shouldFade = isFirstLine || newSpeakerKey != lastSpeakerKey;
+        isFirstLine = false;
+        lastSpeakerKey = newSpeakerKey;
+
+        // 화자가 바뀌는 경우에만 이전 내용을 페이드아웃
+        if (shouldFade && dialogueCanvasGroup.alpha > 0.01f)
         {
             isFading = true;
             panelFadeCoroutine = StartCoroutine(FadePanelTo(0f));
@@ -129,54 +164,61 @@ public class StorySceneUI : MonoBehaviour
             isFading = false;
         }
 
-        ApplyLineContent(index);
+        // 이전 내용이 화면에서 사라진 이후에만 이 줄을 현재 줄로 취급한다
+        currentLineIndex = index;
 
-        // 페이드 인과 타이핑 동시 시작
-        isFading = true;
-        panelFadeCoroutine = StartCoroutine(FadePanelTo(1f));
-        typingCoroutine = StartCoroutine(TypeDialogue(GetDialogueText(currentChapter.lines[index])));
+        if (!line.hasDialogue)
+            yield break;
 
-        yield return panelFadeCoroutine;
-        isFading = false;
+        ApplyDialogueContent(line);
 
-        // 타이핑이 페이드 인보다 길면 완료까지 대기
-        if (typingCoroutine != null)
+        if (shouldFade)
+        {
+            // 페이드 인과 타이핑 동시 시작
+            isFading = true;
+            panelFadeCoroutine = StartCoroutine(FadePanelTo(1f));
+            typingCoroutine = StartCoroutine(TypeDialogue(GetDialogueText(line)));
+
+            yield return panelFadeCoroutine;
+            isFading = false;
+
+            // 타이핑이 페이드 인보다 길면 완료까지 대기
+            if (typingCoroutine != null)
+                yield return typingCoroutine;
+        }
+        else
+        {
+            // 화자가 그대로 유지되므로 패널은 이미 떠 있는 채로 내용만 즉시 갱신하고 타이핑만 진행
+            if (dialogueCanvasGroup.alpha < 1f)
+                dialogueCanvasGroup.alpha = 1f;
+
+            typingCoroutine = StartCoroutine(TypeDialogue(GetDialogueText(line)));
             yield return typingCoroutine;
+        }
     }
 
-    // 내용만 세팅 (alpha 조작 없음)
-    void ApplyLineContent(int index)
+    // 이름표, 초상화, 대사 텍스트 초기화
+    // 화자 이름이 비어있으면 나레이션 줄로 간주하고 이름표와 초상화를 함께 숨긴다
+    void ApplyDialogueContent(StoryLine line)
     {
-        currentLineIndex = index;
-        StoryLine line = currentChapter.lines[index];
+        string speakerName = GetSpeakerName(line);
+        bool isNarration = string.IsNullOrEmpty(speakerName);
 
-        if (line.background != null && backgroundImage != null)
-            backgroundImage.sprite = line.background;
+        if (namePanel != null) namePanel.SetActive(!isNarration);
+        if (speakerNameText != null) speakerNameText.text = isNarration ? "" : speakerName;
 
         if (portraitImage != null)
         {
-            if (line.portrait != null)
-            {
-                portraitImage.sprite = line.portrait;
-                portraitImage.gameObject.SetActive(true);
-            }
-            else
-            {
-                portraitImage.gameObject.SetActive(false);
-            }
+            bool showPortrait = !isNarration && line.portrait != null;
+            portraitImage.gameObject.SetActive(showPortrait);
+            if (showPortrait) portraitImage.sprite = line.portrait;
         }
-
-        string speakerName = GetSpeakerName(line);
-        bool hasSpeaker = !string.IsNullOrEmpty(speakerName);
-
-        if (namePanel != null) namePanel.SetActive(hasSpeaker);
-        if (speakerNameText != null) speakerNameText.text = hasSpeaker ? speakerName : "";
 
         // 페이드 아웃 완료 직후 이전 텍스트가 보이지 않도록 미리 초기화
         if (dialogueText != null) dialogueText.text = "";
     }
 
-    // ===== 페이드 =====
+    // ===== 대사 패널 페이드 =====
 
     IEnumerator FadePanelTo(float targetAlpha)
     {
@@ -191,6 +233,62 @@ public class StorySceneUI : MonoBehaviour
         }
 
         dialogueCanvasGroup.alpha = targetAlpha;
+    }
+
+    // ===== 배경 크로스페이드 =====
+
+    // 배경 이미지 두 장을 겹쳐두고 알파를 교차시켜 컷 전환 없이 배경을 바꾼다
+    // 대사 패널 페이드와는 완전히 독립적으로 진행되며 클릭으로 다음 줄 넘기기를 막지 않는다
+    void StartBackgroundCrossfade(Sprite newSprite)
+    {
+        if (backgroundImageA == null || backgroundImageB == null) return;
+
+        if (!hasShownFirstBackground)
+        {
+            hasShownFirstBackground = true;
+            Image target = isBackgroundAVisible ? backgroundImageA : backgroundImageB;
+            target.sprite = newSprite;
+            SetImageAlpha(target, 1f);
+            return;
+        }
+
+        if (backgroundFadeCoroutine != null) StopCoroutine(backgroundFadeCoroutine);
+        backgroundFadeCoroutine = StartCoroutine(BackgroundCrossfadeCoroutine(newSprite));
+    }
+
+    IEnumerator BackgroundCrossfadeCoroutine(Sprite newSprite)
+    {
+        Image incoming = isBackgroundAVisible ? backgroundImageB : backgroundImageA;
+        Image outgoing = isBackgroundAVisible ? backgroundImageA : backgroundImageB;
+
+        incoming.sprite = newSprite;
+
+        // 진행 중이던 크로스페이드가 끝나기 전에 또 끼어들어도 튀지 않도록
+        // 하드코딩된 0과 1이 아니라 현재 실제 알파값에서 시작한다
+        float startIncomingAlpha = incoming.color.a;
+        float startOutgoingAlpha = outgoing.color.a;
+
+        float elapsed = 0f;
+        while (elapsed < backgroundFadeDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / backgroundFadeDuration;
+            SetImageAlpha(incoming, Mathf.Lerp(startIncomingAlpha, 1f, t));
+            SetImageAlpha(outgoing, Mathf.Lerp(startOutgoingAlpha, 0f, t));
+            yield return null;
+        }
+
+        SetImageAlpha(incoming, 1f);
+        SetImageAlpha(outgoing, 0f);
+        isBackgroundAVisible = !isBackgroundAVisible;
+        backgroundFadeCoroutine = null;
+    }
+
+    void SetImageAlpha(Image image, float alpha)
+    {
+        Color c = image.color;
+        c.a = alpha;
+        image.color = c;
     }
 
     // ===== 타이핑 =====
@@ -213,9 +311,10 @@ public class StorySceneUI : MonoBehaviour
 
     // ===== 클릭 처리 =====
 
-    // 우선순위:
-    // 1. 페이드 또는 타이핑 진행 중 → 모두 즉시 완료, 현재 줄 유지
-    // 2. 아무것도 진행 중이지 않음 → 다음 줄로 전환
+    // 우선순위
+    // 1. 대사 페이드 또는 타이핑 진행 중이면 모두 즉시 완료하고 현재 줄을 유지한다
+    // 2. 아무것도 진행 중이지 않으면 다음 줄로 전환한다
+    // 배경 크로스페이드는 이 판단에 영향을 주지 않는다
     void Advance()
     {
         if (currentChapter == null) return;
@@ -269,6 +368,14 @@ public class StorySceneUI : MonoBehaviour
     }
 
     // ===== 언어 유틸 =====
+
+    // 화자 비교용 키. 나레이션과 대사 없는 줄은 전부 null(화자 없음)로 통일한다
+    string GetSpeakerKey(StoryLine line)
+    {
+        if (!line.hasDialogue) return null;
+        string name = GetSpeakerName(line);
+        return string.IsNullOrEmpty(name) ? null : name;
+    }
 
     string GetSpeakerName(StoryLine line)
     {

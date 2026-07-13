@@ -13,7 +13,33 @@ MonoBehaviour:
   m_Name: Stage1Pre
   m_EditorClassIdentifier: 
   lines:
-  - speakerName: Tessa
+  - hasDialogue: 1
+    speakerNameEN: Tessa
+    dialogueTextEN: Testing
+    speakerNameKR: 
+    dialogueTextKR: 
     portrait: {fileID: 21300000, guid: 428b96ce150cb1646b85cbd89064fe88, type: 3}
-    background: {fileID: 21300000, guid: 31f3e7f27a3645a46b21e138081c2f8b, type: 3}
-    dialogueText: Testing
+    changeBackground: 1
+    background: {fileID: 21300000, guid: 924fcbbb94d46a645ace0e0f89dcbb28, type: 3}
+    changeBgm: 0
+    bgm: {fileID: 0}
+  - hasDialogue: 1
+    speakerNameEN: Tessa
+    dialogueTextEN: asdf asdf asdf asdf asdf asdf
+    speakerNameKR: 
+    dialogueTextKR: 
+    portrait: {fileID: 21300000, guid: 428b96ce150cb1646b85cbd89064fe88, type: 3}
+    changeBackground: 0
+    background: {fileID: 21300000, guid: 924fcbbb94d46a645ace0e0f89dcbb28, type: 3}
+    changeBgm: 0
+    bgm: {fileID: 0}
+  - hasDialogue: 1
+    speakerNameEN: Tessa
+    dialogueTextEN: qwerqwer qwerqwer
+    speakerNameKR: 
+    dialogueTextKR: 
+    portrait: {fileID: 21300000, guid: 428b96ce150cb1646b85cbd89064fe88, type: 3}
+    changeBackground: 1
+    background: {fileID: 21300000, guid: a622e4bb09206ee49a29c37ff6d77ce8, type: 3}
+    changeBgm: 0
+    bgm: {fileID: 0}
