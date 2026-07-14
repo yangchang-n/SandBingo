@@ -609,7 +609,8 @@ public class GameManager : MonoBehaviour
     // 난이도별 진흙 모양 정의 (높이, 개수). 너비는 항상 1칸이라 여기 포함하지 않는다
     // 0번(커스텀 스테이지)은 아직 진입점이 없어 자리표시자 값을 쓴다
     // 커스텀 스테이지 진입 로직이 생기면 이 case만 실제 사용자 지정값으로 교체하면 된다
-    BotController.MudPattern GetMudPatternForDifficulty(int difficulty)
+    // public으로 열어둬서 스테이지 진입 정보 패널(GameSceneUI)도 같은 데이터를 그대로 가져다 쓴다
+    public BotController.MudPattern GetMudPatternForDifficulty(int difficulty)
     {
         switch (difficulty)
         {

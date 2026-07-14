@@ -44,6 +44,9 @@ public class GlobalManager : MonoBehaviour
     // 언어 변경 이벤트 - LocalizedText가 구독
     public System.Action OnLanguageChanged;
 
+    // 씬 페이드인이 끝난 직후 호출됨 - 페이드인 완료 후에만 등장해야 하는 UI가 구독
+    public System.Action OnSceneFadeInComplete;
+
     private string currentLanguage = "EN";
 
     private AudioSource audioSource;
@@ -147,6 +150,8 @@ public class GlobalManager : MonoBehaviour
         yield return null;
 
         yield return StartCoroutine(FadeTo(0f));
+
+        OnSceneFadeInComplete?.Invoke();
 
         _fadePanel.raycastTarget = false;
         _isTransitioning = false;
