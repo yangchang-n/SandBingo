@@ -371,6 +371,10 @@ public class GlobalManager : MonoBehaviour
     {
         switch (stageNumber)
         {
+            case 0:
+                // 커스텀 스테이지는 클리어 여부/최고 점수를 저장하지 않는다
+                // SaveProgress()까지 건너뛰어서 의미 없는 저장이 발생하지 않도록 한다
+                return;
             case 1:
                 stage1Cleared = true;
                 if (finalScore > stage1BestScore)

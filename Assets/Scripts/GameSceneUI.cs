@@ -83,6 +83,7 @@ public class GameSceneUI : MonoBehaviour
         {
             switch (gameManager.botDifficulty)
             {
+                case 0: // 커스텀 스테이지 - 스테이지 1 배경을 그대로 사용
                 case 1:
                     if (easyBackground != null)   easyBackground.SetActive(true);
                     break;

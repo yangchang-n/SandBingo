@@ -575,33 +575,6 @@ public class SandSimulator : MonoBehaviour
         return spawnedCount;
     }
 
-    public void DropSandChunk(int centerX, int centerY, CellType sandType)
-    {
-        int halfSize = cellPixelSize / 2;
-
-        int droppedCount = 0;
-        int targetAmount = cellPixelSize * cellPixelSize;
-
-        for (int dy = -halfSize; dy < halfSize && droppedCount < targetAmount; dy++)
-        {
-            for (int dx = -halfSize; dx < halfSize && droppedCount < targetAmount; dx++)
-            {
-                int posX = centerX + dx;
-                int posY = centerY + dy;
-
-                if (IsInBounds(posX, posY) && grid[posX, posY] == CellType.Empty)
-                {
-                    grid[posX, posY] = sandType;
-                    MarkPixelDirty(posX, posY);
-                    MarkCellDirtyByPixel(posX, posY);
-                    droppedCount++;
-                }
-            }
-        }
-
-        Debug.Log($"Dropped {droppedCount} sand particles in a chunk at ({centerX}, {centerY})");
-    }
-
     public void DropSandRectangle(int centerX, int centerY, float widthCells, float heightCells, CellType sandType)
     {
         int widthPixels = Mathf.RoundToInt(widthCells * cellPixelSize);

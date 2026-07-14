@@ -38,6 +38,10 @@ public class GameManager : MonoBehaviour
     public int stage3CurrentScore = 0;
     public int stage3TargetScore = 300;
 
+    // 커스텀 스테이지(botDifficulty == 0)용 점수. 저장 파일에는 남기지 않는다
+    public int customCurrentScore = 0;
+    public int customTargetScore = 300;
+
     // Game State
     private int currentPlayer;
     private int remainingSand;
@@ -51,7 +55,8 @@ public class GameManager : MonoBehaviour
 
     [Header("Game Mode")]
     public bool isBotMode = true;
-    [Range(1, 3)]
+    // 0 = 커스텀 스테이지, 1~3 = 기존 Easy/Normal/Hard
+    [Range(0, 3)]
     public int botDifficulty = 1;
 
     [Header("Game Over State")]
@@ -105,7 +110,7 @@ public class GameManager : MonoBehaviour
         if (GlobalManager.Instance != null)
         {
             isBotMode = true;
-            botDifficulty = Mathf.Clamp(GlobalManager.Instance.pendingBotDifficulty, 1, 3);
+            botDifficulty = Mathf.Clamp(GlobalManager.Instance.pendingBotDifficulty, 0, 3);
         }
     }
 
@@ -129,6 +134,7 @@ public class GameManager : MonoBehaviour
         stage1CurrentScore = 0;
         stage2CurrentScore = 0;
         stage3CurrentScore = 0;
+        customCurrentScore = 0;
     }
 
     void FindReferences()
@@ -561,6 +567,7 @@ public class GameManager : MonoBehaviour
     {
         return botDifficulty switch
         {
+            0 => customCurrentScore,
             1 => stage1CurrentScore,
             2 => stage2CurrentScore,
             3 => stage3CurrentScore,
@@ -572,6 +579,7 @@ public class GameManager : MonoBehaviour
     {
         return botDifficulty switch
         {
+            0 => customTargetScore,
             1 => stage1TargetScore,
             2 => stage2TargetScore,
             3 => stage3TargetScore,
@@ -583,6 +591,9 @@ public class GameManager : MonoBehaviour
     {
         switch (botDifficulty)
         {
+            case 0:
+                customCurrentScore = score;
+                break;
             case 1:
                 stage1CurrentScore = score;
                 break;
@@ -592,6 +603,23 @@ public class GameManager : MonoBehaviour
             case 3:
                 stage3CurrentScore = score;
                 break;
+        }
+    }
+
+    // 난이도별 진흙 모양 정의 (높이, 개수). 너비는 항상 1칸이라 여기 포함하지 않는다
+    // 0번(커스텀 스테이지)은 아직 진입점이 없어 자리표시자 값을 쓴다
+    // 커스텀 스테이지 진입 로직이 생기면 이 case만 실제 사용자 지정값으로 교체하면 된다
+    BotController.MudPattern GetMudPatternForDifficulty(int difficulty)
+    {
+        switch (difficulty)
+        {
+            case 0: return new BotController.MudPattern { heightCells = 1.0f, count = 2 };
+            case 1: return new BotController.MudPattern { heightCells = 0.8f, count = 2 };
+            case 2: return new BotController.MudPattern { heightCells = 1.2f, count = 2 };
+            case 3: return new BotController.MudPattern { heightCells = 1.0f, count = 3 };
+            default:
+                Debug.LogWarning($"GetMudPatternForDifficulty: 정의되지 않은 난이도 {difficulty}, 기본값(1.0칸 2개)을 사용합니다");
+                return new BotController.MudPattern { heightCells = 1.0f, count = 2 };
         }
     }
 
@@ -621,7 +649,7 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSeconds(delay);
 
-        botController.ExecuteBotTurn(botDifficulty);
+        botController.ExecuteBotTurn(GetMudPatternForDifficulty(botDifficulty));
         remainingSand = 0;
         UpdateGauge();
 
@@ -663,6 +691,7 @@ public class GameManager : MonoBehaviour
         stage1CurrentScore = 0;
         stage2CurrentScore = 0;
         stage3CurrentScore = 0;
+        customCurrentScore = 0;
 
         if (botController != null)
             botController.ClearOasisData();
