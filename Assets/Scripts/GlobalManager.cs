@@ -41,6 +41,19 @@ public class GlobalManager : MonoBehaviour
     public Font enFont;
     public Font krFont;
 
+    // 대화창 전용 폰트 - 일반 UI 폰트(enFont, krFont)와 분리 관리
+    // 대화창은 인물 이름과 대사 모두 항상 같은 폰트, 같은 크기를 쓰므로
+    // 오브젝트별로 따로 지정하지 않고 여기서 한 번만 지정한다
+    [Header("Dialogue Font Settings")]
+    public Font speakerNameFontEN;
+    public Font speakerNameFontKR;
+    public Font dialogueTextFontEN;
+    public Font dialogueTextFontKR;
+    public int speakerNameFontSizeEN = 55;
+    public int speakerNameFontSizeKR = 55;
+    public int dialogueTextFontSizeEN = 45;
+    public int dialogueTextFontSizeKR = 45;
+
     // 언어 변경 이벤트 - LocalizedText가 구독
     public System.Action OnLanguageChanged;
 
@@ -324,6 +337,36 @@ public class GlobalManager : MonoBehaviour
         return enFont;
     }
 
+    // ===== Dialogue Font Control =====
+
+    // 대화창 인물 이름에 쓰이는 폰트 - 일반 UI 폰트와 별개로 관리된다
+    public Font GetSpeakerNameFont()
+    {
+        if (currentLanguage == "KR")
+            return speakerNameFontKR != null ? speakerNameFontKR : speakerNameFontEN;
+
+        return speakerNameFontEN;
+    }
+
+    // 대화창 대사 본문에 쓰이는 폰트 - 일반 UI 폰트와 별개로 관리된다
+    public Font GetDialogueTextFont()
+    {
+        if (currentLanguage == "KR")
+            return dialogueTextFontKR != null ? dialogueTextFontKR : dialogueTextFontEN;
+
+        return dialogueTextFontEN;
+    }
+
+    public int GetSpeakerNameFontSize()
+    {
+        return currentLanguage == "KR" ? speakerNameFontSizeKR : speakerNameFontSizeEN;
+    }
+
+    public int GetDialogueTextFontSize()
+    {
+        return currentLanguage == "KR" ? dialogueTextFontSizeKR : dialogueTextFontSizeEN;
+    }
+
     // ===== Story Control =====
 
     // 스토리 씬으로 전환 - 페이드 효과 포함
@@ -344,7 +387,7 @@ public class GlobalManager : MonoBehaviour
         else if (chapter == stage2PreChapter)       stage2PreSeen      = true;
         else if (chapter == stage2PostChapter)      stage2PostSeen     = true;
         else if (chapter == stage3PreChapter)       stage3PreSeen      = true;
-        else if (chapter == stage3PostChapter)      stage3PostSeen     = true;
+        else if (chapter == stage3PostChapter)       stage3PostSeen    = true;
         else
         {
             Debug.LogWarning($"MarkStoryAsSeen: Unknown chapter '{chapter.name}'");

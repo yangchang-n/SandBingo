@@ -13,7 +13,196 @@ MonoBehaviour:
   m_Name: Stage2Post
   m_EditorClassIdentifier: 
   lines:
-  - speakerName: Tessa
-    portrait: {fileID: 21300000, guid: 428b96ce150cb1646b85cbd89064fe88, type: 3}
-    background: {fileID: 21300000, guid: 31f3e7f27a3645a46b21e138081c2f8b, type: 3}
-    dialogueText: Testing
+  - hasDialogue: 1
+    speakerNameEN: Piper
+    dialogueTextEN: It's coming up, Tessa! Water!
+    speakerNameKR: "\uD30C\uC774\uD37C"
+    dialogueTextKR: "\uC62C\uB77C\uC640\uC694, \uD14C\uC0AC! \uBB3C\uC774\uC5D0\uC694!"
+    portrait: {fileID: 21300000, guid: c68e10ce9d108aa4f9a55192ef845f07, type: 3}
+    changeBackground: 1
+    background: {fileID: 21300000, guid: ca46e4d1dd5bc4c469ecedcac424ecfb, type: 3}
+    changeBgm: 0
+    bgm: {fileID: 0}
+  - hasDialogue: 1
+    speakerNameEN: Tessa
+    dialogueTextEN: Whew... That one was a little rough, though. Wasn't it?
+    speakerNameKR: "\uD14C\uC0AC"
+    dialogueTextKR: "\uD734... \uC774\uBC88 \uAC74 \uADF8\uB798\uB3C4 \uC870\uAE08
+      \uD798\uB4E4\uC5C8\uC5B4. \uADF8\uCE58?"
+    portrait: {fileID: 21300000, guid: b9d7a8ed92ac80342a2e1a95edda6422, type: 3}
+    changeBackground: 0
+    background: {fileID: 0}
+    changeBgm: 0
+    bgm: {fileID: 0}
+  - hasDialogue: 1
+    speakerNameEN: Piper
+    dialogueTextEN: It really was. I almost quit.
+    speakerNameKR: "\uD30C\uC774\uD37C"
+    dialogueTextKR: "\uADF8\uB7EC\uAC8C\uC694. \uD558\uB9C8\uD130\uBA74 \uAD00\uB458
+      \uBED4\uD588\uC5B4\uC694."
+    portrait: {fileID: 21300000, guid: c68e10ce9d108aa4f9a55192ef845f07, type: 3}
+    changeBackground: 0
+    background: {fileID: 0}
+    changeBgm: 0
+    bgm: {fileID: 0}
+  - hasDialogue: 1
+    speakerNameEN: Tessa
+    dialogueTextEN: Thanks for sticking it out. Get a drink first and take a rest.
+    speakerNameKR: "\uD14C\uC0AC"
+    dialogueTextKR: "\uB05D\uAE4C\uC9C0 \uD574\uC918\uC11C \uACE0\uB9C8\uC6CC. \uBB3C\uBD80\uD130
+      \uD55C \uBAA8\uAE08 \uB9C8\uC2DC\uACE0 \uC26C\uACE0 \uC788\uC5B4."
+    portrait: {fileID: 21300000, guid: b9d7a8ed92ac80342a2e1a95edda6422, type: 3}
+    changeBackground: 0
+    background: {fileID: 0}
+    changeBgm: 0
+    bgm: {fileID: 0}
+  - hasDialogue: 1
+    speakerNameEN: Piper
+    dialogueTextEN: You did great too, Tessa.
+    speakerNameKR: "\uD30C\uC774\uD37C"
+    dialogueTextKR: "\uD14C\uC0AC\uB3C4 \uC218\uACE0\uD588\uC5B4\uC694."
+    portrait: {fileID: 21300000, guid: c68e10ce9d108aa4f9a55192ef845f07, type: 3}
+    changeBackground: 0
+    background: {fileID: 0}
+    changeBgm: 0
+    bgm: {fileID: 0}
+  - hasDialogue: 1
+    speakerNameEN: Piper
+    dialogueTextEN: So. Aren't you forgetting something?
+    speakerNameKR: "\uD30C\uC774\uD37C"
+    dialogueTextKR: "\uADFC\uB370 \uBB50 \uC78A\uC740 \uAC70 \uC5C6\uC5B4\uC694?"
+    portrait: {fileID: 21300000, guid: c68e10ce9d108aa4f9a55192ef845f07, type: 3}
+    changeBackground: 0
+    background: {fileID: 0}
+    changeBgm: 0
+    bgm: {fileID: 0}
+  - hasDialogue: 1
+    speakerNameEN: Tessa
+    dialogueTextEN: Yes, yes... Hold on.
+    speakerNameKR: "\uD14C\uC0AC"
+    dialogueTextKR: "\uADF8\uB798 \uADF8\uB798... \uAE30\uB2E4\uB824\uBD10."
+    portrait: {fileID: 21300000, guid: b9d7a8ed92ac80342a2e1a95edda6422, type: 3}
+    changeBackground: 0
+    background: {fileID: 0}
+    changeBgm: 0
+    bgm: {fileID: 0}
+  - hasDialogue: 1
+    speakerNameEN: Tessa
+    dialogueTextEN: Here. Take it.
+    speakerNameKR: "\uD14C\uC0AC"
+    dialogueTextKR: "\uC790, \uC774\uAC70 \uBC1B\uC544."
+    portrait: {fileID: 21300000, guid: b9d7a8ed92ac80342a2e1a95edda6422, type: 3}
+    changeBackground: 0
+    background: {fileID: 0}
+    changeBgm: 0
+    bgm: {fileID: 0}
+  - hasDialogue: 1
+    speakerNameEN: Piper
+    dialogueTextEN: ...What is this? A seed?
+    speakerNameKR: "\uD30C\uC774\uD37C"
+    dialogueTextKR: "...\uC774\uAC8C \uBB50\uC608\uC694? \uC528\uC557?"
+    portrait: {fileID: 21300000, guid: c68e10ce9d108aa4f9a55192ef845f07, type: 3}
+    changeBackground: 0
+    background: {fileID: 0}
+    changeBgm: 0
+    bgm: {fileID: 0}
+  - hasDialogue: 1
+    speakerNameEN: Tessa
+    dialogueTextEN: Fished it out of the first well we woke today. It came up with
+      the water.
+    speakerNameKR: "\uD14C\uC0AC"
+    dialogueTextKR: "\uC544\uAE4C \uC624\uB298 \uCCAB \uC6B0\uBB3C\uC744 \uB6AB\uC5C8\uC744
+      \uB54C \uAC74\uC84C\uC5B4. \uBB3C\uC774\uB791 \uAC19\uC774 \uC62C\uB77C\uC654\uB354\uB77C."
+    portrait: {fileID: 21300000, guid: b9d7a8ed92ac80342a2e1a95edda6422, type: 3}
+    changeBackground: 0
+    background: {fileID: 0}
+    changeBgm: 0
+    bgm: {fileID: 0}
+  - hasDialogue: 1
+    speakerNameEN: Piper
+    dialogueTextEN: From the well? Just like that?
+    speakerNameKR: "\uD30C\uC774\uD37C"
+    dialogueTextKR: "\uC6B0\uBB3C\uC5D0\uC11C\uC694? \uAC11\uC790\uAE30?"
+    portrait: {fileID: 21300000, guid: c68e10ce9d108aa4f9a55192ef845f07, type: 3}
+    changeBackground: 0
+    background: {fileID: 0}
+    changeBgm: 0
+    bgm: {fileID: 0}
+  - hasDialogue: 1
+    speakerNameEN: Tessa
+    dialogueTextEN: First time I've seen it too. Must've been asleep down there and
+      got pushed up when the water broke through.
+    speakerNameKR: "\uD14C\uC0AC"
+    dialogueTextKR: "\uB098\uB3C4 \uCC98\uC74C \uBD24\uC5B4. \uB545\uC18D\uC5D0\uC11C
+      \uC7A0\uB4E4\uC5B4 \uC788\uB358 \uAC8C \uBB3C\uC774 \uD130\uC9C0\uBA74\uC11C
+      \uAC19\uC774 \uBC00\uB824 \uB098\uC654\uB098 \uBD10."
+    portrait: {fileID: 21300000, guid: b9d7a8ed92ac80342a2e1a95edda6422, type: 3}
+    changeBackground: 0
+    background: {fileID: 0}
+    changeBgm: 0
+    bgm: {fileID: 0}
+  - hasDialogue: 1
+    speakerNameEN: Piper
+    dialogueTextEN: Is this thing even alive...? It just looks like a pebble.
+    speakerNameKR: "\uD30C\uC774\uD37C"
+    dialogueTextKR: "\uC774\uAC70 \uC0B4\uC544 \uC788\uAE34 \uD55C \uAC78\uAE4C\uC694...
+      \uC0DD\uAE34 \uAC74 \uADF8\uB0E5 \uB3CC\uBA69\uC774 \uAC19\uC740\uB370."
+    portrait: {fileID: 21300000, guid: c68e10ce9d108aa4f9a55192ef845f07, type: 3}
+    changeBackground: 0
+    background: {fileID: 0}
+    changeBgm: 0
+    bgm: {fileID: 0}
+  - hasDialogue: 1
+    speakerNameEN: Tessa
+    dialogueTextEN: Plant it and we'll find out. I'm not getting my hopes up.
+    speakerNameKR: "\uD14C\uC0AC"
+    dialogueTextKR: "\uC2EC\uC5B4 \uBCF4\uBA74 \uC54C\uACA0\uC9C0? \uD070 \uAE30\uB300\uB294
+      \uD558\uC9C0 \uC54A\uB294\uB2E4\uB9CC."
+    portrait: {fileID: 21300000, guid: b9d7a8ed92ac80342a2e1a95edda6422, type: 3}
+    changeBackground: 0
+    background: {fileID: 0}
+    changeBgm: 0
+    bgm: {fileID: 0}
+  - hasDialogue: 1
+    speakerNameEN: Piper
+    dialogueTextEN: Fine. Let's plant it. I did have to squeeze it out of you.
+    speakerNameKR: "\uD30C\uC774\uD37C"
+    dialogueTextKR: "\uC88B\uC544\uC694. \uC2EC\uC5B4 \uBCF4\uC8E0. \uAE30\uAECF
+      \uBC1B\uC544\uB0B8 \uAC70\uB2C8\uAE50."
+    portrait: {fileID: 21300000, guid: c68e10ce9d108aa4f9a55192ef845f07, type: 3}
+    changeBackground: 0
+    background: {fileID: 0}
+    changeBgm: 0
+    bgm: {fileID: 0}
+  - hasDialogue: 1
+    speakerNameEN: Piper
+    dialogueTextEN: Though if we plant it here and the water stops again, it'll just
+      dry out...
+    speakerNameKR: "\uD30C\uC774\uD37C"
+    dialogueTextKR: "\uADF8\uB7F0\uB370 \uC5EC\uAE34 \uC2EC\uC5B4\uB3C4 \uBB3C\uC774
+      \uB2E4\uC2DC \uBA48\uCD94\uBA74 \uB9D0\uB77C\uBC84\uB9B4 \uD150\uB370..."
+    portrait: {fileID: 21300000, guid: c68e10ce9d108aa4f9a55192ef845f07, type: 3}
+    changeBackground: 0
+    background: {fileID: 0}
+    changeBgm: 0
+    bgm: {fileID: 0}
+  - hasDialogue: 1
+    speakerNameEN: Tessa
+    dialogueTextEN: I've got a solution for that.
+    speakerNameKR: "\uD14C\uC0AC"
+    dialogueTextKR: "\uADF8\uAC70\uB77C\uBA74 \uBC29\uBC95\uC774 \uC788\uC9C0."
+    portrait: {fileID: 21300000, guid: b9d7a8ed92ac80342a2e1a95edda6422, type: 3}
+    changeBackground: 0
+    background: {fileID: 0}
+    changeBgm: 0
+    bgm: {fileID: 0}
+  - hasDialogue: 1
+    speakerNameEN: Piper
+    dialogueTextEN: Put that scam stick away.
+    speakerNameKR: "\uD30C\uC774\uD37C"
+    dialogueTextKR: "\uADF8 \uC0AC\uAE30 \uB9C9\uB300\uAE30\uB294 \uC800\uB9AC \uCE58\uC6CC\uC694."
+    portrait: {fileID: 21300000, guid: c68e10ce9d108aa4f9a55192ef845f07, type: 3}
+    changeBackground: 0
+    background: {fileID: 0}
+    changeBgm: 0
+    bgm: {fileID: 0}

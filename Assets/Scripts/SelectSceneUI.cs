@@ -64,9 +64,9 @@ public class SelectSceneUI : MonoBehaviour
 
         GlobalManager gm = GlobalManager.Instance;
 
-        if (easyButton != null)   easyButton.interactable = true;
-        if (normalButton != null) normalButton.interactable = gm.IsStageCleared(1);
-        if (hardButton != null)   hardButton.interactable   = gm.IsStageCleared(2);
+        SetStageButtonInteractable(easyButton, true);
+        SetStageButtonInteractable(normalButton, gm.IsStageCleared(1));
+        SetStageButtonInteractable(hardButton, gm.IsStageCleared(2));
 
         SetStoryButtonVisible(stage1PreStoryButton,  gm.IsStorySeen(gm.stage1PreChapter));
         SetStoryButtonVisible(stage1PostStoryButton, gm.IsStorySeen(gm.stage1PostChapter));
@@ -74,6 +74,23 @@ public class SelectSceneUI : MonoBehaviour
         SetStoryButtonVisible(stage2PostStoryButton, gm.IsStorySeen(gm.stage2PostChapter));
         SetStoryButtonVisible(stage3PreStoryButton,  gm.IsStorySeen(gm.stage3PreChapter));
         SetStoryButtonVisible(stage3PostStoryButton, gm.IsStorySeen(gm.stage3PostChapter));
+    }
+
+    // 버튼이 비활성화되면 배경 Image는 Button의 Disabled Color로 자동으로 흐려지지만
+    // 자식 Text(Legacy)는 Selectable이 아니라서 그 적용을 받지 않는다
+    // 그래서 텍스트 알파를 버튼과 같은 값으로 직접 맞춰준다
+    void SetStageButtonInteractable(Button button, bool interactable)
+    {
+        if (button == null) return;
+
+        button.interactable = interactable;
+
+        Text label = button.GetComponentInChildren<Text>();
+        if (label == null) return;
+
+        Color color = label.color;
+        color.a = interactable ? 1f : button.colors.disabledColor.a;
+        label.color = color;
     }
 
     void SetStoryButtonVisible(Button button, bool visible)
@@ -84,9 +101,9 @@ public class SelectSceneUI : MonoBehaviour
 
     void EnableAllStageButtons()
     {
-        if (easyButton != null)   easyButton.interactable = true;
-        if (normalButton != null) normalButton.interactable = true;
-        if (hardButton != null)   hardButton.interactable = true;
+        SetStageButtonInteractable(easyButton, true);
+        SetStageButtonInteractable(normalButton, true);
+        SetStageButtonInteractable(hardButton, true);
     }
 
     void HideAllStoryButtons()

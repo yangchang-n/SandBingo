@@ -445,11 +445,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4222872049020068217, guid: 632d25ef1a822eb4b8dc902c65648c62, type: 3}
       propertyPath: m_SizeDelta.x
-      value: -300
+      value: -240
       objectReference: {fileID: 0}
     - target: {fileID: 4222872049020068217, guid: 632d25ef1a822eb4b8dc902c65648c62, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 320
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 4222872049020068217, guid: 632d25ef1a822eb4b8dc902c65648c62, type: 3}
       propertyPath: m_LocalPosition.x
@@ -485,7 +485,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4222872049020068217, guid: 632d25ef1a822eb4b8dc902c65648c62, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 50
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 4222872049020068217, guid: 632d25ef1a822eb4b8dc902c65648c62, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -502,10 +502,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3139087929754996945, guid: 632d25ef1a822eb4b8dc902c65648c62, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 422515861}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 632d25ef1a822eb4b8dc902c65648c62, type: 3}
 --- !u!224 &422515856 stripped
 RectTransform:
@@ -550,18 +547,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!225 &422515861
-CanvasGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 130669841}
-  m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
-  m_IgnoreParentGroups: 0
 --- !u!1 &1103346552
 GameObject:
   m_ObjectHideFlags: 0

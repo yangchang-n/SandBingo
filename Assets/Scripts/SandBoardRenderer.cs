@@ -22,8 +22,6 @@ public class SandBoardRenderer : MonoBehaviour
     private GameObject clickableBorderObject;
     private Texture2D clickableBorderTexture;
     private SpriteRenderer clickableBorderRenderer;
-    private GameObject clickableTextObject;
-    private TextMesh clickableTextMesh;
 
     // Ownership Texts (O/X)
     private TextMesh[,] ownershipTexts;
@@ -48,16 +46,14 @@ public class SandBoardRenderer : MonoBehaviour
 
     [Header("Clickable Area Visuals")]
     public float borderThickness = 2f;
-    public int clickableTextSize = 12;
     public Color borderColor = Color.white;
-    public Color textColor = Color.white;
 
     [Header("Ownership Text Settings")]
     public Color ownershipTextColor = new Color(1f, 1f, 1f, 0.8f);
     public int ownershipCharacterSize = 100;
     public int ownershipFontSize = 14;
 
-    // 보드 프레임 오브젝트 참조 (Inspector에서 직접 원하는 프레임을 넣었다 뺐다 하면서 확인 가능)
+    // 보드 프레임 오브젝트 참조 (Inspector에서 원하는 프레임을 넣었다 뺐다 하면서 확인 가능)
     // Initialize 시점에 생성된 보드 크기에 맞춰 자동으로 크기와 위치가 조정된다
     [Header("Frame Overlay")]
     public SpriteRenderer boardFrameRenderer;
@@ -199,26 +195,6 @@ public class SandBoardRenderer : MonoBehaviour
             1f
         );
         clickableBorderRenderer.sprite = borderSprite;
-
-        clickableTextObject = new GameObject("ClickableAreaText");
-        clickableTextObject.transform.SetParent(transform);
-
-        clickableTextMesh = clickableTextObject.AddComponent<TextMesh>();
-        clickableTextMesh.text = "Clickable Area";
-        clickableTextMesh.fontSize = clickableTextSize;
-        clickableTextMesh.characterSize = 100;
-        clickableTextMesh.color = textColor;
-        clickableTextMesh.anchor = TextAnchor.MiddleCenter;
-        clickableTextMesh.alignment = TextAlignment.Center;
-        clickableTextMesh.fontStyle = FontStyle.Bold;
-
-        MeshRenderer textRenderer = clickableTextObject.GetComponent<MeshRenderer>();
-        textRenderer.sortingOrder = 7;
-
-        float centerX = (clickableMinX + clickableMaxX) / 2f - width / 2f;
-        float topY = clickableMaxY - height / 2f - 10f;
-        clickableTextObject.transform.position = new Vector3(centerX, topY, -1f);
-        clickableTextObject.transform.localScale = Vector3.one * 0.1f;
     }
 
     void DrawClickableBorder()
@@ -386,7 +362,7 @@ public class SandBoardRenderer : MonoBehaviour
         boardFrameRenderer.size = new Vector2(targetWidth / scale, targetHeight / scale);
         boardFrameRenderer.transform.position = transform.position;
 
-        // 보드의 다른 요소들(그리드선 5, 테두리 6, 글자 7, 소유권 텍스트 10)보다 앞에 그려지도록 설정
+        // 보드의 다른 요소들(그리드선 5, 테두리 6, 소유권 텍스트 10)보다 앞에 그려지도록 설정
         boardFrameRenderer.sortingOrder = 20;
     }
 

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3469239719535669016}
   - component: {fileID: 7562803879386653290}
   - component: {fileID: 705986798169715918}
+  - component: {fileID: 7389312410094589759}
   m_Layer: 5
   m_Name: Text (Legacy)
   m_TagString: Untagged
@@ -68,7 +69,7 @@ MonoBehaviour:
   m_FontData:
     m_Font: {fileID: 12800000, guid: 19b9bfe81b147ba4f91b639e7c1b07d9, type: 3}
     m_FontSize: 35
-    m_FontStyle: 0
+    m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 2
     m_MaxSize: 40
@@ -79,6 +80,22 @@ MonoBehaviour:
     m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: SKIP
+--- !u!114 &7389312410094589759
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6798948396943198443}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 063ba2c6141a7b44f813580834a33ee2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textEN: SKIP
+  textKR: "\uC2A4\uD0B5"
+  fontSizeEN: 35
+  fontSizeKR: 30
 --- !u!1 &6832991796279342949
 GameObject:
   m_ObjectHideFlags: 0

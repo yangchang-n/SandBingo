@@ -70,6 +70,10 @@ public class StorySceneUI : MonoBehaviour
             return;
         }
 
+        // 대화창 폰트는 항상 고정이므로 씬 시작 시 한 번만 적용한다
+        // 스토리씬에는 언어를 바꾸는 옵션이 없으므로 별도의 갱신 로직은 필요 없다
+        ApplyDialogueFonts();
+
         if (dialoguePanel != null)
             dialogueCanvasGroup = dialoguePanel.GetComponent<CanvasGroup>();
 
@@ -100,6 +104,26 @@ public class StorySceneUI : MonoBehaviour
             Advance();
 
         mouseWasDown = mouseDown;
+    }
+
+    // ===== 폰트 설정 =====
+
+    // 인물 이름과 대사 텍스트에 GlobalManager가 관리하는 대화창 전용 폰트를 적용한다
+    void ApplyDialogueFonts()
+    {
+        GlobalManager gm = GlobalManager.Instance;
+
+        if (speakerNameText != null)
+        {
+            speakerNameText.font = gm.GetSpeakerNameFont();
+            speakerNameText.fontSize = gm.GetSpeakerNameFontSize();
+        }
+
+        if (dialogueText != null)
+        {
+            dialogueText.font = gm.GetDialogueTextFont();
+            dialogueText.fontSize = gm.GetDialogueTextFontSize();
+        }
     }
 
     // ===== 줄 전환 =====
