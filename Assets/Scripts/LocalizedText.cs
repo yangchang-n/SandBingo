@@ -9,7 +9,9 @@ using UnityEngine.UI;
 public class LocalizedText : MonoBehaviour
 {
     [Header("Text")]
+    [TextArea(2, 5)]
     public string textEN;
+    [TextArea(2, 5)]
     public string textKR;
 
     [Header("Font Size (0 = 원본 크기 유지)")]

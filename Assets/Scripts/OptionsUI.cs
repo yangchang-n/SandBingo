@@ -22,6 +22,19 @@ public class OptionsUI : MonoBehaviour
     public Button backButton;
     public Button resetProgressButton;
 
+    // 확인 문구 자체는 각 패널의 Text에 LocalizedText로 직접 달아두면 되므로 여기서는 관리하지 않는다
+    // 언어 확인 패널의 문구는 "바꿀 언어"가 아니라 "현재 언어"를 기준으로 EN/KR 텍스트를 채워두면
+    // GlobalManager의 현재 언어에 맞는 문구가 LocalizedText에 의해 자동으로 표시된다
+    [Header("Language Confirmation")]
+    public GameObject languageConfirmPanel;
+    public Button languageConfirmButton;
+    public Button languageCancelButton;
+
+    [Header("Reset Confirmation")]
+    public GameObject resetConfirmPanel;
+    public Button resetConfirmButton;
+    public Button resetCancelButton;
+
     private Resolution[] availableResolutions;
 
     void Start()
@@ -33,6 +46,12 @@ public class OptionsUI : MonoBehaviour
 
         if (optionsPanel != null)
             optionsPanel.SetActive(false);
+
+        if (languageConfirmPanel != null)
+            languageConfirmPanel.SetActive(false);
+
+        if (resetConfirmPanel != null)
+            resetConfirmPanel.SetActive(false);
     }
 
     void SetupResolutionDropdown()
@@ -135,6 +154,18 @@ public class OptionsUI : MonoBehaviour
 
         if (resetProgressButton != null)
             resetProgressButton.onClick.AddListener(OnResetProgressClicked);
+
+        if (languageConfirmButton != null)
+            languageConfirmButton.onClick.AddListener(OnLanguageConfirmed);
+
+        if (languageCancelButton != null)
+            languageCancelButton.onClick.AddListener(OnLanguageCancelClicked);
+
+        if (resetConfirmButton != null)
+            resetConfirmButton.onClick.AddListener(OnResetConfirmed);
+
+        if (resetCancelButton != null)
+            resetCancelButton.onClick.AddListener(OnResetCancelClicked);
     }
 
     public void OpenOptions()
@@ -146,10 +177,18 @@ public class OptionsUI : MonoBehaviour
         }
     }
 
+    // 확인 패널이 열린 채로 뒤로가기를 눌러도 다음에 옵션을 다시 열었을 때
+    // 확인 패널이 그대로 떠 있지 않도록 여기서 같이 정리한다
     public void CloseOptions()
     {
         if (optionsPanel != null)
             optionsPanel.SetActive(false);
+
+        if (languageConfirmPanel != null)
+            languageConfirmPanel.SetActive(false);
+
+        if (resetConfirmPanel != null)
+            resetConfirmPanel.SetActive(false);
     }
 
     public bool IsOptionsOpen()
@@ -184,14 +223,31 @@ public class OptionsUI : MonoBehaviour
             muteToggle.isOn = muted;
     }
 
+    // EN/KR 버튼 클릭 시 바로 언어를 바꾸지 않고 확인 패널을 띄운다
+    // 언어가 EN/KR 둘뿐이라 "확인" 시점에 현재 언어의 반대쪽으로 바꾸면 되므로
+    // 어떤 버튼을 눌렀는지 따로 기억해둘 필요가 없다
     void OnLanguageButtonClicked(string code)
     {
         if (GlobalManager.Instance == null) return;
-
         if (GlobalManager.Instance.GetCurrentLanguage() == code) return;
 
-        GlobalManager.Instance.SetLanguage(code);
+        if (languageConfirmPanel != null)
+            languageConfirmPanel.SetActive(true);
+    }
+
+    void OnLanguageConfirmed()
+    {
+        if (GlobalManager.Instance == null) return;
+
+        string newLanguage = GlobalManager.Instance.GetCurrentLanguage() == "EN" ? "KR" : "EN";
+        GlobalManager.Instance.SetLanguage(newLanguage);
         GlobalManager.Instance.LoadScene("TitleScene");
+    }
+
+    void OnLanguageCancelClicked()
+    {
+        if (languageConfirmPanel != null)
+            languageConfirmPanel.SetActive(false);
     }
 
     void OnResolutionChanged(int index)
@@ -255,12 +311,25 @@ public class OptionsUI : MonoBehaviour
             GlobalManager.Instance.SetMute(isOn);
     }
 
+    // 초기화 버튼 클릭 시 바로 초기화하지 않고 확인 패널을 띄운다
     void OnResetProgressClicked()
+    {
+        if (resetConfirmPanel != null)
+            resetConfirmPanel.SetActive(true);
+    }
+
+    void OnResetConfirmed()
     {
         if (GlobalManager.Instance != null)
         {
             GlobalManager.Instance.ResetAllProgress();
             GlobalManager.Instance.LoadScene("TitleScene");
         }
+    }
+
+    void OnResetCancelClicked()
+    {
+        if (resetConfirmPanel != null)
+            resetConfirmPanel.SetActive(false);
     }
 }

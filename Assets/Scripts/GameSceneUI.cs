@@ -6,6 +6,8 @@ public class GameSceneUI : MonoBehaviour
 {
     [Header("Menu Panel")]
     public GameObject menuPanel;
+    public Button menuOpenButton;
+    public Button menuCloseButton;
     public Button resetButton;
     public Button optionsButton;
     public Button mainMenuButton;
@@ -15,6 +17,7 @@ public class GameSceneUI : MonoBehaviour
     public GameObject victoryPanel;
     public GameObject oasisWinText;
     public GameObject mudWinText;
+    public Button victoryCloseButton;
     public Button continueButton;
     public Button retryButton;
 
@@ -62,11 +65,14 @@ public class GameSceneUI : MonoBehaviour
         if (oasisWinText != null) oasisWinText.SetActive(false);
         if (mudWinText != null)   mudWinText.SetActive(false);
 
+        if (menuOpenButton != null)  menuOpenButton.onClick.AddListener(OpenMenu);
+        if (menuCloseButton != null) menuCloseButton.onClick.AddListener(HideMenu);
         if (resetButton != null)    resetButton.onClick.AddListener(OnResetClicked);
         if (optionsButton != null)  optionsButton.onClick.AddListener(OnOptionsClicked);
         if (mainMenuButton != null) mainMenuButton.onClick.AddListener(OnMainMenuClicked);
         if (tutorialButton != null) tutorialButton.onClick.AddListener(OnTutorialButtonClicked);
 
+        if (victoryCloseButton != null) victoryCloseButton.onClick.AddListener(HideVictoryPanel);
         if (continueButton != null)     continueButton.onClick.AddListener(OnContinueClicked);
         if (retryButton != null)        retryButton.onClick.AddListener(OnRetryClicked);
         if (tutorialSkipButton != null) tutorialSkipButton.onClick.AddListener(OnTutorialSkipClicked);
@@ -252,6 +258,13 @@ public class GameSceneUI : MonoBehaviour
     void UpdateScoreText(int currentScore, int targetScore)
     {
         scoreText.text = $"{currentScore} / {targetScore}";
+    }
+
+    void OpenMenu()
+    {
+        isMenuOpen = true;
+
+        if (menuPanel != null) menuPanel.SetActive(true);
     }
 
     void ToggleMenu()
