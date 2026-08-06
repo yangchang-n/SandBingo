@@ -31,7 +31,6 @@ public class GameSceneUI : MonoBehaviour
 
     [Header("Tutorial")]
     public GameObject tutorialPanel;
-    public Button tutorialSkipButton;
 
     [Header("Stage Intro")]
     // 씬 페이드인이 끝난 직후(또는 튜토리얼이 끝난 직후) 잠깐 떴다 사라지는 패널
@@ -53,6 +52,9 @@ public class GameSceneUI : MonoBehaviour
     private CanvasGroup stageIntroCanvasGroup;
     private bool isStageIntroActive = false;
 
+    // 튜토리얼 패널 오브젝트에 붙어 있는 재생 컴포넌트
+    private TutorialPanelUI tutorialUI;
+
     void Start()
     {
         gameManager = GameManager.Instance;
@@ -69,13 +71,12 @@ public class GameSceneUI : MonoBehaviour
         if (menuCloseButton != null) menuCloseButton.onClick.AddListener(HideMenu);
         if (resetButton != null)    resetButton.onClick.AddListener(OnResetClicked);
         if (optionsButton != null)  optionsButton.onClick.AddListener(OnOptionsClicked);
-        if (mainMenuButton != null) mainMenuButton.onClick.AddListener(OnMainMenuClicked);
+        if (mainMenuButton != null) mainMenuButton.onClick.AddListener(OnLeaveGameClicked);
         if (tutorialButton != null) tutorialButton.onClick.AddListener(OnTutorialButtonClicked);
 
         if (victoryCloseButton != null) victoryCloseButton.onClick.AddListener(HideVictoryPanel);
-        if (continueButton != null)     continueButton.onClick.AddListener(OnContinueClicked);
+        if (continueButton != null)     continueButton.onClick.AddListener(OnLeaveGameClicked);
         if (retryButton != null)        retryButton.onClick.AddListener(OnRetryClicked);
-        if (tutorialSkipButton != null) tutorialSkipButton.onClick.AddListener(OnTutorialSkipClicked);
 
         SetupTutorial();
         InitializeScoreDisplay();
@@ -92,6 +93,9 @@ public class GameSceneUI : MonoBehaviour
     {
         if (tutorialPanel == null) return;
 
+        // 패널이 꺼져 있어도 GetComponent 는 동작하므로 여기서 한 번만 잡아둔다
+        tutorialUI = tutorialPanel.GetComponent<TutorialPanelUI>();
+
         GlobalManager gm = GlobalManager.Instance;
 
         bool shouldShow = gm != null
@@ -100,7 +104,21 @@ public class GameSceneUI : MonoBehaviour
             && gm.stage1TutorialChapter != null
             && !gm.IsStorySeen(gm.stage1TutorialChapter);
 
-        tutorialPanel.SetActive(shouldShow);
+        if (!shouldShow)
+        {
+            tutorialPanel.SetActive(false);
+            return;
+        }
+
+        // 재생 컴포넌트가 없으면 스킵 버튼도 동작하지 않아 패널을 닫을 수 없게 된다
+        if (tutorialUI == null)
+        {
+            Debug.LogWarning("TutorialPanelUI not found on tutorialPanel!");
+            tutorialPanel.SetActive(false);
+            return;
+        }
+
+        tutorialUI.Play();
     }
 
     void SetupBackgrounds()
@@ -154,7 +172,7 @@ public class GameSceneUI : MonoBehaviour
     // 그 동안은 튜토리얼 패널 자체가 이미 입력을 막고 있다
     IEnumerator ShowStageIntroSequence()
     {
-        while (tutorialPanel != null && tutorialPanel.activeSelf)
+        while (IsTutorialOpen())
             yield return null;
 
         if (gameManager == null) yield break;
@@ -232,13 +250,22 @@ public class GameSceneUI : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) && gameManager != null && !gameManager.isGameOver && !isStageIntroActive)
-        {
-            if (optionsUI != null && optionsUI.HandleEscapeKey())
-                return;
+        if (!Input.GetKeyDown(KeyCode.Escape)) return;
 
-            ToggleMenu();
+        // 튜토리얼 중에는 대사 넘기기와 겹치고, 스테이지 진입 연출은 곧 사라지므로 무시한다
+        if (isStageIntroActive || IsTutorialOpen()) return;
+
+        // 옵션이 열려 있으면 옵션이 먼저 닫힌다
+        if (optionsUI != null && optionsUI.HandleEscapeKey()) return;
+
+        // 승리 패널이 떠 있으면 닫기 버튼과 같게 동작한다
+        if (victoryPanel != null && victoryPanel.activeSelf)
+        {
+            HideVictoryPanel();
+            return;
         }
+
+        ToggleMenu();
     }
 
     void InitializeScoreDisplay()
@@ -305,7 +332,7 @@ public class GameSceneUI : MonoBehaviour
         if (optionsUI != null && optionsUI.IsOptionsOpen())
             return true;
 
-        if (tutorialPanel != null && tutorialPanel.activeSelf)
+        if (IsTutorialOpen())
             return true;
 
         if (menuPanel != null && menuPanel.activeSelf)
@@ -315,6 +342,11 @@ public class GameSceneUI : MonoBehaviour
             return true;
 
         return false;
+    }
+
+    bool IsTutorialOpen()
+    {
+        return tutorialPanel != null && tutorialPanel.activeSelf;
     }
 
     void OnResetClicked()
@@ -348,34 +380,22 @@ public class GameSceneUI : MonoBehaviour
             Debug.LogWarning("OptionsUI not found!");
     }
 
-    void OnMainMenuClicked()
-    {
-        GlobalManager.Instance.LoadScene("SelectScene");
-    }
 
     void OnTutorialButtonClicked()
     {
         HideMenu();
 
-        if (tutorialPanel != null)
-            tutorialPanel.SetActive(true);
+        if (tutorialUI != null)
+            tutorialUI.Play();
     }
 
-    void OnContinueClicked()
+    // 승리 패널의 Continue 와 메뉴의 Quit 이 같은 동작을 한다
+    // 아직 보지 않은 post 스토리가 있으면 GameManager 가 그쪽으로 보낸다
+    void OnLeaveGameClicked()
     {
         if (gameManager != null)
             gameManager.LeaveGameScene();
         else
             GlobalManager.Instance.LoadScene("SelectScene");
-    }
-
-    void OnTutorialSkipClicked()
-    {
-        if (tutorialPanel != null)
-            tutorialPanel.SetActive(false);
-
-        GlobalManager gm = GlobalManager.Instance;
-        if (gm != null && gm.stage1TutorialChapter != null)
-            gm.MarkStoryAsSeen(gm.stage1TutorialChapter);
     }
 }
