@@ -94,7 +94,6 @@ public class SandBoardRenderer : MonoBehaviour
         CreateOwnershipTexts();
         SetupBoardFrame();
 
-        Debug.Log("SandBoardRenderer initialized - colors cached");
     }
 
     void SetupMainRenderer()
@@ -171,7 +170,6 @@ public class SandBoardRenderer : MonoBehaviour
         }
 
         gridLinesTexture.Apply();
-        Debug.Log("Grid lines cached");
     }
 
     void SetupClickableAreaVisuals()
@@ -276,7 +274,6 @@ public class SandBoardRenderer : MonoBehaviour
         }
 
         clickableBorderTexture.Apply();
-        Debug.Log("Clickable area border cached");
     }
 
     void CreateOwnershipTexts()
@@ -320,7 +317,6 @@ public class SandBoardRenderer : MonoBehaviour
             }
         }
 
-        Debug.Log("Ownership texts created");
     }
 
     // 프레임 오브젝트를 실제 생성된 보드 크기에 맞춰 늘리고 보드 중앙에 위치시킨다

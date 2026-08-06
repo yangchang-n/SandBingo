@@ -184,25 +184,21 @@ public class SelectSceneUI : MonoBehaviour
 
     public void OnEasyButtonClick()
     {
-        Debug.Log("Easy difficulty selected (Stage 1)");
         OnStageButtonClick(1);
     }
 
     public void OnNormalButtonClick()
     {
-        Debug.Log("Normal difficulty selected (Stage 2)");
         OnStageButtonClick(2);
     }
 
     public void OnHardButtonClick()
     {
-        Debug.Log("Hard difficulty selected (Stage 3)");
         OnStageButtonClick(3);
     }
 
     public void OnBackButtonClick()
     {
-        Debug.Log("Returning to Title Scene");
         GlobalManager.Instance.LoadScene("TitleScene");
     }
 

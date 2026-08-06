@@ -101,7 +101,6 @@ public class GlobalManager : MonoBehaviour
             LoadProgress();
             InitializeBGM();
             InitializeFadePanel();
-            Debug.Log("GlobalManager initialized");
             Debug.Log($"Save file location: {_saveFilePath}");
         }
         else
@@ -303,7 +302,6 @@ public class GlobalManager : MonoBehaviour
 
             string json = JsonUtility.ToJson(data, true);
             File.WriteAllText(_saveFilePath, json);
-            Debug.Log($"Progress saved to: {_saveFilePath}");
         }
         catch (System.Exception e)
         {
@@ -502,13 +500,21 @@ public class GlobalManager : MonoBehaviour
 
     // ===== Audio Control =====
 
-    public void SetVolumePercentage(int percentage)
+    // 볼륨을 소리에만 즉시 반영하고 파일에는 쓰지 않는다
+    // 슬라이더를 끄는 동안에는 이쪽만 호출해서 디스크 쓰기가 반복되지 않게 한다
+    public void ApplyVolumePercentage(int percentage)
     {
         volumePercentage = Mathf.Clamp(percentage, 0, 100);
         bgmVolume = volumePercentage / 100f;
 
         if (audioSource != null)
             audioSource.volume = bgmVolume;
+    }
+
+    // 적용과 저장을 함께 한다. 값이 확정된 시점에만 호출한다
+    public void SetVolumePercentage(int percentage)
+    {
+        ApplyVolumePercentage(percentage);
 
         SaveProgress();
         Debug.Log($"Volume set to: {volumePercentage}%");

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class OptionsUI : MonoBehaviour
 {
@@ -37,10 +38,14 @@ public class OptionsUI : MonoBehaviour
 
     private Resolution[] availableResolutions;
 
+    // 아직 저장하지 않은 볼륨 값. 음수면 저장할 변경이 없다는 뜻이다
+    private int pendingVolume = -1;
+
     void Start()
     {
         SetupResolutionDropdown();
         SetupAudioControls();
+        SetupVolumeCommitTrigger();
         SetupLanguageButtons();
         SetupButtons();
 
@@ -181,6 +186,9 @@ public class OptionsUI : MonoBehaviour
     // 확인 패널이 그대로 떠 있지 않도록 여기서 같이 정리한다
     public void CloseOptions()
     {
+        // 마우스를 떼지 않고 창을 닫는 경우나 키보드로 값을 바꾼 경우를 대비한 안전장치
+        CommitVolume();
+
         if (optionsPanel != null)
             optionsPanel.SetActive(false);
 
@@ -262,6 +270,8 @@ public class OptionsUI : MonoBehaviour
             GlobalManager.Instance.SetResolution(selected.width, selected.height, false);
     }
 
+    // 슬라이더를 끄는 동안에는 소리에만 즉시 반영하고 저장은 미룬다
+    // 저장은 손을 뗄 때(PointerUp)나 옵션 창을 닫을 때 한 번만 이루어진다
     void OnVolumeSliderChanged(float value)
     {
         int intValue = Mathf.RoundToInt(value);
@@ -269,8 +279,41 @@ public class OptionsUI : MonoBehaviour
         if (volumeInput != null)
             volumeInput.text = intValue.ToString();
 
+        if (GlobalManager.Instance == null)
+            return;
+
+        if (GlobalManager.Instance.GetVolumePercentage() == intValue)
+            return;
+
+        GlobalManager.Instance.ApplyVolumePercentage(intValue);
+        pendingVolume = intValue;
+    }
+
+    // 슬라이더에서 손을 떼는 순간을 잡기 위해 PointerUp 이벤트를 붙인다
+    // 슬라이더 오브젝트에 EventTrigger 가 없으면 만들어서 사용한다
+    void SetupVolumeCommitTrigger()
+    {
+        if (volumeSlider == null) return;
+
+        EventTrigger trigger = volumeSlider.gameObject.GetComponent<EventTrigger>();
+        if (trigger == null)
+            trigger = volumeSlider.gameObject.AddComponent<EventTrigger>();
+
+        EventTrigger.Entry entry = new EventTrigger.Entry { eventID = EventTriggerType.PointerUp };
+        entry.callback.AddListener(_ => CommitVolume());
+        trigger.triggers.Add(entry);
+    }
+
+    // 미뤄둔 볼륨 값을 실제로 저장한다. 저장할 변경이 없으면 아무것도 하지 않는다
+    void CommitVolume()
+    {
+        if (pendingVolume < 0) return;
+
+        int value = pendingVolume;
+        pendingVolume = -1;
+
         if (GlobalManager.Instance != null)
-            GlobalManager.Instance.SetVolumePercentage(intValue);
+            GlobalManager.Instance.SetVolumePercentage(value);
     }
 
     void OnVolumeInputSubmit(string text)
@@ -289,8 +332,13 @@ public class OptionsUI : MonoBehaviour
             if (volumeSlider != null)
                 volumeSlider.value = clampedValue;
 
+            // 숫자 입력은 값이 확정된 조작이므로 바로 저장한다
             if (GlobalManager.Instance != null)
-                GlobalManager.Instance.SetVolumePercentage(clampedValue);
+            {
+                GlobalManager.Instance.ApplyVolumePercentage(clampedValue);
+                pendingVolume = clampedValue;
+                CommitVolume();
+            }
 
             if (volumeInput != null)
                 volumeInput.text = clampedValue.ToString();

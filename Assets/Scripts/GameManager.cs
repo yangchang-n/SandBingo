@@ -12,22 +12,47 @@ public class GameManager : MonoBehaviour
     private BotController botController;
     private GameSceneUI gameUI;
     private SandGaugeRenderer sandGaugeRenderer;
+    private Camera mainCamera;
 
     // Game Settings
     private int sandPerTurn;
-    private const int SAND_SPAWN_RATE = 10;
 
     // Physics Settings
     [Header("Physics Settings")]
-    [Tooltip("목표 물리 시뮬레이션 프레임레이트 (권장: 60-240)")]
+    [Tooltip("시뮬레이션 갱신 빈도. 움직임의 부드러움만 결정하며 낙하 속도에는 영향이 없다")]
+    [Range(30, 480)]
     public int targetPhysicsRate = 240;
 
-    [Range(1, 10)]
-    [Tooltip("한 단계 당 실행되는 시뮬레이션 반복 횟수 (권장: 2-4)")]
-    public int simulationsPerStep = 2;
+    [Tooltip("모래가 초당 떨어지는 픽셀 수. 낙하 속도와 뿌리는 속도를 함께 결정하는 유일한 값이다")]
+    [Range(60, 720)]
+    public int sandFallSpeed = 360;
+
+    // 생성 패턴의 가로 폭. SandSimulator.SpawnSand가 dx를 -1에서 1까지 채우므로 3이다
+    private const int SPAWN_COLUMNS = 3;
+
+    // 한 스텝에 채울 수 있는 최대 높이
+    // SandSimulator.SPAWN_PATTERN_HEIGHT와 같은 값이어야 하며 한쪽만 바꾸면 안 된다
+    private const int MAX_FALL_PER_STEP = 3;
+
+    // 프레임당 허용할 최대 물리 스텝 수
+    // 240Hz 기준 25ms까지 담을 수 있어 40fps 이상에서는 목표 속도가 유지된다
+    // 값을 더 키우면 느린 기기에서 한 프레임의 처리량이 늘어
+    // 수직동기화가 프레임레이트를 한 단계 더 떨어뜨리는 역효과가 생긴다
+    private const int MAX_STEPS_PER_FRAME = 6;
 
     private float physicsAccumulator = 0f;
+
+    // 스텝당 낙하 픽셀이 소수일 때 나머지를 다음 스텝으로 넘기는 누적값
+    private float fallCarry = 0f;
+
+    // 모래가 완전히 정착하면 false가 되어 보드 순회 자체를 멈춘다
+    // 보드 내용을 바꾸는 쪽에서 WakeSimulation을 불러 다시 켜준다
+    private bool isSimulationAwake = true;
+
     private float PhysicsTimestep => 1f / targetPhysicsRate;
+
+    // 한 물리 스텝에서 떨어질 픽셀 수. 정수가 아닐 수 있어 실수로 둔다
+    private float FallPerStep => (float)sandFallSpeed / targetPhysicsRate;
 
     // Score System
     [Header("Score System")]
@@ -130,11 +155,21 @@ public class GameManager : MonoBehaviour
         isMudWin = false;
 
         physicsAccumulator = 0f;
+        fallCarry = 0f;
+        isSimulationAwake = true;
 
         stage1CurrentScore = 0;
         stage2CurrentScore = 0;
         stage3CurrentScore = 0;
         customCurrentScore = 0;
+
+        // 한 스텝의 낙하 거리가 생성 패턴 높이를 넘으면 그 차이만큼 모래 줄기가 끊긴다
+        // 이 경우 낙하 거리가 강제로 잘려서 실제 속도가 설정값보다 느려지기도 한다
+        if (FallPerStep > MAX_FALL_PER_STEP)
+        {
+            Debug.LogWarning($"Sand Fall Speed({sandFallSpeed})가 Target Physics Rate({targetPhysicsRate}) 대비 너무 큽니다. " +
+                             $"{targetPhysicsRate * MAX_FALL_PER_STEP} 이하로 낮추세요.");
+        }
     }
 
     void FindReferences()
@@ -156,13 +191,22 @@ public class GameManager : MonoBehaviour
         {
             Debug.LogWarning("GameSceneUI not found in scene!");
         }
+
+        // 마우스 좌표 변환에 매 프레임 쓰이므로 참조를 한 번만 잡아둔다
+        mainCamera = Camera.main;
+        if (mainCamera == null)
+        {
+            Debug.LogError("Main Camera not found in scene!");
+        }
     }
 
     void SetupCamera()
     {
+        if (mainCamera == null) return;
+
         float boardHeight = sandSimulator.GetHeight();
-        Camera.main.orthographicSize = boardHeight / 2f * 1.3f;
-        Camera.main.transform.position = new Vector3(0, 15f, -10f);
+        mainCamera.orthographicSize = boardHeight / 2f * 1.3f;
+        mainCamera.transform.position = new Vector3(0, 15f, -10f);
     }
 
     void SetupGauge()
@@ -189,7 +233,6 @@ public class GameManager : MonoBehaviour
             return;
 
         HandleTurnTransition();
-        HandlePlayerInput();
         UpdatePhysicsWithFixedTimestep();
     }
 
@@ -197,16 +240,151 @@ public class GameManager : MonoBehaviour
     {
         physicsAccumulator += Time.deltaTime;
 
-        if (physicsAccumulator > PhysicsTimestep * 3)
+        float accumulatorLimit = PhysicsTimestep * MAX_STEPS_PER_FRAME;
+
+        if (physicsAccumulator > accumulatorLimit)
         {
-            physicsAccumulator = PhysicsTimestep * 3;
+            physicsAccumulator = accumulatorLimit;
+
+            // 개발 중에만 의미가 있는 경고이다
+            // 릴리즈 빌드에서는 매 프레임 호출되어 로그 파일만 불리므로 컴파일 단계에서 제외한다
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
             Debug.LogWarning($"Physics accumulator clamped! FPS too low. Current FPS: {1f / Time.deltaTime:F1}");
+#endif
         }
+
+        // 마우스 위치와 패널 상태는 프레임당 한 번만 갱신되므로 생성 대상도 프레임당 한 번만 계산한다
+        // 스텝마다 다시 계산하면 좌표 변환과 패널 검사만 중복될 뿐 결과는 같다
+        bool isPouring = TryGetPourTarget(out Vector2Int pourCell);
+
+        bool simulatedThisFrame = false;
 
         while (physicsAccumulator >= PhysicsTimestep)
         {
-            UpdateSimulation();
+            simulatedThisFrame |= StepSimulation(isPouring, pourCell);
             physicsAccumulator -= PhysicsTimestep;
+        }
+
+        if (!simulatedThisFrame)
+        {
+            return;
+        }
+
+        // 화면은 프레임당 한 번만 갱신되므로 텍스처 업로드도 프레임당 한 번이면 충분하다
+        sandSimulator.UpdateTexture();
+
+        // 게이지 갱신은 텍스처 전체를 다시 쓰는 작업이라 스텝마다 부르면 안 된다
+        if (isPouring)
+        {
+            UpdateGauge();
+        }
+    }
+
+    // 물리 스텝 하나를 진행한다. 실제로 보드를 훑었으면 true를 반환한다
+    // 뿌리기를 이 안에서 처리해야 생성 간격이 낙하 간격과 같은 박자를 갖는다
+    bool StepSimulation(bool isPouring, Vector2Int pourCell)
+    {
+        fallCarry += FallPerStep;
+
+        int fallPixels = Mathf.FloorToInt(fallCarry);
+
+        if (fallPixels > MAX_FALL_PER_STEP)
+        {
+            // 생성 패턴 높이를 넘는 낙하는 어차피 채울 수 없으므로 잘라낸다
+            // 이때 남은 이월값을 버리지 않으면 계속 쌓여서 상한에 눌러앉는다
+            fallPixels = MAX_FALL_PER_STEP;
+            fallCarry = 0f;
+        }
+        else
+        {
+            fallCarry -= fallPixels;
+        }
+
+        if (fallPixels <= 0)
+        {
+            return false;
+        }
+
+        // 채우는 높이를 떨어지는 거리와 같게 맞춰야 모래 줄기가 끊기지 않는다
+        // 생성에 성공하면 PourSand 안에서 시뮬레이션이 깨어난다
+        if (isPouring && remainingSand > 0)
+        {
+            PourSand(pourCell, fallPixels * SPAWN_COLUMNS);
+        }
+
+        if (!isSimulationAwake)
+        {
+            return false;
+        }
+
+        for (int i = 0; i < fallPixels; i++)
+        {
+            if (sandSimulator.SimulatePhysics())
+            {
+                isSandMoving = true;
+            }
+            else
+            {
+                // 한 번의 전체 순회에서 아무것도 움직이지 않았다면 보드는 완전히 정착한 상태이다
+                // 같은 상태를 다시 훑어도 결과가 같으므로 다음 변화가 생길 때까지 멈춘다
+                isSimulationAwake = false;
+                break;
+            }
+        }
+
+        return true;
+    }
+
+    // 코드가 보드 내용을 바꿨을 때 반드시 호출해야 한다
+    // 빠뜨리면 새로 생긴 모래가 공중에 멈춘 채로 남는다
+    void WakeSimulation()
+    {
+        isSimulationAwake = true;
+    }
+
+    // 이번 프레임에 플레이어가 모래를 쏟고 있는지 판정하고 대상 좌표를 돌려준다
+    bool TryGetPourTarget(out Vector2Int cell)
+    {
+        cell = default;
+
+        if (isGameOver) return false;
+        if (!isPlayerTurn) return false;
+        if (isBotMode && currentPlayer == 1) return false;
+        if (remainingSand <= 0) return false;
+        if (!Input.GetMouseButton(0)) return false;
+
+        // 옵션, 튜토리얼, 메뉴, 스테이지 진입 패널이 열려 있는 동안에는 모래를 생성하지 않는다
+        if (gameUI != null && gameUI.IsInputBlocked()) return false;
+
+        if (mainCamera == null) return false;
+
+        cell = WorldToGrid(mainCamera.ScreenToWorldPoint(Input.mousePosition));
+
+        return sandSimulator.IsInClickableArea(cell.x, cell.y);
+    }
+
+    void PourSand(Vector2Int cell, int amount)
+    {
+        int spawnAmount = Mathf.Min(amount, remainingSand);
+        int actualSpawned = sandSimulator.SpawnSand(cell.x, cell.y, GetCurrentPlayerSandType(), spawnAmount);
+
+        if (actualSpawned <= 0)
+        {
+            return;
+        }
+
+        WakeSimulation();
+
+        if (isBotMode && currentPlayer == 0 && botController != null)
+        {
+            botController.RecordOasisSandPosition(cell.x);
+        }
+
+        remainingSand -= actualSpawned;
+
+        if (remainingSand <= 0)
+        {
+            EndTurn();
         }
     }
 
@@ -263,6 +441,9 @@ public class GameManager : MonoBehaviour
                 yield return new WaitForSeconds(0.6f);
 
                 sandSimulator.RemoveCells(scoreResult.cellsToRemove);
+
+                // 칸이 비면 그 위의 모래가 다시 무너져야 하므로 시뮬레이션을 깨운다
+                WakeSimulation();
 
                 CheckVictoryCondition();
 
@@ -330,8 +511,6 @@ public class GameManager : MonoBehaviour
             GameObject particle = Instantiate(cellRemovalParticlePrefab, worldPos, Quaternion.identity);
             Destroy(particle, 1.5f);
         }
-
-        Debug.Log($"Spawned {cellsToRemove.Count} removal particles");
     }
 
     void SpawnScoreTexts(List<SandSimulator.ScoreLine> scoreLines)
@@ -404,43 +583,6 @@ public class GameManager : MonoBehaviour
         Destroy(textObj);
     }
 
-    void HandlePlayerInput()
-    {
-        if (isBotMode && currentPlayer == 1)
-        {
-            return;
-        }
-
-        // 옵션, 튜토리얼, 메뉴 패널이 열려 있는 동안에는 모래를 생성하지 않는다
-        if (gameUI != null && gameUI.IsInputBlocked())
-        {
-            return;
-        }
-
-        if (isPlayerTurn && Input.GetMouseButton(0) && remainingSand > 0)
-        {
-            SpawnSandAtMouse();
-            UpdateGauge();
-        }
-    }
-
-    void UpdateSimulation()
-    {
-        bool movedThisFrame = false;
-
-        for (int i = 0; i < simulationsPerStep; i++)
-        {
-            movedThisFrame |= sandSimulator.SimulatePhysics();
-        }
-
-        if (movedThisFrame)
-        {
-            isSandMoving = true;
-        }
-
-        sandSimulator.UpdateTexture();
-    }
-
     void CheckVictoryCondition()
     {
         if (isGameOver) return;
@@ -507,37 +649,6 @@ public class GameManager : MonoBehaviour
         }
 
         gm.LoadScene("SelectScene");
-    }
-
-    void SpawnSandAtMouse()
-    {
-        Vector3 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector2Int gridPos = WorldToGrid(worldPos);
-
-        if (!sandSimulator.IsInClickableArea(gridPos.x, gridPos.y))
-        {
-            return;
-        }
-
-        SandSimulator.CellType sandType = GetCurrentPlayerSandType();
-        int spawnAmount = Mathf.Min(SAND_SPAWN_RATE, remainingSand);
-
-        int actualSpawned = sandSimulator.SpawnSand(gridPos.x, gridPos.y, sandType, spawnAmount);
-
-        if (actualSpawned > 0)
-        {
-            if (isBotMode && currentPlayer == 0 && botController != null)
-            {
-                botController.RecordOasisSandPosition(gridPos.x);
-            }
-
-            remainingSand -= actualSpawned;
-
-            if (remainingSand <= 0)
-            {
-                EndTurn();
-            }
-        }
     }
 
     Vector2Int WorldToGrid(Vector3 worldPos)
@@ -651,6 +762,10 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(delay);
 
         botController.ExecuteBotTurn(GetMudPatternForDifficulty(botDifficulty));
+
+        // 봇이 진흙을 새로 떨어뜨렸으므로 시뮬레이션을 깨운다
+        WakeSimulation();
+
         remainingSand = 0;
         UpdateGauge();
 
@@ -688,6 +803,7 @@ public class GameManager : MonoBehaviour
         isOasisWin = false;
         isMudWin = false;
         physicsAccumulator = 0f;
+        fallCarry = 0f;
 
         stage1CurrentScore = 0;
         stage2CurrentScore = 0;
@@ -698,6 +814,10 @@ public class GameManager : MonoBehaviour
             botController.ClearOasisData();
 
         sandSimulator.ResetBoard();
+
+        // 보드를 비웠으므로 시뮬레이션을 깨운다
+        WakeSimulation();
+
         StartNewTurn();
 
         Debug.Log("Game Reset!");

@@ -324,6 +324,20 @@ public class SandSimulator : MonoBehaviour
         }
     }
 
+    // 점수 판정 방향 - 가로, 세로, 대각선 두 방향
+    // 네 방향에 완전히 같은 규칙을 적용하므로 방향만 바꿔가며 같은 코드를 재사용한다
+    private static readonly Vector2Int[] SCORE_DIRECTIONS =
+    {
+        new Vector2Int(1, 0),
+        new Vector2Int(0, 1),
+        new Vector2Int(1, 1),
+        new Vector2Int(1, -1)
+    };
+
+    private const int MIN_SCORE_LINE_LENGTH = 5;
+    private const int BASE_LINE_SCORE = 100;
+    private const int EXTRA_CELL_SCORE = 50;
+
     public ScoreResult CalculateScoreAndGetCells()
     {
         ScoreResult result = new ScoreResult
@@ -334,182 +348,9 @@ public class SandSimulator : MonoBehaviour
             cellsToRemove = new HashSet<Vector2Int>()
         };
 
-        // 가로 체크
-        for (int y = 0; y < gridSize; y++)
+        foreach (Vector2Int direction in SCORE_DIRECTIONS)
         {
-            for (int x = 0; x < gridSize; x++)
-            {
-                CellOwnership owner = ownership[x, y];
-                if (owner == CellOwnership.None) continue;
-
-                int count = 1;
-                while (x + count < gridSize && ownership[x + count, y] == owner)
-                {
-                    count++;
-                }
-
-                if (count >= 5)
-                {
-                    int score = 100 + (count - 5) * 50;
-
-                    ScoreLine line = new ScoreLine
-                    {
-                        cells = new List<Vector2Int>(),
-                        score = owner == CellOwnership.Sky ? score : -score,
-                        ownership = owner
-                    };
-
-                    for (int i = 0; i < count; i++)
-                    {
-                        Vector2Int cell = new Vector2Int(x + i, y);
-                        line.cells.Add(cell);
-                        result.cellsToRemove.Add(cell);
-                    }
-
-                    result.scoreLines.Add(line);
-
-                    if (owner == CellOwnership.Sky)
-                        result.oasisScore += score;
-                    else
-                        result.mudScore += score;
-
-                    x += count - 1;
-                }
-            }
-        }
-
-        // 세로 체크
-        for (int x = 0; x < gridSize; x++)
-        {
-            for (int y = 0; y < gridSize; y++)
-            {
-                CellOwnership owner = ownership[x, y];
-                if (owner == CellOwnership.None) continue;
-
-                int count = 1;
-                while (y + count < gridSize && ownership[x, y + count] == owner)
-                {
-                    count++;
-                }
-
-                if (count >= 5)
-                {
-                    int score = 100 + (count - 5) * 50;
-
-                    ScoreLine line = new ScoreLine
-                    {
-                        cells = new List<Vector2Int>(),
-                        score = owner == CellOwnership.Sky ? score : -score,
-                        ownership = owner
-                    };
-
-                    for (int i = 0; i < count; i++)
-                    {
-                        Vector2Int cell = new Vector2Int(x, y + i);
-                        line.cells.Add(cell);
-                        result.cellsToRemove.Add(cell);
-                    }
-
-                    result.scoreLines.Add(line);
-
-                    if (owner == CellOwnership.Sky)
-                        result.oasisScore += score;
-                    else
-                        result.mudScore += score;
-
-                    y += count - 1;
-                }
-            }
-        }
-
-        // 대각선 체크 (역슬래시 방향)
-        for (int y = 0; y < gridSize; y++)
-        {
-            for (int x = 0; x < gridSize; x++)
-            {
-                CellOwnership owner = ownership[x, y];
-                if (owner == CellOwnership.None) continue;
-
-                int count = 1;
-                while (x + count < gridSize && y + count < gridSize &&
-                       ownership[x + count, y + count] == owner)
-                {
-                    count++;
-                }
-
-                if (count >= 5)
-                {
-                    int score = 100 + (count - 5) * 50;
-
-                    ScoreLine line = new ScoreLine
-                    {
-                        cells = new List<Vector2Int>(),
-                        score = owner == CellOwnership.Sky ? score : -score,
-                        ownership = owner
-                    };
-
-                    for (int i = 0; i < count; i++)
-                    {
-                        Vector2Int cell = new Vector2Int(x + i, y + i);
-                        line.cells.Add(cell);
-                        result.cellsToRemove.Add(cell);
-                    }
-
-                    result.scoreLines.Add(line);
-
-                    if (owner == CellOwnership.Sky)
-                        result.oasisScore += score;
-                    else
-                        result.mudScore += score;
-
-                    x += count - 1;
-                }
-            }
-        }
-
-        // 대각선 체크 (슬래시 방향)
-        for (int y = 0; y < gridSize; y++)
-        {
-            for (int x = 0; x < gridSize; x++)
-            {
-                CellOwnership owner = ownership[x, y];
-                if (owner == CellOwnership.None) continue;
-
-                int count = 1;
-                while (x + count < gridSize && y - count >= 0 &&
-                       ownership[x + count, y - count] == owner)
-                {
-                    count++;
-                }
-
-                if (count >= 5)
-                {
-                    int score = 100 + (count - 5) * 50;
-
-                    ScoreLine line = new ScoreLine
-                    {
-                        cells = new List<Vector2Int>(),
-                        score = owner == CellOwnership.Sky ? score : -score,
-                        ownership = owner
-                    };
-
-                    for (int i = 0; i < count; i++)
-                    {
-                        Vector2Int cell = new Vector2Int(x + i, y - i);
-                        line.cells.Add(cell);
-                        result.cellsToRemove.Add(cell);
-                    }
-
-                    result.scoreLines.Add(line);
-
-                    if (owner == CellOwnership.Sky)
-                        result.oasisScore += score;
-                    else
-                        result.mudScore += score;
-
-                    x += count - 1;
-                }
-            }
+            CollectScoreLines(direction.x, direction.y, ref result);
         }
 
         if (result.cellsToRemove.Count > 0)
@@ -518,6 +359,55 @@ public class SandSimulator : MonoBehaviour
         }
 
         return result;
+    }
+
+    // 한 방향에 대해 같은 소유자가 이어지는 최대 구간을 한 번씩만 찾는다
+    // 방향이 다른 줄끼리 칸을 공유하는 것은 각각 별개의 줄로 인정된다
+    void CollectScoreLines(int dx, int dy, ref ScoreResult result)
+    {
+        for (int y = 0; y < gridSize; y++)
+        {
+            for (int x = 0; x < gridSize; x++)
+            {
+                CellOwnership owner = ownership[x, y];
+                if (owner == CellOwnership.None) continue;
+
+                // 진행 방향의 바로 뒤 칸이 같은 소유자면 이 칸은 줄의 시작점이 아니다
+                // 이 검사를 빼면 같은 줄을 시작점만 옮겨가며 여러 번 세게 된다
+                if (GetCellOwnership(x - dx, y - dy) == owner) continue;
+
+                int count = 1;
+                while (GetCellOwnership(x + count * dx, y + count * dy) == owner)
+                {
+                    count++;
+                }
+
+                if (count < MIN_SCORE_LINE_LENGTH) continue;
+
+                int score = BASE_LINE_SCORE + (count - MIN_SCORE_LINE_LENGTH) * EXTRA_CELL_SCORE;
+
+                ScoreLine line = new ScoreLine
+                {
+                    cells = new List<Vector2Int>(),
+                    score = owner == CellOwnership.Sky ? score : -score,
+                    ownership = owner
+                };
+
+                for (int i = 0; i < count; i++)
+                {
+                    Vector2Int cell = new Vector2Int(x + i * dx, y + i * dy);
+                    line.cells.Add(cell);
+                    result.cellsToRemove.Add(cell);
+                }
+
+                result.scoreLines.Add(line);
+
+                if (owner == CellOwnership.Sky)
+                    result.oasisScore += score;
+                else
+                    result.mudScore += score;
+            }
+        }
     }
 
     public void RemoveCells(HashSet<Vector2Int> cells)
@@ -602,8 +492,6 @@ public class SandSimulator : MonoBehaviour
                 }
             }
         }
-
-        Debug.Log($"Dropped {droppedCount} sand particles in {widthCells}x{heightCells} rectangle at ({centerX}, {centerY})");
     }
 
     public void ResetBoard()
