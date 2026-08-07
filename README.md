@@ -1,38 +1,68 @@
-### Download Link (GitHub Release) :
-- [v0.8](https://github.com/yangchang-n/SandBingo/releases/download/v0.8/SandBingo-v0.8.zip)
-- no virus
-
 # Sand Bingo
 
 <div align="center">
   <br>
-  <img src="https://github.com/user-attachments/assets/6c741215-beed-476e-b056-1f2d236a0726" style="width:80%" />
-  <br><br>
-  <img src="https://github.com/user-attachments/assets/eb39304c-41ab-4e70-91ca-67729864532b" style="width:80%" />
-  <h3>Sandbox-style bingo game</h3>
+  <img src="ReadmeAssets/loop.gif" width="480" />
+  <br>
 </div>
 
-## Characters (to be updated)
+<h3 align="center">Five-in-a-row on a falling-sand board</h3>
 
 <div align="center">
   <br>
-  <table border="0" cellspacing="0" cellpadding="0" style="border-collapse:collapse;">
+  <img src="ReadmeAssets/s1.jpg" width="40%" />
+  &nbsp;&nbsp;
+  <img src="ReadmeAssets/s2.jpg" width="40%" />
+  <br>
+  <br>
+  <img src="ReadmeAssets/s3.jpg" width="40%" />
+  &nbsp;&nbsp;
+  <img src="ReadmeAssets/s4.jpg" width="40%" />
+  <br>
+</div>
+
+## Characters
+
+<div>
+  <br>
+  <table align="center" cellpadding="12">
     <tr>
-      <td align="center" style="border:none;">
-        <img src="https://github.com/user-attachments/assets/e7583c4f-bc1b-48fb-8e95-c62131517c63" width="300" />
+      <td align="center">
+        <img src="ReadmeAssets/T00.png" width="340" />
         <h3>Tessa</h3>
       </td>
-      <td width="50" style="border:none;"></td>
-      <td align="center" style="border:none;">
-        <img src="https://github.com/user-attachments/assets/6cdc27fa-646b-408c-a6da-914105fb6d0b" width="300" />
+      <td align="center">
+        <img src="ReadmeAssets/P00F.png" width="340" />
         <h3>Piper</h3>
       </td>
     </tr>
   </table>
 </div>
 
-## Details
+## About
 
-- Started on 2026-02-09
+- Genre : Single-player falling-sand puzzle, with visual novel scenes
+- Playtime : About 30 minutes
+- Stages : Easy, Normal, Hard, and Custom (planned for v1.1)
+- Languages : English, Korean
+- Release : 2026-08-31 on Steam (planned)
+- Development started : 2026-02-09
 - Unity version : 2022.3.62f3
-- All arts and images were AI-generated with GPT-Image and Aurora(Grok).
+
+## Credits
+
+### Unity Asset Store
+
+- [Dark Brown GUI kit](https://assetstore.unity.com/packages/2d/gui/dark-brown-gui-kit-201086) - ARCEY
+- [Fantasy Wooden GUI : Free](https://assetstore.unity.com/packages/2d/gui/fantasy-wooden-gui-free-103811) - Black Hammer
+- [BoldPixels Font](https://assetstore.unity.com/packages/2d/fonts/boldpixels-font-332078) - YukiPixels
+
+### Other Assets
+
+- [TerrarumSansBitmap](https://github.com/curioustorvald/Terrarum-sans-bitmap/releases) - CuriousTorvald
+- [PF스타더스트](https://m.blog.naver.com/campanula913/221366697603) - 피나타
+
+### Generative AI
+
+- Unity C# scripts : Claude Sonnet 4.5 to 5 (implementation), Claude Opus 4.6 to 5 (optimization)
+- Images : GPT Image 2.0 (generation), ~~Claude Opus 4.8 to 5 (prompting)~~
