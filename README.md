@@ -10,14 +10,16 @@
 
 <div align="center">
   <br>
-  <img src="ReadmeAssets/s1.jpg" width="40%" />
-  &nbsp;&nbsp;
-  <img src="ReadmeAssets/s2.jpg" width="40%" />
+  <br>
+  <img src="ReadmeAssets/s1.jpg" width="42%" />
+  &nbsp;
+  <img src="ReadmeAssets/s2.jpg" width="42%" />
   <br>
   <br>
-  <img src="ReadmeAssets/s3.jpg" width="40%" />
-  &nbsp;&nbsp;
-  <img src="ReadmeAssets/s4.jpg" width="40%" />
+  <img src="ReadmeAssets/s3.jpg" width="42%" />
+  &nbsp;
+  <img src="ReadmeAssets/s4.jpg" width="42%" />
+  <br>
   <br>
 </div>
 
@@ -64,5 +66,5 @@
 
 ### Generative AI
 
-- Unity C# scripts : Claude Sonnet 4.5 to 5 (implementation), Claude Opus 4.6 to 5 (optimization)
-- Images : GPT Image 2.0 (generation), ~~Claude Opus 4.8 to 5 (prompting)~~
+- Unity C# scripts : Claude Sonnet 4.5 - 5 (implementation), Claude Opus 4.6 - 5 (optimization)
+- Images : GPT Image 2.0 (generation), ~~Claude Opus 4.8 - 5 (prompting)~~
