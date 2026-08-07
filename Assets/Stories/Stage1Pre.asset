@@ -15,23 +15,13 @@ MonoBehaviour:
   lines:
   - hasDialogue: 1
     speakerNameEN: 
-    dialogueTextEN: 
-    speakerNameKR: 
-    dialogueTextKR: 
-    portrait: {fileID: 0}
-    changeBackground: 1
-    background: {fileID: 21300000, guid: 93071248eb920da4e94bdbba8f2b22b5, type: 3}
-    changeBgm: 0
-    bgm: {fileID: 0}
-  - hasDialogue: 1
-    speakerNameEN: 
     dialogueTextEN: You never know a goodbye was the last one until long after.
     speakerNameKR: 
     dialogueTextKR: "\uB9C8\uC9C0\uB9C9 \uC778\uC0AC\uB294 \uB298 \uC9C0\uB09C \uB4A4\uC5D0\uC57C
       \uC54C\uAC8C \uB41C\uB2E4"
     portrait: {fileID: 0}
-    changeBackground: 0
-    background: {fileID: 0}
+    changeBackground: 1
+    background: {fileID: 21300000, guid: 93071248eb920da4e94bdbba8f2b22b5, type: 3}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
@@ -92,8 +82,8 @@ MonoBehaviour:
     dialogueTextKR: "\uADF8\uB798\uC11C \uADF8 \uC560\uAC00 \uC5C6\uB294 \uC6B0\uBB3C\uAC00\uB294
       \uC774\uD1A0\uB85D \uC870\uC6A9\uD560 \uC218\uAC00 \uC5C6\uC5C8\uB2E4"
     portrait: {fileID: 0}
-    changeBackground: 0
-    background: {fileID: 0}
+    changeBackground: 1
+    background: {fileID: 21300000, guid: 132ed72fa8997cc4c88b19f8b3beeb37, type: 3}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
@@ -126,7 +116,7 @@ MonoBehaviour:
     dialogueTextEN: ...What are you even talking about?
     speakerNameKR: "\uD30C\uC774\uD37C"
     dialogueTextKR: "\u2026\u2026\uBB50\uB77C\uB294 \uAC70\uC57C?"
-    portrait: {fileID: 21300000, guid: c68e10ce9d108aa4f9a55192ef845f07, type: 3}
+    portrait: {fileID: 21300000, guid: b0c713d599beb9344b4ee106a4240d3b, type: 3}
     changeBackground: 0
     background: {fileID: 0}
     changeBgm: 0
@@ -137,7 +127,7 @@ MonoBehaviour:
     speakerNameKR: "\uD30C\uC774\uD37C"
     dialogueTextKR: "\uC800 \uC5EC\uAE30 \uC788\uAC70\uB4E0\uC694? ...\uB354\uC704
       \uBA39\uC5C8\uB098?"
-    portrait: {fileID: 21300000, guid: c68e10ce9d108aa4f9a55192ef845f07, type: 3}
+    portrait: {fileID: 21300000, guid: e0d48381d94c0714ba8e3bdddc9c5eaa, type: 3}
     changeBackground: 0
     background: {fileID: 0}
     changeBgm: 0
@@ -160,7 +150,7 @@ MonoBehaviour:
     dialogueTextEN: Oh. You're back.
     speakerNameKR: "\uD14C\uC0AC"
     dialogueTextKR: "\uC5B4, \uC654\uAD6C\uB098."
-    portrait: {fileID: 21300000, guid: b9d7a8ed92ac80342a2e1a95edda6422, type: 3}
+    portrait: {fileID: 21300000, guid: d10acede0f7e8e5489ec70da230be6c6, type: 3}
     changeBackground: 0
     background: {fileID: 0}
     changeBgm: 0
@@ -171,7 +161,7 @@ MonoBehaviour:
     speakerNameKR: "\uD14C\uC0AC"
     dialogueTextKR: "\uC0DD\uAC01\uBCF4\uB2E4 \uBE68\uB9AC \uC654\uB124. \uC880 \uB354
       \uCC9C\uCC9C\uD788 \uC640\uB3C4 \uB410\uB294\uB370."
-    portrait: {fileID: 21300000, guid: b9d7a8ed92ac80342a2e1a95edda6422, type: 3}
+    portrait: {fileID: 21300000, guid: 804f4937427d73c438fd059b9f112a8f, type: 3}
     changeBackground: 0
     background: {fileID: 0}
     changeBgm: 0
@@ -182,7 +172,7 @@ MonoBehaviour:
     speakerNameKR: "\uD30C\uC774\uD37C"
     dialogueTextKR: "\uC880 \uB354 \uCC9C\uCC9C\uD788 \uC640\uC694? \uC81C \uC7A5\uB840\uC2DD\uC774\uB77C\uB3C4
       \uB9C8\uC800 \uCE58\uB974\uC2DC\uAC8C?"
-    portrait: {fileID: 21300000, guid: c68e10ce9d108aa4f9a55192ef845f07, type: 3}
+    portrait: {fileID: 21300000, guid: b0c713d599beb9344b4ee106a4240d3b, type: 3}
     changeBackground: 0
     background: {fileID: 0}
     changeBgm: 0
@@ -193,7 +183,7 @@ MonoBehaviour:
     speakerNameKR: "\uD14C\uC0AC"
     dialogueTextKR: "...\uC800\uCABD \uC6B0\uBB3C\uC740 \uC5B4\uB560\uC5B4? \uBB3C\uC774
       \uC870\uAE08\uC774\uB77C\uB3C4 \uB098\uC624\uB294 \uAC83 \uAC19\uC544?"
-    portrait: {fileID: 21300000, guid: b9d7a8ed92ac80342a2e1a95edda6422, type: 3}
+    portrait: {fileID: 21300000, guid: 45ba7650e66fc1349bc111d80a881bb0, type: 3}
     changeBackground: 0
     background: {fileID: 0}
     changeBgm: 0
@@ -203,7 +193,7 @@ MonoBehaviour:
     dialogueTextEN: Unbelievable... No, that one's hopeless too.
     speakerNameKR: "\uD30C\uC774\uD37C"
     dialogueTextKR: "\uCC38 \uB098... \uC800\uCABD\uB3C4 \uAC00\uB9DD\uC774 \uC5C6\uC5B4\uC694."
-    portrait: {fileID: 21300000, guid: c68e10ce9d108aa4f9a55192ef845f07, type: 3}
+    portrait: {fileID: 21300000, guid: f35fe2d75bd44f144b4e061c950e5fe3, type: 3}
     changeBackground: 0
     background: {fileID: 0}
     changeBgm: 0
@@ -214,7 +204,7 @@ MonoBehaviour:
     speakerNameKR: "\uD30C\uC774\uD37C"
     dialogueTextKR: "\uC774\uAC70 \uBD10\uC694. \uC870\uAE08\uB3C4 \uBABB \uCC44\uC6E0\uC796\uC544\uC694.
       \uD14C\uC0AC \uCABD\uC740\uC694?"
-    portrait: {fileID: 21300000, guid: c68e10ce9d108aa4f9a55192ef845f07, type: 3}
+    portrait: {fileID: 21300000, guid: 59b8a7a9165996b46a7a3de8fcf86420, type: 3}
     changeBackground: 0
     background: {fileID: 0}
     changeBgm: 0
@@ -227,9 +217,9 @@ MonoBehaviour:
     dialogueTextKR: "\uC9C0\uAE08\uC740 \uC548 \uB098\uC624\uB294\uB370, \uC5EC\uAE30
       \uBCF4\uBA74 \uC798 \uAC74\uB4DC\uB9AC\uBA74 \uD130\uC838 \uB098\uC62C \uAC83
       \uAC19\uC9C0 \uC54A\uC544?"
-    portrait: {fileID: 21300000, guid: b9d7a8ed92ac80342a2e1a95edda6422, type: 3}
-    changeBackground: 0
-    background: {fileID: 0}
+    portrait: {fileID: 21300000, guid: 804f4937427d73c438fd059b9f112a8f, type: 3}
+    changeBackground: 1
+    background: {fileID: 21300000, guid: ca46e4d1dd5bc4c469ecedcac424ecfb, type: 3}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
@@ -238,7 +228,7 @@ MonoBehaviour:
     speakerNameKR: "\uD30C\uC774\uD37C"
     dialogueTextKR: "\uC5B4, \uADF8\uB7EC\uB124\uC694? \uADFC\uB370 \uC65C \uC791\uC5C5
       \uC548 \uD558\uACE0 \uC788\uC5C8\uC5B4\uC694?"
-    portrait: {fileID: 21300000, guid: c68e10ce9d108aa4f9a55192ef845f07, type: 3}
+    portrait: {fileID: 21300000, guid: ce46d5e3f69096f4a84f9897353ff324, type: 3}
     changeBackground: 0
     background: {fileID: 0}
     changeBgm: 0
@@ -251,7 +241,7 @@ MonoBehaviour:
     dialogueTextKR: "\uC694\uC998\uC5D4 \uB108\uAC00 \uB354 \uC190\uC7AC\uC8FC\uAC00
       \uC88B\uC796\uC544. \uC6B0\uB9AC \uC5D0\uC774\uC2A4\uB97C \uAE30\uB2E4\uB9AC\uACE0
       \uC788\uC5C8\uC9C0."
-    portrait: {fileID: 21300000, guid: b9d7a8ed92ac80342a2e1a95edda6422, type: 3}
+    portrait: {fileID: 21300000, guid: 00390391673ce4c42996757871825105, type: 3}
     changeBackground: 0
     background: {fileID: 0}
     changeBgm: 0
@@ -261,7 +251,7 @@ MonoBehaviour:
     dialogueTextEN: You just couldn't be bothered...
     speakerNameKR: "\uD30C\uC774\uD37C"
     dialogueTextKR: "\uADF8\uB0E5 \uADC0\uCC2E\uC558\uB358 \uAC70\uBA74\uC11C..."
-    portrait: {fileID: 21300000, guid: c68e10ce9d108aa4f9a55192ef845f07, type: 3}
+    portrait: {fileID: 21300000, guid: b0c713d599beb9344b4ee106a4240d3b, type: 3}
     changeBackground: 0
     background: {fileID: 0}
     changeBgm: 0
