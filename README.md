@@ -2,7 +2,7 @@
 
 <div align="center">
   <br>
-  <img src="ReadmeAssets/loop.gif" width="480" />
+  <img src="ReadmeAssets/loop-crop.gif" width="360" />
   <br>
 </div>
 
@@ -47,7 +47,7 @@
 - Playtime : About 30 minutes
 - Stages : Easy, Normal, Hard, and Custom (planned for v1.1)
 - Languages : English, Korean
-- Release : 2026-08-31 on Steam (planned)
+- Release : 2026-09-10 on Steam (planned)
 - Development started : 2026-02-09
 - Unity version : 2022.3.62f3
 
