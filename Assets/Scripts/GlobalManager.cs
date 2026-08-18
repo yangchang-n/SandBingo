@@ -498,6 +498,48 @@ public class GlobalManager : MonoBehaviour
         Debug.Log("========================");
     }
 
+    // ===== Custom Stage Settings =====
+
+    // 커스텀 스테이지의 난이도를 정의하는 값은 진흙 덩이의 높이와 개수 둘뿐이다
+    // 개수 상한 5는 BotController.OFFSET_MULTIPLIERS에 정의된 범위와 맞춘 값이다
+    // 한쪽만 늘리면 배율이 없어서 진흙이 한 지점에 몰리게 되므로 반드시 함께 수정해야 한다
+    public const int CUSTOM_MUD_HEIGHT_MIN_TENTHS = 5;
+    public const int CUSTOM_MUD_HEIGHT_MAX_TENTHS = 20;
+    public const int CUSTOM_MUD_COUNT_MIN = 1;
+    public const int CUSTOM_MUD_COUNT_MAX = 5;
+
+    // 높이를 0.1 단위 정수로 들고 있다
+    // float에 0.1씩 더하면 오차가 누적되어 상한 비교가 어긋나기 때문이다
+    // private이라 직렬화되지 않으므로 씬에 저장된 값이 기본값을 덮을 일이 없고
+    // 앱을 켤 때마다 반드시 1.0칸 2개에서 시작한다
+    // 저장 파일에도 남기지 않으므로 앱을 끄면 사라진다
+    private int customMudHeightTenths = 10;
+    private int customMudCount = 2;
+
+    public int GetCustomMudHeightTenths() => customMudHeightTenths;
+    public int GetCustomMudCount() => customMudCount;
+
+    // 범위를 벗어난 값이 들어와도 여기서 잘라내므로 호출하는 쪽은 검사할 필요가 없다
+    public void SetCustomMudHeightTenths(int tenths)
+    {
+        customMudHeightTenths = Mathf.Clamp(tenths, CUSTOM_MUD_HEIGHT_MIN_TENTHS, CUSTOM_MUD_HEIGHT_MAX_TENTHS);
+    }
+
+    public void SetCustomMudCount(int count)
+    {
+        customMudCount = Mathf.Clamp(count, CUSTOM_MUD_COUNT_MIN, CUSTOM_MUD_COUNT_MAX);
+    }
+
+    // 0.1 단위 정수를 실제 칸 수로 바꾸는 곳은 여기 한 군데뿐이다
+    public BotController.MudPattern GetCustomMudPattern()
+    {
+        return new BotController.MudPattern
+        {
+            heightCells = customMudHeightTenths / 10f,
+            count = customMudCount
+        };
+    }
+
     // ===== Audio Control =====
 
     // 볼륨을 소리에만 즉시 반영하고 파일에는 쓰지 않는다

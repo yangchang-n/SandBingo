@@ -43,11 +43,11 @@
 
 ## About
 
-- Genre : Single-player falling-sand puzzle, with visual novel scenes
-- Playtime : About 30 minutes
-- Stages : Easy, Normal, Hard, and Custom (planned for v1.1)
+- Genre : Single-player falling-sand puzzle
+- Stages : Easy, Normal, Hard, and Custom
 - Languages : English, Korean
-- Release : 2026-09-10 on Steam (planned)
+- Playtime : About 30 minutes
+- Release : September 2026 on Steam (planned)
 - Development started : 2026-02-09
 - Unity version : 2022.3.62f3
 
@@ -59,7 +59,7 @@
 - [Fantasy Wooden GUI : Free](https://assetstore.unity.com/packages/2d/gui/fantasy-wooden-gui-free-103811) - Black Hammer
 - [BoldPixels Font](https://assetstore.unity.com/packages/2d/fonts/boldpixels-font-332078) - YukiPixels
 
-### Other Assets
+### Fonts
 
 - [TerrarumSansBitmap](https://github.com/curioustorvald/Terrarum-sans-bitmap/releases) - CuriousTorvald
 - [PF스타더스트](https://m.blog.naver.com/campanula913/221366697603) - 피나타

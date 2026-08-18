@@ -21,7 +21,7 @@ MonoBehaviour:
       \uC815\uB3C4\uBA74 \uCDA9\uBD84\uD574."
     portrait: {fileID: 21300000, guid: b9d7a8ed92ac80342a2e1a95edda6422, type: 3}
     changeBackground: 1
-    background: {fileID: 21300000, guid: ca46e4d1dd5bc4c469ecedcac424ecfb, type: 3}
+    background: {fileID: 21300000, guid: 67b5dd471d2fdea4eb0322b8c9ef0b5b, type: 3}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
@@ -79,8 +79,8 @@ MonoBehaviour:
     dialogueTextKR: "\uC5BC\uB978 \uCD9C\uBC1C\uD574\uC694. \uC800\uB141 \uC804\uAE4C\uC9C0\uB294
       \uB6AB\uB9B4 \uB9CC\uD55C \uB2E4\uC74C \uC6B0\uBB3C\uC744 \uCC3E\uC544\uBD10\uC57C\uC8E0!"
     portrait: {fileID: 21300000, guid: c68e10ce9d108aa4f9a55192ef845f07, type: 3}
-    changeBackground: 0
-    background: {fileID: 0}
+    changeBackground: 1
+    background: {fileID: 21300000, guid: b4a9dfb72689ac14d8e7674924b60d8d, type: 3}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1

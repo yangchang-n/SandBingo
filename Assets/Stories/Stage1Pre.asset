@@ -21,7 +21,7 @@ MonoBehaviour:
       \uC54C\uAC8C \uB41C\uB2E4"
     portrait: {fileID: 0}
     changeBackground: 1
-    background: {fileID: 21300000, guid: 93071248eb920da4e94bdbba8f2b22b5, type: 3}
+    background: {fileID: 21300000, guid: 322e2db8d43ddae4e9abd6d7c2fb1f3b, type: 3}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
@@ -44,8 +44,8 @@ MonoBehaviour:
     dialogueTextKR: "\uD30C\uC774\uD37C\uB294 \uADF8\uC911\uC5D0\uC11C\uB3C4 \uAC00\uC7A5
       \uBC1D\uACE0 \uB0AD\uB9CC\uC801\uC778 \uC544\uC774\uC600\uB2E4"
     portrait: {fileID: 0}
-    changeBackground: 0
-    background: {fileID: 0}
+    changeBackground: 1
+    background: {fileID: 21300000, guid: c5e196337caa51d43875a8e4167bdb97, type: 3}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
@@ -82,8 +82,8 @@ MonoBehaviour:
     dialogueTextKR: "\uADF8\uB798\uC11C \uADF8 \uC560\uAC00 \uC5C6\uB294 \uC6B0\uBB3C\uAC00\uB294
       \uC774\uD1A0\uB85D \uC870\uC6A9\uD560 \uC218\uAC00 \uC5C6\uC5C8\uB2E4"
     portrait: {fileID: 0}
-    changeBackground: 1
-    background: {fileID: 21300000, guid: 132ed72fa8997cc4c88b19f8b3beeb37, type: 3}
+    changeBackground: 0
+    background: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
@@ -128,8 +128,8 @@ MonoBehaviour:
     dialogueTextKR: "\uC800 \uC5EC\uAE30 \uC788\uAC70\uB4E0\uC694? ...\uB354\uC704
       \uBA39\uC5C8\uB098?"
     portrait: {fileID: 21300000, guid: e0d48381d94c0714ba8e3bdddc9c5eaa, type: 3}
-    changeBackground: 0
-    background: {fileID: 0}
+    changeBackground: 1
+    background: {fileID: 21300000, guid: 0de407dde7b713748a681e6124b7c4c4, type: 3}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
@@ -219,7 +219,7 @@ MonoBehaviour:
       \uAC19\uC9C0 \uC54A\uC544?"
     portrait: {fileID: 21300000, guid: 804f4937427d73c438fd059b9f112a8f, type: 3}
     changeBackground: 1
-    background: {fileID: 21300000, guid: ca46e4d1dd5bc4c469ecedcac424ecfb, type: 3}
+    background: {fileID: 21300000, guid: 7511d1ab55c135a43a2154d942768c1c, type: 3}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1

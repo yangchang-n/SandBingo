@@ -20,7 +20,7 @@ MonoBehaviour:
     dialogueTextKR: "\uD558\uC544... \uBD84\uBA85 \uC5EC\uAE30 \uADFC\uCC98\uC600\uB294\uB370..."
     portrait: {fileID: 21300000, guid: b9d7a8ed92ac80342a2e1a95edda6422, type: 3}
     changeBackground: 1
-    background: {fileID: 21300000, guid: ca46e4d1dd5bc4c469ecedcac424ecfb, type: 3}
+    background: {fileID: 21300000, guid: 67b5dd471d2fdea4eb0322b8c9ef0b5b, type: 3}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1

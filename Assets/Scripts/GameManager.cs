@@ -84,6 +84,12 @@ public class GameManager : MonoBehaviour
     [Range(0, 3)]
     public int botDifficulty = 1;
 
+    // 커스텀 스테이지의 진흙 모양. 씬 진입 시 GlobalManager에서 한 번만 가져와 고정한다
+    // private이라 직렬화되지 않으므로 GameScene 인스펙터 작업이 필요 없고
+    // GlobalManager 없이 에디터에서 GameScene을 단독 재생할 때는 이 기본값이 그대로 쓰인다
+    private BotController.MudPattern customMudPattern =
+        new BotController.MudPattern { heightCells = 1.0f, count = 2 };
+
     [Header("Game Over State")]
     public bool isGameOver = false;
     public bool isOasisWin = false;
@@ -141,6 +147,10 @@ public class GameManager : MonoBehaviour
         {
             isBotMode = true;
             botDifficulty = Mathf.Clamp(GlobalManager.Instance.pendingBotDifficulty, 0, 3);
+
+            // 진입 시점의 설정값을 한 번만 복사해둔다
+            // 이후 ResetGame으로 재시도해도 난이도가 바뀌지 않는다
+            customMudPattern = GlobalManager.Instance.GetCustomMudPattern();
         }
     }
 
@@ -726,14 +736,13 @@ public class GameManager : MonoBehaviour
     }
 
     // 난이도별 진흙 모양 정의 (높이, 개수). 너비는 항상 1칸이라 여기 포함하지 않는다
-    // 0번(커스텀 스테이지)은 아직 진입점이 없어 자리표시자 값을 쓴다
-    // 커스텀 스테이지 진입 로직이 생기면 이 case만 실제 사용자 지정값으로 교체하면 된다
+    // 0번(커스텀 스테이지)은 셀렉트씬의 커스텀 패널에서 정한 값을 LoadGameSettings가 미리 받아둔 것이다
     // public으로 열어둬서 스테이지 진입 정보 패널(GameSceneUI)도 같은 데이터를 그대로 가져다 쓴다
     public BotController.MudPattern GetMudPatternForDifficulty(int difficulty)
     {
         switch (difficulty)
         {
-            case 0: return new BotController.MudPattern { heightCells = 1.0f, count = 2 };
+            case 0: return customMudPattern;
             case 1: return new BotController.MudPattern { heightCells = 0.8f, count = 2 };
             case 2: return new BotController.MudPattern { heightCells = 1.0f, count = 2 };
             case 3: return new BotController.MudPattern { heightCells = 0.8f, count = 3 };
