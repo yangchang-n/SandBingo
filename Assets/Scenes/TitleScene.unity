@@ -247,13 +247,13 @@ MonoBehaviour:
   stage1BestScore: 0
   stage2BestScore: 0
   stage3BestScore: 0
-  stage1PreChapter: {fileID: 11400000, guid: 9adfacda38855ea4087d900cbf088033, type: 2}
-  stage1TutorialChapter: {fileID: 11400000, guid: c3dcba26adff6254e9c6934bcd98ca73, type: 2}
-  stage1PostChapter: {fileID: 11400000, guid: a5bf00f3fc657e44e83b157ad337ae31, type: 2}
-  stage2PreChapter: {fileID: 11400000, guid: 6fb8e0d9375efc14db08a6501f3101f9, type: 2}
-  stage2PostChapter: {fileID: 11400000, guid: 22fdb30425c49cf48b013456cf22b9eb, type: 2}
-  stage3PreChapter: {fileID: 11400000, guid: 4f89aeee25c0b0442af3fa25d96d9208, type: 2}
-  stage3PostChapter: {fileID: 11400000, guid: b667461247fc3524ebbc00017284ac94, type: 2}
+  stage1PreChapter: {fileID: 11400000, guid: 4447d8cd6ac033e41bb3a8c65f2a903a, type: 2}
+  stage1TutorialChapter: {fileID: 11400000, guid: 4acd8c3a6300f4142bbf32ce7865bc04, type: 2}
+  stage1PostChapter: {fileID: 11400000, guid: 81845adfcf5a5774e9b532633ab44507, type: 2}
+  stage2PreChapter: {fileID: 11400000, guid: e52c058cb7514b24683de004bd1d8fa3, type: 2}
+  stage2PostChapter: {fileID: 11400000, guid: 32d9c7c6b651b0d4a83608e66d3220b5, type: 2}
+  stage3PreChapter: {fileID: 11400000, guid: 91e0b07ef8f999043a415fa0b357b080, type: 2}
+  stage3PostChapter: {fileID: 11400000, guid: fdd43ec447d160947ada42566ef264d1, type: 2}
   bgmClip: {fileID: 8300000, guid: 0f27606caa27b0f479ffa05f636dedbd, type: 3}
   bgmVolume: 0.5
   isMuted: 0

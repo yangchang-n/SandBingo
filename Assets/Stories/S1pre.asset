@@ -10,18 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 24cee7e49fc532a45ab71bd5ace6cb7b, type: 3}
-  m_Name: Stage1Pre
+  m_Name: S1pre
   m_EditorClassIdentifier: 
   lines:
   - hasDialogue: 1
     speakerNameEN: 
-    dialogueTextEN: You never know a goodbye was the last one until long after.
+    dialogueTextEN: You never know which goodbye is the last one until it's long
+      past.
     speakerNameKR: 
     dialogueTextKR: "\uB9C8\uC9C0\uB9C9 \uC778\uC0AC\uB294 \uB298 \uC9C0\uB09C \uB4A4\uC5D0\uC57C
       \uC54C\uAC8C \uB41C\uB2E4"
     portrait: {fileID: 0}
     changeBackground: 1
-    background: {fileID: 21300000, guid: 322e2db8d43ddae4e9abd6d7c2fb1f3b, type: 3}
+    background: {fileID: 21300000, guid: 67b5dd471d2fdea4eb0322b8c9ef0b5b, type: 3}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
@@ -35,6 +38,8 @@ MonoBehaviour:
     portrait: {fileID: 0}
     changeBackground: 0
     background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
@@ -44,8 +49,10 @@ MonoBehaviour:
     dialogueTextKR: "\uD30C\uC774\uD37C\uB294 \uADF8\uC911\uC5D0\uC11C\uB3C4 \uAC00\uC7A5
       \uBC1D\uACE0 \uB0AD\uB9CC\uC801\uC778 \uC544\uC774\uC600\uB2E4"
     portrait: {fileID: 0}
-    changeBackground: 1
-    background: {fileID: 21300000, guid: c5e196337caa51d43875a8e4167bdb97, type: 3}
+    changeBackground: 0
+    background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
@@ -59,12 +66,14 @@ MonoBehaviour:
     portrait: {fileID: 0}
     changeBackground: 0
     background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
     speakerNameEN: 
-    dialogueTextEN: And then she'd be right back at it, pestering me about how that
-      cloud looked just like something, didn't it.
+    dialogueTextEN: "And then she'd be right back at it, pestering me \u2014 didn't
+      that cloud look just like something or other?"
     speakerNameKR: 
     dialogueTextKR: "\uADF8\uB7EC\uB2E4\uAC00\uB3C4 \uAC00\uB054 \uBCF4\uC774\uB294
       \uAD6C\uB984\uC774 \uAF2D \uBB34\uC5C7\uCC98\uB7FC \uC0DD\uAE30\uC9C0 \uC54A\uC558\uB0D0\uACE0
@@ -72,6 +81,8 @@ MonoBehaviour:
     portrait: {fileID: 0}
     changeBackground: 0
     background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
@@ -84,6 +95,8 @@ MonoBehaviour:
     portrait: {fileID: 0}
     changeBackground: 0
     background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
@@ -96,6 +109,8 @@ MonoBehaviour:
     portrait: {fileID: 0}
     changeBackground: 0
     background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
@@ -109,6 +124,8 @@ MonoBehaviour:
     portrait: {fileID: 0}
     changeBackground: 0
     background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
@@ -119,6 +136,8 @@ MonoBehaviour:
     portrait: {fileID: 21300000, guid: b0c713d599beb9344b4ee106a4240d3b, type: 3}
     changeBackground: 0
     background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
@@ -127,9 +146,11 @@ MonoBehaviour:
     speakerNameKR: "\uD30C\uC774\uD37C"
     dialogueTextKR: "\uC800 \uC5EC\uAE30 \uC788\uAC70\uB4E0\uC694? ...\uB354\uC704
       \uBA39\uC5C8\uB098?"
-    portrait: {fileID: 21300000, guid: e0d48381d94c0714ba8e3bdddc9c5eaa, type: 3}
-    changeBackground: 1
-    background: {fileID: 21300000, guid: 0de407dde7b713748a681e6124b7c4c4, type: 3}
+    portrait: {fileID: 21300000, guid: f35fe2d75bd44f144b4e061c950e5fe3, type: 3}
+    changeBackground: 0
+    background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
@@ -143,6 +164,8 @@ MonoBehaviour:
     portrait: {fileID: 0}
     changeBackground: 0
     background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
@@ -150,9 +173,11 @@ MonoBehaviour:
     dialogueTextEN: Oh. You're back.
     speakerNameKR: "\uD14C\uC0AC"
     dialogueTextKR: "\uC5B4, \uC654\uAD6C\uB098."
-    portrait: {fileID: 21300000, guid: d10acede0f7e8e5489ec70da230be6c6, type: 3}
+    portrait: {fileID: 21300000, guid: 804f4937427d73c438fd059b9f112a8f, type: 3}
     changeBackground: 0
     background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
@@ -161,9 +186,11 @@ MonoBehaviour:
     speakerNameKR: "\uD14C\uC0AC"
     dialogueTextKR: "\uC0DD\uAC01\uBCF4\uB2E4 \uBE68\uB9AC \uC654\uB124. \uC880 \uB354
       \uCC9C\uCC9C\uD788 \uC640\uB3C4 \uB410\uB294\uB370."
-    portrait: {fileID: 21300000, guid: 804f4937427d73c438fd059b9f112a8f, type: 3}
+    portrait: {fileID: 21300000, guid: 45ba7650e66fc1349bc111d80a881bb0, type: 3}
     changeBackground: 0
     background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
@@ -175,6 +202,8 @@ MonoBehaviour:
     portrait: {fileID: 21300000, guid: b0c713d599beb9344b4ee106a4240d3b, type: 3}
     changeBackground: 0
     background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
@@ -183,9 +212,11 @@ MonoBehaviour:
     speakerNameKR: "\uD14C\uC0AC"
     dialogueTextKR: "...\uC800\uCABD \uC6B0\uBB3C\uC740 \uC5B4\uB560\uC5B4? \uBB3C\uC774
       \uC870\uAE08\uC774\uB77C\uB3C4 \uB098\uC624\uB294 \uAC83 \uAC19\uC544?"
-    portrait: {fileID: 21300000, guid: 45ba7650e66fc1349bc111d80a881bb0, type: 3}
+    portrait: {fileID: 21300000, guid: 804f4937427d73c438fd059b9f112a8f, type: 3}
     changeBackground: 0
     background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
@@ -193,20 +224,24 @@ MonoBehaviour:
     dialogueTextEN: Unbelievable... No, that one's hopeless too.
     speakerNameKR: "\uD30C\uC774\uD37C"
     dialogueTextKR: "\uCC38 \uB098... \uC800\uCABD\uB3C4 \uAC00\uB9DD\uC774 \uC5C6\uC5B4\uC694."
-    portrait: {fileID: 21300000, guid: f35fe2d75bd44f144b4e061c950e5fe3, type: 3}
+    portrait: {fileID: 21300000, guid: b0c713d599beb9344b4ee106a4240d3b, type: 3}
     changeBackground: 0
     background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
     speakerNameEN: Piper
-    dialogueTextEN: Look at this. Couldn't fill it even a little. How about yours?
+    dialogueTextEN: Look at this. I couldn't fill it at all. How about yours?
     speakerNameKR: "\uD30C\uC774\uD37C"
     dialogueTextKR: "\uC774\uAC70 \uBD10\uC694. \uC870\uAE08\uB3C4 \uBABB \uCC44\uC6E0\uC796\uC544\uC694.
       \uD14C\uC0AC \uCABD\uC740\uC694?"
-    portrait: {fileID: 21300000, guid: 59b8a7a9165996b46a7a3de8fcf86420, type: 3}
+    portrait: {fileID: 21300000, guid: e0d48381d94c0714ba8e3bdddc9c5eaa, type: 3}
     changeBackground: 0
     background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
@@ -217,9 +252,11 @@ MonoBehaviour:
     dialogueTextKR: "\uC9C0\uAE08\uC740 \uC548 \uB098\uC624\uB294\uB370, \uC5EC\uAE30
       \uBCF4\uBA74 \uC798 \uAC74\uB4DC\uB9AC\uBA74 \uD130\uC838 \uB098\uC62C \uAC83
       \uAC19\uC9C0 \uC54A\uC544?"
-    portrait: {fileID: 21300000, guid: 804f4937427d73c438fd059b9f112a8f, type: 3}
-    changeBackground: 1
-    background: {fileID: 21300000, guid: 7511d1ab55c135a43a2154d942768c1c, type: 3}
+    portrait: {fileID: 21300000, guid: 45ba7650e66fc1349bc111d80a881bb0, type: 3}
+    changeBackground: 0
+    background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
@@ -231,6 +268,8 @@ MonoBehaviour:
     portrait: {fileID: 21300000, guid: ce46d5e3f69096f4a84f9897353ff324, type: 3}
     changeBackground: 0
     background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
@@ -241,9 +280,11 @@ MonoBehaviour:
     dialogueTextKR: "\uC694\uC998\uC5D4 \uB108\uAC00 \uB354 \uC190\uC7AC\uC8FC\uAC00
       \uC88B\uC796\uC544. \uC6B0\uB9AC \uC5D0\uC774\uC2A4\uB97C \uAE30\uB2E4\uB9AC\uACE0
       \uC788\uC5C8\uC9C0."
-    portrait: {fileID: 21300000, guid: 00390391673ce4c42996757871825105, type: 3}
+    portrait: {fileID: 21300000, guid: 9efc6fe7a790fc8428194a75c40098e7, type: 3}
     changeBackground: 0
     background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
@@ -254,5 +295,7 @@ MonoBehaviour:
     portrait: {fileID: 21300000, guid: b0c713d599beb9344b4ee106a4240d3b, type: 3}
     changeBackground: 0
     background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}

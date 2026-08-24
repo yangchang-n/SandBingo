@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 24cee7e49fc532a45ab71bd5ace6cb7b, type: 3}
-  m_Name: Stage1Tutorial
+  m_Name: Tutorial
   m_EditorClassIdentifier: 
   lines:
   - hasDialogue: 1
     speakerNameEN: Piper
-    dialogueTextEN: As you know, waking a well takes 'oasis sand'. It's special stuff,
+    dialogueTextEN: As you know, waking a well takes Oasis Sand. It's a special resource,
       and there's only ever so much of it.
     speakerNameKR: "\uD30C\uC774\uD37C"
     dialogueTextKR: "\uC54C\uB2E4\uC2DC\uD53C \uC6B0\uBB3C\uC744 \uB6AB\uAE30 \uC704\uD574\uC120
@@ -24,6 +24,8 @@ MonoBehaviour:
     portrait: {fileID: 21300000, guid: b01f092eb0545574db7d43f93e64aba7, type: 3}
     changeBackground: 0
     background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
@@ -37,6 +39,8 @@ MonoBehaviour:
     portrait: {fileID: 21300000, guid: a27f087f63d32394aa6a316793fe64ae, type: 3}
     changeBackground: 0
     background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
@@ -49,6 +53,8 @@ MonoBehaviour:
     portrait: {fileID: 21300000, guid: b0c713d599beb9344b4ee106a4240d3b, type: 3}
     changeBackground: 0
     background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
@@ -60,9 +66,11 @@ MonoBehaviour:
       \uAE4A\uC219\uD55C \uACF3\uC5D0 \uC788\uB294 \uBB3C\uAE38\uC744 \uC704\uB85C
       \uD2B8\uC774\uAC8C \uD558\uB294 \uBB50... \uB300\uCDA9 \uADF8\uB7F0 \uC6D0\uB9AC\uC758
       \uC18C\uC7AC \uC544\uB2C8\uC5C8\uC5B4\uC694?"
-    portrait: {fileID: 21300000, guid: b0c713d599beb9344b4ee106a4240d3b, type: 3}
+    portrait: {fileID: 21300000, guid: e0d48381d94c0714ba8e3bdddc9c5eaa, type: 3}
     changeBackground: 0
     background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
@@ -74,18 +82,22 @@ MonoBehaviour:
     portrait: {fileID: 21300000, guid: 09aff2867ae9ee3479addb17d5a880eb, type: 3}
     changeBackground: 0
     background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
     speakerNameEN: Piper
-    dialogueTextEN: Anyway, oasis sand can only be dropped here, inside this area.
+    dialogueTextEN: Anyway, Oasis Sand can only be dropped here, inside this area.
     speakerNameKR: "\uD30C\uC774\uD37C"
     dialogueTextKR: "\uC544\uBB34\uD2BC \uC624\uC544\uC2DC\uC2A4 \uBAA8\uB798\uB294
       \uC5EC\uAE30 \uC774 \uBD80\uBD84, \uC774 \uC601\uC5ED \uC548\uC5D0\uB9CC \uB5A8\uC5B4\uD2B8\uB9B4
       \uC218 \uC788\uC5B4\uC694."
-    portrait: {fileID: 21300000, guid: b01f092eb0545574db7d43f93e64aba7, type: 3}
+    portrait: {fileID: 21300000, guid: f35fe2d75bd44f144b4e061c950e5fe3, type: 3}
     changeBackground: 0
     background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
@@ -99,6 +111,8 @@ MonoBehaviour:
     portrait: {fileID: 21300000, guid: ce46d5e3f69096f4a84f9897353ff324, type: 3}
     changeBackground: 0
     background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
@@ -112,19 +126,23 @@ MonoBehaviour:
     portrait: {fileID: 21300000, guid: 45ba7650e66fc1349bc111d80a881bb0, type: 3}
     changeBackground: 0
     background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
     speakerNameEN: Piper
-    dialogueTextEN: Once you've used a certain amount of oasis sand, mud builds up
+    dialogueTextEN: Once you've used a certain amount of Oasis Sand, mud builds up
       in response.
     speakerNameKR: "\uD30C\uC774\uD37C"
     dialogueTextKR: "\uC77C\uC815\uB7C9\uC758 \uC624\uC544\uC2DC\uC2A4 \uBAA8\uB798\uB97C
       \uC0AC\uC6A9\uD558\uACE0 \uB098\uBA74, \uADF8\uC5D0 \uB300\uD55C \uBC18\uC751\uC73C\uB85C
       \uC9C4\uD759\uC774 \uC313\uC5EC\uC694."
-    portrait: {fileID: 21300000, guid: 312af029b1b084a41ade9a6fdf1a6418, type: 3}
+    portrait: {fileID: 21300000, guid: 54f6faf07226c1c41a606a18277747c1, type: 3}
     changeBackground: 0
     background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
@@ -138,6 +156,8 @@ MonoBehaviour:
     portrait: {fileID: 21300000, guid: a27f087f63d32394aa6a316793fe64ae, type: 3}
     changeBackground: 0
     background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
@@ -148,9 +168,11 @@ MonoBehaviour:
     dialogueTextKR: "\uB9DE\uC544\uC694! \uADF8\uB7EC\uB2C8 \uC9C4\uD759\uC774 \uC313\uC5EC\uC11C
       \uC11C\uB85C\uB97C \uC787\uAE30 \uC804\uC5D0, \uC624\uC544\uC2DC\uC2A4 \uBAA8\uB798\uB85C
       \uC11C\uB85C\uB97C \uC774\uC5B4\uC57C \uD574\uC694."
-    portrait: {fileID: 21300000, guid: ce46d5e3f69096f4a84f9897353ff324, type: 3}
+    portrait: {fileID: 21300000, guid: b01f092eb0545574db7d43f93e64aba7, type: 3}
     changeBackground: 0
     background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
@@ -159,9 +181,11 @@ MonoBehaviour:
     speakerNameKR: "\uD30C\uC774\uD37C"
     dialogueTextKR: "\uAC00\uB85C, \uC138\uB85C, \uB300\uAC01\uC120 \uBC29\uD5A5\uC73C\uB85C
       5\uCE78 \uC774\uC0C1\uC744 \uC5F0\uC18D\uC73C\uB85C \uC774\uC73C\uBA74"
-    portrait: {fileID: 21300000, guid: b01f092eb0545574db7d43f93e64aba7, type: 3}
+    portrait: {fileID: 21300000, guid: 312af029b1b084a41ade9a6fdf1a6418, type: 3}
     changeBackground: 0
     background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
@@ -171,21 +195,25 @@ MonoBehaviour:
     speakerNameKR: "\uD30C\uC774\uD37C"
     dialogueTextKR: "\uC9C4\uD759\uC774 \uC313\uC774\uAE30 \uC804\uC5D0 \uB545\uC5D0
       \uCDA9\uBD84\uD55C \uC790\uADF9\uC744 \uC904 \uC218 \uC788\uC744 \uAC70\uC608\uC694."
-    portrait: {fileID: 21300000, guid: 312af029b1b084a41ade9a6fdf1a6418, type: 3}
+    portrait: {fileID: 21300000, guid: b01f092eb0545574db7d43f93e64aba7, type: 3}
     changeBackground: 0
     background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
     speakerNameEN: Tessa
-    dialogueTextEN: But once you've shocked the ground, the oasis sand gets absorbed
+    dialogueTextEN: But once you've shocked the ground, the Oasis Sand gets absorbed
       right into it,
     speakerNameKR: "\uD14C\uC0AC"
     dialogueTextKR: "\uD558\uC9C0\uB9CC \uC790\uADF9\uC744 \uC8FC\uACE0 \uB09C \uD6C4
       \uC624\uC544\uC2DC\uC2A4 \uBAA8\uB798\uB294 \uB545\uC73C\uB85C \uD761\uC218\uB418\uC5B4\uBC84\uB9AC\uACE0,"
-    portrait: {fileID: 21300000, guid: a27f087f63d32394aa6a316793fe64ae, type: 3}
+    portrait: {fileID: 21300000, guid: 09aff2867ae9ee3479addb17d5a880eb, type: 3}
     changeBackground: 0
     background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
@@ -195,22 +223,26 @@ MonoBehaviour:
     dialogueTextKR: "\uADF8 \uC704\uB85C \uC9C4\uD759\uC774 \uB0B4\uB824\uC549\uC544
       \uC6B0\uBB3C\uC774 \uB9C9\uD600\uBC84\uB9B4 \uC218\uB3C4 \uC788\uC73C\uB2C8
       \uC870\uC2EC\uD574."
-    portrait: {fileID: 21300000, guid: 804f4937427d73c438fd059b9f112a8f, type: 3}
+    portrait: {fileID: 21300000, guid: a27f087f63d32394aa6a316793fe64ae, type: 3}
     changeBackground: 0
     background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
     speakerNameEN: Piper
-    dialogueTextEN: Here's a tip. As long as a square is more than half oasis sand,
+    dialogueTextEN: Here's a tip. As long as a square is more than half Oasis Sand,
       a little mud mixed in doesn't matter!
     speakerNameKR: "\uD30C\uC774\uD37C"
     dialogueTextKR: "\uC774\uAC74 \uD301\uC778\uB370, \uD55C \uCE78\uC758 \uBC18
       \uC774\uC0C1\uB9CC \uC624\uC544\uC2DC\uC2A4 \uBAA8\uB798\uB85C \uCC44\uC6B0\uBA74
       \uADF8 \uCE78\uC740 \uC9C4\uD759\uC774 \uC870\uAE08 \uC11E\uC5EC\uB3C4 \uC0C1\uAD00\uC5C6\uB300\uC694!"
-    portrait: {fileID: 21300000, guid: ce46d5e3f69096f4a84f9897353ff324, type: 3}
+    portrait: {fileID: 21300000, guid: 312af029b1b084a41ade9a6fdf1a6418, type: 3}
     changeBackground: 0
     background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
@@ -222,6 +254,8 @@ MonoBehaviour:
     portrait: {fileID: 21300000, guid: b01f092eb0545574db7d43f93e64aba7, type: 3}
     changeBackground: 0
     background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
@@ -235,5 +269,7 @@ MonoBehaviour:
     portrait: {fileID: 21300000, guid: 312af029b1b084a41ade9a6fdf1a6418, type: 3}
     changeBackground: 0
     background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}

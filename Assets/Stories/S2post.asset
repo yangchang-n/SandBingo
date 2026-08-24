@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 24cee7e49fc532a45ab71bd5ace6cb7b, type: 3}
-  m_Name: Stage2Post
+  m_Name: S2post
   m_EditorClassIdentifier: 
   lines:
   - hasDialogue: 1
@@ -18,9 +18,11 @@ MonoBehaviour:
     dialogueTextEN: It's coming up, Tessa! Water!
     speakerNameKR: "\uD30C\uC774\uD37C"
     dialogueTextKR: "\uC62C\uB77C\uC640\uC694, \uD14C\uC0AC! \uBB3C\uC774\uC5D0\uC694!"
-    portrait: {fileID: 21300000, guid: c68e10ce9d108aa4f9a55192ef845f07, type: 3}
+    portrait: {fileID: 21300000, guid: 72e0d32e6f7782a429b83eb443451079, type: 3}
     changeBackground: 1
     background: {fileID: 21300000, guid: 67b5dd471d2fdea4eb0322b8c9ef0b5b, type: 3}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
@@ -29,9 +31,11 @@ MonoBehaviour:
     speakerNameKR: "\uD14C\uC0AC"
     dialogueTextKR: "\uD734... \uC774\uBC88 \uAC74 \uADF8\uB798\uB3C4 \uC870\uAE08
       \uD798\uB4E4\uC5C8\uC5B4. \uADF8\uCE58?"
-    portrait: {fileID: 21300000, guid: b9d7a8ed92ac80342a2e1a95edda6422, type: 3}
+    portrait: {fileID: 21300000, guid: 09aff2867ae9ee3479addb17d5a880eb, type: 3}
     changeBackground: 0
     background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
@@ -40,20 +44,24 @@ MonoBehaviour:
     speakerNameKR: "\uD30C\uC774\uD37C"
     dialogueTextKR: "\uADF8\uB7EC\uAC8C\uC694. \uD558\uB9C8\uD130\uBA74 \uAD00\uB458
       \uBED4\uD588\uC5B4\uC694."
-    portrait: {fileID: 21300000, guid: c68e10ce9d108aa4f9a55192ef845f07, type: 3}
+    portrait: {fileID: 21300000, guid: 92f70ecbddf4ab442a82c91a1e576087, type: 3}
     changeBackground: 0
     background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
     speakerNameEN: Tessa
-    dialogueTextEN: Thanks for sticking it out. Get a drink first and take a rest.
+    dialogueTextEN: Thanks for sticking it out. Have a sip first and get some rest.
     speakerNameKR: "\uD14C\uC0AC"
     dialogueTextKR: "\uB05D\uAE4C\uC9C0 \uD574\uC918\uC11C \uACE0\uB9C8\uC6CC. \uBB3C\uBD80\uD130
       \uD55C \uBAA8\uAE08 \uB9C8\uC2DC\uACE0 \uC26C\uACE0 \uC788\uC5B4."
-    portrait: {fileID: 21300000, guid: b9d7a8ed92ac80342a2e1a95edda6422, type: 3}
+    portrait: {fileID: 21300000, guid: 45ba7650e66fc1349bc111d80a881bb0, type: 3}
     changeBackground: 0
     background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
@@ -61,9 +69,11 @@ MonoBehaviour:
     dialogueTextEN: You did great too, Tessa.
     speakerNameKR: "\uD30C\uC774\uD37C"
     dialogueTextKR: "\uD14C\uC0AC\uB3C4 \uC218\uACE0\uD588\uC5B4\uC694."
-    portrait: {fileID: 21300000, guid: c68e10ce9d108aa4f9a55192ef845f07, type: 3}
+    portrait: {fileID: 21300000, guid: 92f70ecbddf4ab442a82c91a1e576087, type: 3}
     changeBackground: 0
     background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
@@ -71,19 +81,23 @@ MonoBehaviour:
     dialogueTextEN: So. Aren't you forgetting something?
     speakerNameKR: "\uD30C\uC774\uD37C"
     dialogueTextKR: "\uADFC\uB370 \uBB50 \uC78A\uC740 \uAC70 \uC5C6\uC5B4\uC694?"
-    portrait: {fileID: 21300000, guid: c68e10ce9d108aa4f9a55192ef845f07, type: 3}
+    portrait: {fileID: 21300000, guid: 312af029b1b084a41ade9a6fdf1a6418, type: 3}
     changeBackground: 0
     background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
     speakerNameEN: Tessa
-    dialogueTextEN: Yes, yes... Hold on.
+    dialogueTextEN: Yeah, yeah... Hold on.
     speakerNameKR: "\uD14C\uC0AC"
     dialogueTextKR: "\uADF8\uB798 \uADF8\uB798... \uAE30\uB2E4\uB824\uBD10."
-    portrait: {fileID: 21300000, guid: b9d7a8ed92ac80342a2e1a95edda6422, type: 3}
+    portrait: {fileID: 21300000, guid: 804f4937427d73c438fd059b9f112a8f, type: 3}
     changeBackground: 0
     background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
@@ -91,9 +105,11 @@ MonoBehaviour:
     dialogueTextEN: Here. Take it.
     speakerNameKR: "\uD14C\uC0AC"
     dialogueTextKR: "\uC790, \uC774\uAC70 \uBC1B\uC544."
-    portrait: {fileID: 21300000, guid: b9d7a8ed92ac80342a2e1a95edda6422, type: 3}
+    portrait: {fileID: 21300000, guid: 45ba7650e66fc1349bc111d80a881bb0, type: 3}
     changeBackground: 0
     background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
@@ -101,9 +117,11 @@ MonoBehaviour:
     dialogueTextEN: ...What is this? A seed?
     speakerNameKR: "\uD30C\uC774\uD37C"
     dialogueTextKR: "...\uC774\uAC8C \uBB50\uC608\uC694? \uC528\uC557?"
-    portrait: {fileID: 21300000, guid: c68e10ce9d108aa4f9a55192ef845f07, type: 3}
+    portrait: {fileID: 21300000, guid: ce46d5e3f69096f4a84f9897353ff324, type: 3}
     changeBackground: 0
     background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
@@ -113,9 +131,11 @@ MonoBehaviour:
     speakerNameKR: "\uD14C\uC0AC"
     dialogueTextKR: "\uC544\uAE4C \uC624\uB298 \uCCAB \uC6B0\uBB3C\uC744 \uB6AB\uC5C8\uC744
       \uB54C \uAC74\uC84C\uC5B4. \uBB3C\uC774\uB791 \uAC19\uC774 \uC62C\uB77C\uC654\uB354\uB77C."
-    portrait: {fileID: 21300000, guid: b9d7a8ed92ac80342a2e1a95edda6422, type: 3}
+    portrait: {fileID: 21300000, guid: 00390391673ce4c42996757871825105, type: 3}
     changeBackground: 0
     background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
@@ -123,9 +143,11 @@ MonoBehaviour:
     dialogueTextEN: From the well? Just like that?
     speakerNameKR: "\uD30C\uC774\uD37C"
     dialogueTextKR: "\uC6B0\uBB3C\uC5D0\uC11C\uC694? \uAC11\uC790\uAE30?"
-    portrait: {fileID: 21300000, guid: c68e10ce9d108aa4f9a55192ef845f07, type: 3}
+    portrait: {fileID: 21300000, guid: b0c713d599beb9344b4ee106a4240d3b, type: 3}
     changeBackground: 0
     background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
@@ -136,9 +158,11 @@ MonoBehaviour:
     dialogueTextKR: "\uB098\uB3C4 \uCC98\uC74C \uBD24\uC5B4. \uB545\uC18D\uC5D0\uC11C
       \uC7A0\uB4E4\uC5B4 \uC788\uB358 \uAC8C \uBB3C\uC774 \uD130\uC9C0\uBA74\uC11C
       \uAC19\uC774 \uBC00\uB824 \uB098\uC654\uB098 \uBD10."
-    portrait: {fileID: 21300000, guid: b9d7a8ed92ac80342a2e1a95edda6422, type: 3}
+    portrait: {fileID: 21300000, guid: d10acede0f7e8e5489ec70da230be6c6, type: 3}
     changeBackground: 0
     background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
@@ -147,20 +171,25 @@ MonoBehaviour:
     speakerNameKR: "\uD30C\uC774\uD37C"
     dialogueTextKR: "\uC774\uAC70 \uC0B4\uC544 \uC788\uAE34 \uD55C \uAC78\uAE4C\uC694...
       \uC0DD\uAE34 \uAC74 \uADF8\uB0E5 \uB3CC\uBA69\uC774 \uAC19\uC740\uB370."
-    portrait: {fileID: 21300000, guid: c68e10ce9d108aa4f9a55192ef845f07, type: 3}
+    portrait: {fileID: 21300000, guid: f35fe2d75bd44f144b4e061c950e5fe3, type: 3}
     changeBackground: 0
     background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
     speakerNameEN: Tessa
-    dialogueTextEN: Plant it and we'll find out. I'm not getting my hopes up.
+    dialogueTextEN: Plant it and we'll find out someday. Not that I'd get my hopes
+      up.
     speakerNameKR: "\uD14C\uC0AC"
-    dialogueTextKR: "\uC2EC\uC5B4 \uBCF4\uBA74 \uC54C\uACA0\uC9C0? \uD070 \uAE30\uB300\uB294
-      \uD558\uC9C0 \uC54A\uB294\uB2E4\uB9CC."
-    portrait: {fileID: 21300000, guid: b9d7a8ed92ac80342a2e1a95edda6422, type: 3}
+    dialogueTextKR: "\uC2EC\uC5B4 \uBCF4\uBA74 \uC5B8\uC820\uAC00 \uC54C\uACA0\uC9C0?
+      \uD070 \uAE30\uB300\uB294 \uD558\uC9C0 \uC54A\uB294\uB2E4\uB9CC."
+    portrait: {fileID: 21300000, guid: 45ba7650e66fc1349bc111d80a881bb0, type: 3}
     changeBackground: 0
     background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
@@ -168,10 +197,12 @@ MonoBehaviour:
     dialogueTextEN: Fine. Let's plant it. I did have to squeeze it out of you.
     speakerNameKR: "\uD30C\uC774\uD37C"
     dialogueTextKR: "\uC88B\uC544\uC694. \uC2EC\uC5B4 \uBCF4\uC8E0. \uAE30\uAECF
-      \uBC1B\uC544\uB0B8 \uAC70\uB2C8\uAE50."
-    portrait: {fileID: 21300000, guid: c68e10ce9d108aa4f9a55192ef845f07, type: 3}
+      \uBC1B\uC544\uB0B8 \uAC70\uB2C8\uAE4C."
+    portrait: {fileID: 21300000, guid: 312af029b1b084a41ade9a6fdf1a6418, type: 3}
     changeBackground: 0
     background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
@@ -181,28 +212,22 @@ MonoBehaviour:
     speakerNameKR: "\uD30C\uC774\uD37C"
     dialogueTextKR: "\uADF8\uB7F0\uB370 \uC5EC\uAE34 \uC2EC\uC5B4\uB3C4 \uBB3C\uC774
       \uB2E4\uC2DC \uBA48\uCD94\uBA74 \uB9D0\uB77C\uBC84\uB9B4 \uD150\uB370..."
-    portrait: {fileID: 21300000, guid: c68e10ce9d108aa4f9a55192ef845f07, type: 3}
+    portrait: {fileID: 21300000, guid: ce46d5e3f69096f4a84f9897353ff324, type: 3}
     changeBackground: 0
     background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
     speakerNameEN: Tessa
-    dialogueTextEN: I've got a solution for that.
+    dialogueTextEN: For that, I know just the place.
     speakerNameKR: "\uD14C\uC0AC"
-    dialogueTextKR: "\uADF8\uAC70\uB77C\uBA74 \uBC29\uBC95\uC774 \uC788\uC9C0."
-    portrait: {fileID: 21300000, guid: b9d7a8ed92ac80342a2e1a95edda6422, type: 3}
+    dialogueTextKR: "\uADF8\uAC70\uB77C\uBA74 \uC544\uB294 \uACF3\uC774 \uC788\uC9C0."
+    portrait: {fileID: 21300000, guid: 804f4937427d73c438fd059b9f112a8f, type: 3}
     changeBackground: 0
     background: {fileID: 0}
-    changeBgm: 0
-    bgm: {fileID: 0}
-  - hasDialogue: 1
-    speakerNameEN: Piper
-    dialogueTextEN: Put that scam stick away.
-    speakerNameKR: "\uD30C\uC774\uD37C"
-    dialogueTextKR: "\uADF8 \uC0AC\uAE30 \uB9C9\uB300\uAE30\uB294 \uC800\uB9AC \uCE58\uC6CC\uC694."
-    portrait: {fileID: 21300000, guid: c68e10ce9d108aa4f9a55192ef845f07, type: 3}
-    changeBackground: 0
-    background: {fileID: 0}
+    changePanel: 0
+    characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}

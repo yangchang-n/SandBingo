@@ -2140,15 +2140,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   backgroundImageA: {fileID: 0}
   backgroundImageB: {fileID: 0}
+  characterPanelImage: {fileID: 0}
   portraitImage: {fileID: 193937362}
   speakerNameText: {fileID: 193937360}
   dialogueText: {fileID: 193937359}
   namePanel: {fileID: 193937361}
   skipButton: {fileID: 1493878007}
   dialoguePanel: {fileID: 193937363}
+  continueArrow: {fileID: 2144007131}
   typingSpeed: 0.04
   dialogueFadeDuration: 0.25
   backgroundFadeDuration: 0.5
+  characterPanelFadeDuration: 0.3
+  panelNudgeDistance: 12
+  panelNudgeDuration: 0.12
+  arrowBobDistance: 6
+  arrowBobCycles: 1.2
   maskRoot: {fileID: 834409861}
   maskTop: {fileID: 1678036074}
   maskBottom: {fileID: 1346470066}
@@ -5142,6 +5149,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2129981016}
   m_CullTransparentMesh: 1
+--- !u!224 &2144007131 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 7087026732542979216, guid: 632d25ef1a822eb4b8dc902c65648c62, type: 3}
+  m_PrefabInstance: {fileID: 193937357}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
