@@ -15,22 +15,21 @@ MonoBehaviour:
   lines:
   - hasDialogue: 1
     speakerNameEN: 
-    dialogueTextEN: You never know which goodbye is the last one until it's long
-      past.
+    dialogueTextEN: You don't realize which goodbye was the last until long afterward.
     speakerNameKR: 
     dialogueTextKR: "\uB9C8\uC9C0\uB9C9 \uC778\uC0AC\uB294 \uB298 \uC9C0\uB09C \uB4A4\uC5D0\uC57C
       \uC54C\uAC8C \uB41C\uB2E4"
     portrait: {fileID: 0}
-    changeBackground: 1
-    background: {fileID: 21300000, guid: 67b5dd471d2fdea4eb0322b8c9ef0b5b, type: 3}
+    changeBackground: 0
+    background: {fileID: 0}
     changePanel: 0
     characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
     speakerNameEN: 
-    dialogueTextEN: In a land dry for decades now, the faces beside me slipped away
-      like sand between my fingers.
+    dialogueTextEN: For decades, this land had been nearly bone-dry, and familiar
+      faces slipped away like sand through open fingers.
     speakerNameKR: 
     dialogueTextKR: "\uBA87\uC2ED \uB144\uC9F8 \uAC70\uC758 \uB9D0\uB77C\uBC84\uB9B0
       \uC774 \uB545\uC5D0\uC11C, \uACC1\uC5D0 \uC788\uB358 \uC5BC\uAD74\uB4E4\uC740
@@ -44,7 +43,7 @@ MonoBehaviour:
     bgm: {fileID: 0}
   - hasDialogue: 1
     speakerNameEN: 
-    dialogueTextEN: Piper was the brightest of them, and the biggest dreamer.
+    dialogueTextEN: Piper was the brightest of them all, and the biggest dreamer.
     speakerNameKR: 
     dialogueTextKR: "\uD30C\uC774\uD37C\uB294 \uADF8\uC911\uC5D0\uC11C\uB3C4 \uAC00\uC7A5
       \uBC1D\uACE0 \uB0AD\uB9CC\uC801\uC778 \uC544\uC774\uC600\uB2E4"
@@ -57,12 +56,12 @@ MonoBehaviour:
     bgm: {fileID: 0}
   - hasDialogue: 1
     speakerNameEN: 
-    dialogueTextEN: She never stopped talking, and yet she'd spend long stretches
-      staring up at the blue sky, gone quiet and far away.
+    dialogueTextEN: She was always talking, so the well had no right to be this quiet
+      without her.
     speakerNameKR: 
-    dialogueTextKR: "\uADF8\uB140\uB294 \uB9D0\uC774 \uCC38 \uB9CE\uC73C\uBA74\uC11C\uB3C4,
-      \uC885\uC885 \uD30C\uB780 \uD558\uB298\uC744 \uD55C\uCC38 \uC62C\uB824\uB2E4\uBCF4\uBA70
-      \uAC00\uB9CC\uD788 \uC0DD\uAC01\uC5D0 \uC7A0\uAE30\uAE30\uB3C4 \uD588\uB2E4"
+    dialogueTextKR: "\uADF8 \uC544\uC774\uB294 \uB9D0\uC774 \uCC38 \uB9CE\uC558\uAE30\uC5D0,
+      \uADF8\uB140\uAC00 \uC5C6\uB294 \uC6B0\uBB3C\uAC00\uB294 \uC774\uD1A0\uB85D
+      \uC870\uC6A9\uD560 \uC218\uAC00 \uC5C6\uC5C8\uB2E4"
     portrait: {fileID: 0}
     changeBackground: 0
     background: {fileID: 0}
@@ -72,37 +71,8 @@ MonoBehaviour:
     bgm: {fileID: 0}
   - hasDialogue: 1
     speakerNameEN: 
-    dialogueTextEN: "And then she'd be right back at it, pestering me \u2014 didn't
-      that cloud look just like something or other?"
-    speakerNameKR: 
-    dialogueTextKR: "\uADF8\uB7EC\uB2E4\uAC00\uB3C4 \uAC00\uB054 \uBCF4\uC774\uB294
-      \uAD6C\uB984\uC774 \uAF2D \uBB34\uC5C7\uCC98\uB7FC \uC0DD\uAE30\uC9C0 \uC54A\uC558\uB0D0\uACE0
-      \uB2E4\uC2DC \uADC0\uCC2E\uAC8C \uC7AC\uC798\uAC70\uB838\uB2E4"
-    portrait: {fileID: 0}
-    changeBackground: 0
-    background: {fileID: 0}
-    changePanel: 0
-    characterPanel: {fileID: 0}
-    changeBgm: 0
-    bgm: {fileID: 0}
-  - hasDialogue: 1
-    speakerNameEN: 
-    dialogueTextEN: So the wellside without her was quieter than it had any right
-      to be.
-    speakerNameKR: 
-    dialogueTextKR: "\uADF8\uB798\uC11C \uADF8 \uC560\uAC00 \uC5C6\uB294 \uC6B0\uBB3C\uAC00\uB294
-      \uC774\uD1A0\uB85D \uC870\uC6A9\uD560 \uC218\uAC00 \uC5C6\uC5C8\uB2E4"
-    portrait: {fileID: 0}
-    changeBackground: 0
-    background: {fileID: 0}
-    changePanel: 0
-    characterPanel: {fileID: 0}
-    changeBgm: 0
-    bgm: {fileID: 0}
-  - hasDialogue: 1
-    speakerNameEN: 
-    dialogueTextEN: She was already gone, and in the end only her voice stayed behind,
-      somewhere inside me.
+    dialogueTextEN: She was already gone. In the end, all that remained was her voice,
+      lingering somewhere deep within.
     speakerNameKR: 
     dialogueTextKR: "\uADF8\uB140\uB294 \uC774\uBBF8 \uB5A0\uB0AC\uACE0, \uACB0\uAD6D
       \uB9C8\uC74C\uC18D\uC5D0 \uBAA9\uC18C\uB9AC\uB9CC \uB0A8\uC558\uB2E4"
@@ -115,8 +85,8 @@ MonoBehaviour:
     bgm: {fileID: 0}
   - hasDialogue: 1
     speakerNameEN: 
-    dialogueTextEN: "And the one left behind would carry that voice for years and
-      years, until one day even that\u2014"
+    dialogueTextEN: "The one left behind would carry that voice for years and years,
+      until one day even that\u2014"
     speakerNameKR: 
     dialogueTextKR: "\uB0A8\uC740 \uC0AC\uB78C\uC740 \uADF8 \uBAA9\uC18C\uB9AC\uB97C
       \uC624\uB798\uC624\uB798 \uD488\uACE0 \uB2E4\uB2C8\uB2E4\uAC00, \uC5B4\uB290
@@ -133,7 +103,7 @@ MonoBehaviour:
     dialogueTextEN: ...What are you even talking about?
     speakerNameKR: "\uD30C\uC774\uD37C"
     dialogueTextKR: "\u2026\u2026\uBB50\uB77C\uB294 \uAC70\uC57C?"
-    portrait: {fileID: 21300000, guid: b0c713d599beb9344b4ee106a4240d3b, type: 3}
+    portrait: {fileID: 0}
     changeBackground: 0
     background: {fileID: 0}
     changePanel: 0
@@ -142,11 +112,11 @@ MonoBehaviour:
     bgm: {fileID: 0}
   - hasDialogue: 1
     speakerNameEN: Piper
-    dialogueTextEN: Um, I'm right here? ...Did the heat finally get to her?
+    dialogueTextEN: I'm right here, you know? ...Did the heat finally get to her?
     speakerNameKR: "\uD30C\uC774\uD37C"
     dialogueTextKR: "\uC800 \uC5EC\uAE30 \uC788\uAC70\uB4E0\uC694? ...\uB354\uC704
       \uBA39\uC5C8\uB098?"
-    portrait: {fileID: 21300000, guid: f35fe2d75bd44f144b4e061c950e5fe3, type: 3}
+    portrait: {fileID: 0}
     changeBackground: 0
     background: {fileID: 0}
     changePanel: 0
@@ -155,12 +125,11 @@ MonoBehaviour:
     bgm: {fileID: 0}
   - hasDialogue: 1
     speakerNameEN: 
-    dialogueTextEN: Piper was standing there with an empty bucket in one hand and
-      a look of pure disbelief on her face. Perfectly fine. On both feet.
+    dialogueTextEN: Piper stood there with an empty bucket in one hand, looking utterly
+      baffled.
     speakerNameKR: 
     dialogueTextKR: "\uD30C\uC774\uD37C\uAC00 \uBE48 \uBB3C\uD1B5\uC744 \uD55C \uC190\uC5D0
-      \uB4E0 \uCC44, \uC5B4\uC774\uC5C6\uB2E4\uB294 \uC5BC\uAD74\uB85C \uC11C \uC788\uC5C8\uB2E4.
-      \uBA40\uCA61\uD788, \uB450 \uBC1C\uB85C."
+      \uB4E0 \uCC44, \uC5B4\uC774\uC5C6\uB2E4\uB294 \uC5BC\uAD74\uB85C \uC11C \uC788\uC5C8\uB2E4"
     portrait: {fileID: 0}
     changeBackground: 0
     background: {fileID: 0}
@@ -173,7 +142,7 @@ MonoBehaviour:
     dialogueTextEN: Oh. You're back.
     speakerNameKR: "\uD14C\uC0AC"
     dialogueTextKR: "\uC5B4, \uC654\uAD6C\uB098."
-    portrait: {fileID: 21300000, guid: 804f4937427d73c438fd059b9f112a8f, type: 3}
+    portrait: {fileID: 0}
     changeBackground: 0
     background: {fileID: 0}
     changePanel: 0
@@ -186,7 +155,7 @@ MonoBehaviour:
     speakerNameKR: "\uD14C\uC0AC"
     dialogueTextKR: "\uC0DD\uAC01\uBCF4\uB2E4 \uBE68\uB9AC \uC654\uB124. \uC880 \uB354
       \uCC9C\uCC9C\uD788 \uC640\uB3C4 \uB410\uB294\uB370."
-    portrait: {fileID: 21300000, guid: 45ba7650e66fc1349bc111d80a881bb0, type: 3}
+    portrait: {fileID: 0}
     changeBackground: 0
     background: {fileID: 0}
     changePanel: 0
@@ -199,7 +168,7 @@ MonoBehaviour:
     speakerNameKR: "\uD30C\uC774\uD37C"
     dialogueTextKR: "\uC880 \uB354 \uCC9C\uCC9C\uD788 \uC640\uC694? \uC81C \uC7A5\uB840\uC2DD\uC774\uB77C\uB3C4
       \uB9C8\uC800 \uCE58\uB974\uC2DC\uAC8C?"
-    portrait: {fileID: 21300000, guid: b0c713d599beb9344b4ee106a4240d3b, type: 3}
+    portrait: {fileID: 0}
     changeBackground: 0
     background: {fileID: 0}
     changePanel: 0
@@ -208,11 +177,11 @@ MonoBehaviour:
     bgm: {fileID: 0}
   - hasDialogue: 1
     speakerNameEN: Tessa
-    dialogueTextEN: ...So how was the well over there? Any water at all?
+    dialogueTextEN: ...So how was the well over there? Any sign of water?
     speakerNameKR: "\uD14C\uC0AC"
     dialogueTextKR: "...\uC800\uCABD \uC6B0\uBB3C\uC740 \uC5B4\uB560\uC5B4? \uBB3C\uC774
       \uC870\uAE08\uC774\uB77C\uB3C4 \uB098\uC624\uB294 \uAC83 \uAC19\uC544?"
-    portrait: {fileID: 21300000, guid: 804f4937427d73c438fd059b9f112a8f, type: 3}
+    portrait: {fileID: 0}
     changeBackground: 0
     background: {fileID: 0}
     changePanel: 0
@@ -221,23 +190,11 @@ MonoBehaviour:
     bgm: {fileID: 0}
   - hasDialogue: 1
     speakerNameEN: Piper
-    dialogueTextEN: Unbelievable... No, that one's hopeless too.
+    dialogueTextEN: Seriously... That one's hopeless too. How about yours?
     speakerNameKR: "\uD30C\uC774\uD37C"
-    dialogueTextKR: "\uCC38 \uB098... \uC800\uCABD\uB3C4 \uAC00\uB9DD\uC774 \uC5C6\uC5B4\uC694."
-    portrait: {fileID: 21300000, guid: b0c713d599beb9344b4ee106a4240d3b, type: 3}
-    changeBackground: 0
-    background: {fileID: 0}
-    changePanel: 0
-    characterPanel: {fileID: 0}
-    changeBgm: 0
-    bgm: {fileID: 0}
-  - hasDialogue: 1
-    speakerNameEN: Piper
-    dialogueTextEN: Look at this. I couldn't fill it at all. How about yours?
-    speakerNameKR: "\uD30C\uC774\uD37C"
-    dialogueTextKR: "\uC774\uAC70 \uBD10\uC694. \uC870\uAE08\uB3C4 \uBABB \uCC44\uC6E0\uC796\uC544\uC694.
+    dialogueTextKR: "\uCC38 \uB098... \uC800\uCABD\uB3C4 \uAC00\uB9DD\uC774 \uC5C6\uC5B4\uC694.
       \uD14C\uC0AC \uCABD\uC740\uC694?"
-    portrait: {fileID: 21300000, guid: e0d48381d94c0714ba8e3bdddc9c5eaa, type: 3}
+    portrait: {fileID: 0}
     changeBackground: 0
     background: {fileID: 0}
     changePanel: 0
@@ -246,13 +203,13 @@ MonoBehaviour:
     bgm: {fileID: 0}
   - hasDialogue: 1
     speakerNameEN: Tessa
-    dialogueTextEN: Nothing right now, but look here. Doesn't it feel like it'd burst
-      if you hit it just right?
+    dialogueTextEN: Nothing yet, but look here. Feels like we could get something
+      flowing if we hit it just right, doesn't it?
     speakerNameKR: "\uD14C\uC0AC"
     dialogueTextKR: "\uC9C0\uAE08\uC740 \uC548 \uB098\uC624\uB294\uB370, \uC5EC\uAE30
       \uBCF4\uBA74 \uC798 \uAC74\uB4DC\uB9AC\uBA74 \uD130\uC838 \uB098\uC62C \uAC83
       \uAC19\uC9C0 \uC54A\uC544?"
-    portrait: {fileID: 21300000, guid: 45ba7650e66fc1349bc111d80a881bb0, type: 3}
+    portrait: {fileID: 0}
     changeBackground: 0
     background: {fileID: 0}
     changePanel: 0
@@ -265,7 +222,7 @@ MonoBehaviour:
     speakerNameKR: "\uD30C\uC774\uD37C"
     dialogueTextKR: "\uC5B4, \uADF8\uB7EC\uB124\uC694? \uADFC\uB370 \uC65C \uC791\uC5C5
       \uC548 \uD558\uACE0 \uC788\uC5C8\uC5B4\uC694?"
-    portrait: {fileID: 21300000, guid: ce46d5e3f69096f4a84f9897353ff324, type: 3}
+    portrait: {fileID: 0}
     changeBackground: 0
     background: {fileID: 0}
     changePanel: 0
@@ -274,13 +231,13 @@ MonoBehaviour:
     bgm: {fileID: 0}
   - hasDialogue: 1
     speakerNameEN: Tessa
-    dialogueTextEN: You're better with your hands these days. I was waiting on our
-      ace.
+    dialogueTextEN: You're better at this than I am these days. I was waiting for
+      our ace.
     speakerNameKR: "\uD14C\uC0AC"
     dialogueTextKR: "\uC694\uC998\uC5D4 \uB108\uAC00 \uB354 \uC190\uC7AC\uC8FC\uAC00
       \uC88B\uC796\uC544. \uC6B0\uB9AC \uC5D0\uC774\uC2A4\uB97C \uAE30\uB2E4\uB9AC\uACE0
       \uC788\uC5C8\uC9C0."
-    portrait: {fileID: 21300000, guid: 9efc6fe7a790fc8428194a75c40098e7, type: 3}
+    portrait: {fileID: 0}
     changeBackground: 0
     background: {fileID: 0}
     changePanel: 0
@@ -292,7 +249,7 @@ MonoBehaviour:
     dialogueTextEN: You just couldn't be bothered...
     speakerNameKR: "\uD30C\uC774\uD37C"
     dialogueTextKR: "\uADF8\uB0E5 \uADC0\uCC2E\uC558\uB358 \uAC70\uBA74\uC11C..."
-    portrait: {fileID: 21300000, guid: b0c713d599beb9344b4ee106a4240d3b, type: 3}
+    portrait: {fileID: 0}
     changeBackground: 0
     background: {fileID: 0}
     changePanel: 0

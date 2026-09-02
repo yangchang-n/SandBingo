@@ -59,9 +59,9 @@ public class GameManager : MonoBehaviour
     public int stage1CurrentScore = 0;
     public int stage1TargetScore = 300;
     public int stage2CurrentScore = 0;
-    public int stage2TargetScore = 300;
+    public int stage2TargetScore = 350;
     public int stage3CurrentScore = 0;
-    public int stage3TargetScore = 300;
+    public int stage3TargetScore = 400;
 
     // 커스텀 스테이지(botDifficulty == 0)용 점수. 저장 파일에는 남기지 않는다
     public int customCurrentScore = 0;
@@ -738,14 +738,18 @@ public class GameManager : MonoBehaviour
     // 난이도별 진흙 모양 정의 (높이, 개수). 너비는 항상 1칸이라 여기 포함하지 않는다
     // 0번(커스텀 스테이지)은 셀렉트씬의 커스텀 패널에서 정한 값을 LoadGameSettings가 미리 받아둔 것이다
     // public으로 열어둬서 스테이지 진입 정보 패널(GameSceneUI)도 같은 데이터를 그대로 가져다 쓴다
+    // 개수가 단계마다 늘어나는 것이 난이도 곡선의 핵심이다
+    // 2개는 평균 좌우만 치지만 3개부터는 평균 위치에 직접 떨어지고 개수만큼 벽이 넓어진다
+    // 3단계의 5개는 5칸 연결과 같은 폭이지만, 높이를 0.5로 낮춰서 각 칸을 되찾을 여지를 남긴다
+    // 소유권 판정이 반 이상 기준이므로 0.5는 플레이어가 나머지 반을 채우면 뒤집을 수 있는 최대 높이다
     public BotController.MudPattern GetMudPatternForDifficulty(int difficulty)
     {
         switch (difficulty)
         {
             case 0: return customMudPattern;
-            case 1: return new BotController.MudPattern { heightCells = 0.8f, count = 2 };
-            case 2: return new BotController.MudPattern { heightCells = 1.0f, count = 2 };
-            case 3: return new BotController.MudPattern { heightCells = 0.8f, count = 3 };
+            case 1: return new BotController.MudPattern { heightCells = 1.0f, count = 2 };
+            case 2: return new BotController.MudPattern { heightCells = 0.8f, count = 3 };
+            case 3: return new BotController.MudPattern { heightCells = 0.5f, count = 5 };
             default:
                 Debug.LogWarning($"GetMudPatternForDifficulty: 정의되지 않은 난이도 {difficulty}, 기본값(1.0칸 2개)을 사용합니다");
                 return new BotController.MudPattern { heightCells = 1.0f, count = 2 };

@@ -2222,9 +2222,9 @@ MonoBehaviour:
   stage1CurrentScore: 0
   stage1TargetScore: 300
   stage2CurrentScore: 0
-  stage2TargetScore: 300
+  stage2TargetScore: 350
   stage3CurrentScore: 0
-  stage3TargetScore: 300
+  stage3TargetScore: 400
   customCurrentScore: 0
   customTargetScore: 300
   isBotMode: 1

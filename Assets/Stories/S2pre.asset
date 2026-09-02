@@ -15,23 +15,23 @@ MonoBehaviour:
   lines:
   - hasDialogue: 1
     speakerNameEN: Piper
-    dialogueTextEN: It's so hot.
+    dialogueTextEN: It's hot.
     speakerNameKR: "\uD30C\uC774\uD37C"
     dialogueTextKR: "\uB365\uB124\uC694."
-    portrait: {fileID: 21300000, guid: 54f6faf07226c1c41a606a18277747c1, type: 3}
-    changeBackground: 1
-    background: {fileID: 21300000, guid: 67b5dd471d2fdea4eb0322b8c9ef0b5b, type: 3}
+    portrait: {fileID: 0}
+    changeBackground: 0
+    background: {fileID: 0}
     changePanel: 0
     characterPanel: {fileID: 0}
     changeBgm: 0
     bgm: {fileID: 0}
   - hasDialogue: 1
     speakerNameEN: Tessa
-    dialogueTextEN: Yeah... Somehow it gets hotter as the sun goes down.
+    dialogueTextEN: Yeah... Feels like it gets even hotter as the sun goes down.
     speakerNameKR: "\uD14C\uC0AC"
     dialogueTextKR: "\uADF8\uB7EC\uAC8C... \uD574\uAC00 \uC838 \uAC08 \uB54C\uAC00
       \uB354 \uB354\uC6B4 \uAC83 \uAC19\uC544."
-    portrait: {fileID: 21300000, guid: bc1b5bc7d393d224688d63ec912bbeeb, type: 3}
+    portrait: {fileID: 0}
     changeBackground: 0
     background: {fileID: 0}
     changePanel: 0
@@ -40,24 +40,12 @@ MonoBehaviour:
     bgm: {fileID: 0}
   - hasDialogue: 1
     speakerNameEN: Piper
-    dialogueTextEN: Why is it that the people who wake the wells end up the thirstiest?
+    dialogueTextEN: Why do the people who wake wells have to be thirstier than everyone
+      else?
     speakerNameKR: "\uD30C\uC774\uD37C"
     dialogueTextKR: "\uBB3C \uB6AB\uB294 \uC0AC\uB78C\uC774 \uC65C \uB354 \uBAA9\uB9C8\uB974\uAC8C
       \uB2E4\uB140\uC57C \uD558\uC8E0?"
-    portrait: {fileID: 21300000, guid: f35fe2d75bd44f144b4e061c950e5fe3, type: 3}
-    changeBackground: 0
-    background: {fileID: 0}
-    changePanel: 0
-    characterPanel: {fileID: 0}
-    changeBgm: 0
-    bgm: {fileID: 0}
-  - hasDialogue: 1
-    speakerNameEN: Piper
-    dialogueTextEN: Ugh... Do you think anyone appreciates how hard this is?
-    speakerNameKR: "\uD30C\uC774\uD37C"
-    dialogueTextKR: "\uD6C4\uC6B0... \uC0AC\uB78C\uB4E4\uC774 \uC774 \uACE0\uC0DD\uC744
-      \uC54C\uC544\uC904\uAE4C\uC694?"
-    portrait: {fileID: 21300000, guid: 54f6faf07226c1c41a606a18277747c1, type: 3}
+    portrait: {fileID: 0}
     changeBackground: 0
     background: {fileID: 0}
     changePanel: 0
@@ -66,11 +54,11 @@ MonoBehaviour:
     bgm: {fileID: 0}
   - hasDialogue: 1
     speakerNameEN: Tessa
-    dialogueTextEN: No idea. Too hot to think about anything complicated.
+    dialogueTextEN: No idea. Too hot to think about complicated things.
     speakerNameKR: "\uD14C\uC0AC"
     dialogueTextKR: "\uBAB0\uB77C. \uB354\uC6B0\uB2C8\uAE4C \uBCF5\uC7A1\uD55C \uAC74
       \uC0DD\uAC01\uD558\uAE30 \uC2EB\uC5B4."
-    portrait: {fileID: 21300000, guid: 09aff2867ae9ee3479addb17d5a880eb, type: 3}
+    portrait: {fileID: 0}
     changeBackground: 0
     background: {fileID: 0}
     changePanel: 0
@@ -79,11 +67,11 @@ MonoBehaviour:
     bgm: {fileID: 0}
   - hasDialogue: 1
     speakerNameEN: Piper
-    dialogueTextEN: This job is so unfair... Now I don't even feel like working.
+    dialogueTextEN: That's so unfair... Now I don't even feel like working.
     speakerNameKR: "\uD30C\uC774\uD37C"
-    dialogueTextKR: "\uC774 \uC77C \uCC38 \uBD88\uACF5\uD3C9\uD558\uB124\uC694...
-      \uAC11\uC790\uAE30 \uC758\uC695\uB3C4 \uC548 \uB098\uACE0."
-    portrait: {fileID: 21300000, guid: f35fe2d75bd44f144b4e061c950e5fe3, type: 3}
+    dialogueTextKR: "\uCC38 \uBD88\uACF5\uD3C9\uD558\uB124\uC694... \uAC11\uC790\uAE30
+      \uC758\uC695\uB3C4 \uC548 \uB098\uACE0."
+    portrait: {fileID: 0}
     changeBackground: 0
     background: {fileID: 0}
     changePanel: 0
@@ -92,11 +80,11 @@ MonoBehaviour:
     bgm: {fileID: 0}
   - hasDialogue: 1
     speakerNameEN: Tessa
-    dialogueTextEN: Want a joke so bad it'll cool you right off?
+    dialogueTextEN: Want to hear a joke so bad it'll give you chills?
     speakerNameKR: "\uD14C\uC0AC"
     dialogueTextKR: "\uC370\uB801\uD55C \uC598\uAE30\uB97C \uC880 \uD574\uC8FC\uBA74
       \uC2DC\uC6D0\uD574\uC9C8\uAE4C?"
-    portrait: {fileID: 21300000, guid: 9efc6fe7a790fc8428194a75c40098e7, type: 3}
+    portrait: {fileID: 0}
     changeBackground: 0
     background: {fileID: 0}
     changePanel: 0
@@ -105,10 +93,10 @@ MonoBehaviour:
     bgm: {fileID: 0}
   - hasDialogue: 1
     speakerNameEN: Piper
-    dialogueTextEN: I'm starting to get annoyed, so please don't.
+    dialogueTextEN: I'm already getting annoyed, so don't.
     speakerNameKR: "\uD30C\uC774\uD37C"
     dialogueTextKR: "\uC9DC\uC99D\uB098\uB824\uACE0 \uD558\uB2C8\uAE4C \uADF8\uB9CC\uB46C\uC694."
-    portrait: {fileID: 21300000, guid: b0c713d599beb9344b4ee106a4240d3b, type: 3}
+    portrait: {fileID: 0}
     changeBackground: 0
     background: {fileID: 0}
     changePanel: 0
@@ -117,10 +105,10 @@ MonoBehaviour:
     bgm: {fileID: 0}
   - hasDialogue: 1
     speakerNameEN: Tessa
-    dialogueTextEN: Fine. How about this, then?
+    dialogueTextEN: All right. How about this, then?
     speakerNameKR: "\uD14C\uC0AC"
     dialogueTextKR: "\uC88B\uC544, \uADF8\uB7FC \uC774\uAC74 \uC5B4\uB54C?"
-    portrait: {fileID: 21300000, guid: 45ba7650e66fc1349bc111d80a881bb0, type: 3}
+    portrait: {fileID: 0}
     changeBackground: 0
     background: {fileID: 0}
     changePanel: 0
@@ -129,11 +117,11 @@ MonoBehaviour:
     bgm: {fileID: 0}
   - hasDialogue: 1
     speakerNameEN: Tessa
-    dialogueTextEN: Just wake the next well and I'll give you a present.
+    dialogueTextEN: Wake the next well and I'll give you a present.
     speakerNameKR: "\uD14C\uC0AC"
     dialogueTextKR: "\uB2E4\uC74C \uC6B0\uBB3C\uB9CC \uB6AB\uC73C\uBA74 \uC120\uBB3C\uC744
       \uD558\uB098 \uC904\uAC8C."
-    portrait: {fileID: 21300000, guid: 804f4937427d73c438fd059b9f112a8f, type: 3}
+    portrait: {fileID: 0}
     changeBackground: 0
     background: {fileID: 0}
     changePanel: 0
@@ -142,10 +130,10 @@ MonoBehaviour:
     bgm: {fileID: 0}
   - hasDialogue: 1
     speakerNameEN: Piper
-    dialogueTextEN: No thanks. I'm not that interested.
+    dialogueTextEN: No thanks. Not interested.
     speakerNameKR: "\uD30C\uC774\uD37C"
     dialogueTextKR: "\uB410\uAC70\uB4E0\uC694. \uBCC4\uB85C \uAD00\uC2EC \uC5C6\uC5B4\uC694."
-    portrait: {fileID: 21300000, guid: f35fe2d75bd44f144b4e061c950e5fe3, type: 3}
+    portrait: {fileID: 0}
     changeBackground: 0
     background: {fileID: 0}
     changePanel: 0
@@ -154,10 +142,10 @@ MonoBehaviour:
     bgm: {fileID: 0}
   - hasDialogue: 1
     speakerNameEN: Piper
-    dialogueTextEN: ...But what is it?
+    dialogueTextEN: ...What is it, though?
     speakerNameKR: "\uD30C\uC774\uD37C"
     dialogueTextKR: "...\uADFC\uB370 \uBB54\uB370\uC694?"
-    portrait: {fileID: 21300000, guid: b0c713d599beb9344b4ee106a4240d3b, type: 3}
+    portrait: {fileID: 0}
     changeBackground: 0
     background: {fileID: 0}
     changePanel: 0
@@ -166,10 +154,10 @@ MonoBehaviour:
     bgm: {fileID: 0}
   - hasDialogue: 1
     speakerNameEN: Tessa
-    dialogueTextEN: Hmm... Honestly, I'm not too sure myself.
+    dialogueTextEN: Hmm... Honestly, I'm not really sure myself.
     speakerNameKR: "\uD14C\uC0AC"
     dialogueTextKR: "\uC74C... \uC0AC\uC2E4 \uB098\uB3C4 \uC798 \uBAA8\uB974\uACA0\uC5B4."
-    portrait: {fileID: 21300000, guid: a27f087f63d32394aa6a316793fe64ae, type: 3}
+    portrait: {fileID: 0}
     changeBackground: 0
     background: {fileID: 0}
     changePanel: 0
@@ -181,7 +169,7 @@ MonoBehaviour:
     dialogueTextEN: That's not how presents work.
     speakerNameKR: "\uD30C\uC774\uD37C"
     dialogueTextKR: "\uADF8\uB7F0 \uAC8C \uC5B4\uB528\uC5B4\uC694."
-    portrait: {fileID: 21300000, guid: 59b8a7a9165996b46a7a3de8fcf86420, type: 3}
+    portrait: {fileID: 0}
     changeBackground: 0
     background: {fileID: 0}
     changePanel: 0
@@ -190,11 +178,11 @@ MonoBehaviour:
     bgm: {fileID: 0}
   - hasDialogue: 1
     speakerNameEN: Piper
-    dialogueTextEN: Don't tell me it's a day off or something.
+    dialogueTextEN: Don't tell me it's just a day off or something.
     speakerNameKR: "\uD30C\uC774\uD37C"
-    dialogueTextKR: "\uC124\uB9C8 \uD558\uB8E8 \uC26C\uAC8C \uD574\uC8FC\uACA0\uB2E4,
+    dialogueTextKR: "\uC124\uB9C8 \uADF8\uB0E5 \uD558\uB8E8 \uC26C\uAC8C \uD574\uC8FC\uACA0\uB2E4,
       \uBB50 \uC774\uB7F0 \uAC70\uC608\uC694?"
-    portrait: {fileID: 21300000, guid: b0c713d599beb9344b4ee106a4240d3b, type: 3}
+    portrait: {fileID: 0}
     changeBackground: 0
     background: {fileID: 0}
     changePanel: 0
@@ -206,7 +194,7 @@ MonoBehaviour:
     dialogueTextEN: That's not it.
     speakerNameKR: "\uD14C\uC0AC"
     dialogueTextKR: "\uADF8\uAC74 \uC544\uB2C8\uC9C0."
-    portrait: {fileID: 21300000, guid: 45ba7650e66fc1349bc111d80a881bb0, type: 3}
+    portrait: {fileID: 0}
     changeBackground: 0
     background: {fileID: 0}
     changePanel: 0
@@ -215,12 +203,12 @@ MonoBehaviour:
     bgm: {fileID: 0}
   - hasDialogue: 1
     speakerNameEN: Piper
-    dialogueTextEN: Then it's not going to be our friendship or the satisfaction
-      of hard work, is it?
+    dialogueTextEN: Then it's not going to be something like our friendship or the
+      satisfaction of a job well done, right?
     speakerNameKR: "\uD30C\uC774\uD37C"
     dialogueTextKR: "\uADF8\uB7FC \uBB50 \uC6B0\uB9AC\uB4E4\uC758 \uC6B0\uC815\uC774\uB098
       \uB178\uB825\uC758 \uBFCC\uB4EF\uD568 \uAC19\uC740 \uAC74 \uC544\uB2C8\uACA0\uC8E0?"
-    portrait: {fileID: 21300000, guid: 59b8a7a9165996b46a7a3de8fcf86420, type: 3}
+    portrait: {fileID: 0}
     changeBackground: 0
     background: {fileID: 0}
     changePanel: 0
@@ -229,11 +217,11 @@ MonoBehaviour:
     bgm: {fileID: 0}
   - hasDialogue: 1
     speakerNameEN: Tessa
-    dialogueTextEN: Well, now that you put it that way, you're not far off...
+    dialogueTextEN: Well... when you put it that way, you're not far off...
     speakerNameKR: "\uD14C\uC0AC"
     dialogueTextKR: "\uBB50 \uB530\uC9C0\uACE0 \uBCF4\uBA74 \uBE44\uC2B7\uD558\uAE34
       \uD55C\uB370..."
-    portrait: {fileID: 21300000, guid: bc1b5bc7d393d224688d63ec912bbeeb, type: 3}
+    portrait: {fileID: 0}
     changeBackground: 0
     background: {fileID: 0}
     changePanel: 0
@@ -242,10 +230,10 @@ MonoBehaviour:
     bgm: {fileID: 0}
   - hasDialogue: 1
     speakerNameEN: Tessa
-    dialogueTextEN: Wai... wait up, don't leave meee...!
+    dialogueTextEN: W-Wait! Wait up for meee...!
     speakerNameKR: "\uD14C\uC0AC"
     dialogueTextKR: "\uC7A0... \uC7A0\uAE50\uB9CC, \uAC19\uC774 \uAC00\uC544\uC544...!"
-    portrait: {fileID: 21300000, guid: e14d70471e05459469153d33c29efc1e, type: 3}
+    portrait: {fileID: 0}
     changeBackground: 0
     background: {fileID: 0}
     changePanel: 0

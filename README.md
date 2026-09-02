@@ -46,8 +46,8 @@
 - Genre : Single-player falling-sand puzzle
 - Stages : Easy, Normal, Hard, and Custom
 - Languages : English, Korean
-- Playtime : About 30 minutes
-- Release : September 2026 on Steam (planned)
+- Playtime : About 20 minutes
+- Release : September 2026 on [Steam](https://store.steampowered.com/app/5056380/Sand_Bingo/) (planned)
 - Development started : 2026-02-09
 - Unity version : 2022.3.62f3
 
