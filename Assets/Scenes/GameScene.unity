@@ -2164,14 +2164,12 @@ MonoBehaviour:
   highlights:
   - fromLine: 0
     target: {fileID: 1568991379}
-  - fromLine: 5
+  - fromLine: 6
     target: {fileID: 838285992}
-  - fromLine: 8
+  - fromLine: 9
     target: {fileID: 25845956}
-  - fromLine: 11
+  - fromLine: 12
     target: {fileID: 412916496}
-  - fromLine: 15
-    target: {fileID: 0}
 --- !u!1 &1078086198
 GameObject:
   m_ObjectHideFlags: 0

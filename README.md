@@ -46,23 +46,28 @@
 - Genre : Single-player falling-sand puzzle
 - Stages : Easy, Normal, Hard, and Custom
 - Languages : English, Korean
-- Playtime : About 20 minutes
+- Playtime : About 15 minutes
 - Release : September 2026 on [Steam](https://store.steampowered.com/app/5056380/Sand_Bingo/) (planned)
 - Development started : 2026-02-09
 - Unity version : 2022.3.62f3
 
 ## Credits
 
-### Unity Asset Store
+### UI
 
 - [Dark Brown GUI kit](https://assetstore.unity.com/packages/2d/gui/dark-brown-gui-kit-201086) - ARCEY
 - [Fantasy Wooden GUI : Free](https://assetstore.unity.com/packages/2d/gui/fantasy-wooden-gui-free-103811) - Black Hammer
+
+### Font
+
 - [BoldPixels Font](https://assetstore.unity.com/packages/2d/fonts/boldpixels-font-332078) - YukiPixels
-
-### Fonts
-
 - [TerrarumSansBitmap](https://github.com/curioustorvald/Terrarum-sans-bitmap/releases) - CuriousTorvald
 - [PF스타더스트](https://m.blog.naver.com/campanula913/221366697603) - 피나타
+
+### BGM
+
+- [黄金虫の大名行列](https://amachamusic.chagasi.com/music_koganemushi.html) - 甘茶の音楽工房
+- [抜き足差し足](https://amachamusic.chagasi.com/music_nukiashisashiashi.html) - 甘茶の音楽工房
 
 ### Generative AI
 
