@@ -95,11 +95,6 @@ public class GameManager : MonoBehaviour
     public bool isOasisWin = false;
     public bool isMudWin = false;
 
-    // 이 씬에 들어온 뒤 한 번이라도 승리했는지를 기록한다
-    // isOasisWin 은 리셋으로 지워지지만 이 값은 남아서, 리셋 후 나가더라도
-    // 아직 보지 않은 post 스토리를 놓치지 않게 해준다
-    private bool hasWonInThisSession = false;
-
     [Header("Player Colors")]
     public Color skyColor = new Color(0x85 / 255f, 0xBE / 255f, 0xC9 / 255f);
     public Color brownColor = new Color(0x3C / 255f, 0x25 / 255f, 0x16 / 255f);
@@ -168,7 +163,6 @@ public class GameManager : MonoBehaviour
         isGameOver = false;
         isOasisWin = false;
         isMudWin = false;
-        hasWonInThisSession = false;
 
         physicsAccumulator = 0f;
         fallCarry = 0f;
@@ -610,7 +604,6 @@ public class GameManager : MonoBehaviour
         {
             isGameOver = true;
             isOasisWin = true;
-            hasWonInThisSession = true;
 
             if (GlobalManager.Instance != null)
             {
@@ -638,6 +631,7 @@ public class GameManager : MonoBehaviour
     }
 
     // 게임 종료 후 씬 전환 - 페이드 효과 포함
+    // 스토리 비활성화로 진입 차단. post 스토리를 거치지 않고 항상 셀렉트씬으로 돌아간다
     public void LeaveGameScene()
     {
         if (GlobalManager.Instance == null)
@@ -646,27 +640,7 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        GlobalManager gm = GlobalManager.Instance;
-
-        // 리셋 여부와 무관하게, 이 씬에서 이겨본 적이 있고 아직 보지 않은 post 스토리가 있으면 그쪽으로 보낸다
-        if (hasWonInThisSession)
-        {
-            StoryChapter postChapter = botDifficulty switch
-            {
-                1 => gm.stage1PostChapter,
-                2 => gm.stage2PostChapter,
-                3 => gm.stage3PostChapter,
-                _ => null
-            };
-
-            if (postChapter != null && !gm.IsStorySeen(postChapter))
-            {
-                gm.GoToStory(postChapter, "SelectScene");
-                return;
-            }
-        }
-
-        gm.LoadScene("SelectScene");
+        GlobalManager.Instance.LoadScene("SelectScene");
     }
 
     Vector2Int WorldToGrid(Vector3 worldPos)

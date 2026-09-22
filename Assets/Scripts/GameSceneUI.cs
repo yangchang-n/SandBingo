@@ -390,7 +390,7 @@ public class GameSceneUI : MonoBehaviour
     }
 
     // 승리 패널의 Continue 와 메뉴의 Quit 이 같은 동작을 한다
-    // 아직 보지 않은 post 스토리가 있으면 GameManager 가 그쪽으로 보낸다
+    // 둘 다 GameManager 를 거쳐 셀렉트씬으로 돌아간다
     void OnLeaveGameClicked()
     {
         if (gameManager != null)

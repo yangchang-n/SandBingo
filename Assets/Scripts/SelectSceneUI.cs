@@ -111,16 +111,17 @@ public class SelectSceneUI : MonoBehaviour
         SetButtonInteractable(normalButton, gm.IsStageCleared(1));
         SetButtonInteractable(hardButton, gm.IsStageCleared(2));
 
-        SetButtonVisible(stage1PreStoryButton,  gm.IsStorySeen(gm.stage1PreChapter));
-        SetButtonVisible(stage1PostStoryButton, gm.IsStorySeen(gm.stage1PostChapter));
-        SetButtonVisible(stage2PreStoryButton,  gm.IsStorySeen(gm.stage2PreChapter));
-        SetButtonVisible(stage2PostStoryButton, gm.IsStorySeen(gm.stage2PostChapter));
-        SetButtonVisible(stage3PreStoryButton,  gm.IsStorySeen(gm.stage3PreChapter));
-        SetButtonVisible(stage3PostStoryButton, gm.IsStorySeen(gm.stage3PostChapter));
+        // 스토리 비활성화로 진입 차단
+        // 기존 세이브에 감상 기록이 남아 있어도 다시보기 버튼은 항상 숨긴다
+        SetButtonVisible(stage1PreStoryButton,  false);
+        SetButtonVisible(stage1PostStoryButton, false);
+        SetButtonVisible(stage2PreStoryButton,  false);
+        SetButtonVisible(stage2PostStoryButton, false);
+        SetButtonVisible(stage3PreStoryButton,  false);
+        SetButtonVisible(stage3PostStoryButton, false);
 
-        // 커스텀 버튼은 stage3 post 스토리를 본 뒤에만 나타난다
-        // 이 스토리는 스테이지 3을 클리어해야만 재생되므로 클리어 여부를 따로 검사할 필요가 없다
-        SetButtonVisible(customButton, gm.IsStorySeen(gm.stage3PostChapter));
+        // 커스텀 버튼은 스테이지 3을 클리어한 뒤에만 나타난다
+        SetButtonVisible(customButton, gm.IsStageCleared(3));
     }
 
     // 버튼이 비활성화되면 배경 Image는 Button의 Disabled Color로 자동으로 흐려지지만
@@ -167,27 +168,11 @@ public class SelectSceneUI : MonoBehaviour
         SetButtonVisible(customButton,          false);
     }
 
+    // 스토리 비활성화로 진입 차단
+    // pre 스토리를 거치지 않고 항상 게임씬으로 바로 들어간다
     void OnStageButtonClick(int difficulty)
     {
-        if (GlobalManager.Instance == null)
-        {
-            StartGame(difficulty);
-            return;
-        }
-
-        GlobalManager gm = GlobalManager.Instance;
-        StoryChapter preChapter = GetPreChapter(gm, difficulty);
-        bool preUnseen = preChapter != null && !gm.IsStorySeen(preChapter);
-
-        if (preUnseen)
-        {
-            gm.pendingBotDifficulty = difficulty;
-            gm.GoToStory(preChapter, "GameScene");
-        }
-        else
-        {
-            StartGame(difficulty);
-        }
+        StartGame(difficulty);
     }
 
     // GlobalManager가 없으면 페이드도 난이도 전달도 불가능하므로 씬만 직접 넘긴다

@@ -255,7 +255,8 @@ public class GlobalManager : MonoBehaviour
             bgmVolume = volumePercentage / 100f;
             isMuted = data.isMuted;
 
-            currentLanguage = string.IsNullOrEmpty(data.languageCode) ? "EN" : data.languageCode;
+            // 한국어 지원 중단으로 저장된 언어 코드와 무관하게 항상 영어로 고정한다
+            currentLanguage = "EN";
 
             if (data.screenWidth > 0 && data.screenHeight > 0)
                 ApplyResolution(data.screenWidth, data.screenHeight, data.isFullscreen);
