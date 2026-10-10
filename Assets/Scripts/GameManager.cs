@@ -701,7 +701,7 @@ public class GameManager : MonoBehaviour
             case 0: return customMudPattern;
             case 1: return new BotController.MudPattern { heightCells = 1.0f, count = 2 };
             case 2: return new BotController.MudPattern { heightCells = 0.8f, count = 3 };
-            case 3: return new BotController.MudPattern { heightCells = 0.5f, count = 5 };
+            case 3: return new BotController.MudPattern { heightCells = 0.7f, count = 4 };
             default:
                 Debug.LogWarning($"GetMudPatternForDifficulty: 정의되지 않은 난이도 {difficulty}, 기본값(1.0칸 2개)을 사용합니다");
                 return new BotController.MudPattern { heightCells = 1.0f, count = 2 };

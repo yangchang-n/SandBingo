@@ -70,8 +70,8 @@ public class RemotePlaySessionManager : MonoBehaviour
     // 색별로 한 번만 만든 게스트 커서. Steam 에 만든 커서는 게임이 끝날 때까지 유지되므로 다시 만들지 않는다
     private readonly Dictionary<Color32, RemotePlayCursorID_t> guestCursors = new Dictionary<Color32, RemotePlayCursorID_t>();
 
-    // 문서상 매개변수 이름은 BGRA 인데 설명은 빨강 초록 파랑 알파 순서라고 적혀 있어서 서로 맞지 않는다
-    // 매개변수 이름을 따랐다. 실제 테스트에서 Oasis 와 Mud 색이 서로 바뀌어 보이면 false 로 변경
+    // 문서상 매개변수 이름은 BGRA 인데 설명은 RGBA 순서라고 적혀 있어서 서로 일치하지 않는다
+    // 매개변수 이름을 따랐다. R과 B가 서로 바뀌어 보이면 false 로 변경
     private const bool GUEST_CURSOR_BGRA = true;
 #endif
 
@@ -148,7 +148,7 @@ public class RemotePlaySessionManager : MonoBehaviour
     }
 
     // 기본 커서로 되돌리는 함수는 문서에 없다. 커서 번호 0 을 넘기면 기본 커서로 돌아갈 것으로 보고 시도
-    // 효과가 없으면 게임씬을 나간 뒤에도 게스트는 점 커서가 계속 보인다. 실제 테스트에서 확인 필요
+    // 효과가 없으면 게임씬을 나간 뒤에도 게스트 커서가 투명하게 유지된다. 실제 테스트에서 확인 필요
     public void ResetActiveGuestCursor()
     {
 #if !DISABLESTEAMWORKS

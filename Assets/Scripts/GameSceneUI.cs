@@ -38,10 +38,8 @@ public class GameSceneUI : MonoBehaviour
     public Text infoMudText;
     [Tooltip("Versus 현재 차례 이름. 다국어 폰트")]
     public Text infoTurnNameText;
-    [Tooltip("Versus 승리 시 점수 자리에 켜지는 그룹")]
-    public GameObject infoWinnerGroup;
-    [Tooltip("Versus 승자 이름. 다국어 폰트")]
-    public Text infoWinnerNameText;
+    [Tooltip("Versus 승리 시 점수 자리에 켜지는 텍스트")]
+    public GameObject infoWinnerText;
 
     [Header("Versus Intro")]
     [Tooltip("진입 패널의 Oasis 쪽 이름. 다국어 폰트")]
@@ -98,8 +96,8 @@ public class GameSceneUI : MonoBehaviour
         if (victoryPanel != null) victoryPanel.SetActive(false);
         if (oasisWinText != null) oasisWinText.SetActive(false);
         if (mudWinText != null)   mudWinText.SetActive(false);
-        if (versusWinGroup != null)  versusWinGroup.SetActive(false);
-        if (infoWinnerGroup != null) infoWinnerGroup.SetActive(false);
+        if (versusWinGroup != null) versusWinGroup.SetActive(false);
+        if (infoWinnerText != null) infoWinnerText.SetActive(false);
 
         ApplyModeObjects();
 
@@ -180,8 +178,8 @@ public class GameSceneUI : MonoBehaviour
             infoTurnNameText.text = gameManager.GetPlayerName(player);
 
         // 새 턴이 시작됐으면 승부가 아직 나지 않은 것이므로 승자 표시를 지운다. Reset 직후에도 여기서 지워진다
-        if (infoWinnerGroup != null)
-            infoWinnerGroup.SetActive(false);
+        if (infoWinnerText != null)
+            infoWinnerText.SetActive(false);
     }
 
     // 너비는 씬에서 정한 값을 유지하고 높이만 배율에 맞춤
@@ -447,8 +445,7 @@ public class GameSceneUI : MonoBehaviour
             if (versusWinnerNameText != null) versusWinnerNameText.text = winnerName;
             if (versusWinGroup != null)       versusWinGroup.SetActive(true);
 
-            if (infoWinnerNameText != null) infoWinnerNameText.text = winnerName;
-            if (infoWinnerGroup != null)    infoWinnerGroup.SetActive(true);
+            if (infoWinnerText != null) infoWinnerText.SetActive(true);
             return;
         }
 

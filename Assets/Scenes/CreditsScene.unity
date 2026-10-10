@@ -192,7 +192,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: v1.0.0-beta.1
+  m_Text: v1.0.0-beta.2
 --- !u!222 &26512454
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2244,7 +2244,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2100185254}
-  - component: {fileID: 2100185253}
+  - component: {fileID: 2100185255}
   m_Layer: 0
   m_Name: CreditsSceneUI
   m_TagString: Untagged
@@ -2252,25 +2252,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2100185253
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2100185252}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe32f38337b77c840bb94dbd6563137d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  scrollContent: {fileID: 276133216}
-  lastText: {fileID: 58838361}
-  scrollSpeed: 40
-  startDelay: 3
-  restDelay: 5
-  linkButton: {fileID: 1149845130}
-  linkUrl: https://github.com/yangchang-n/SandBingo
 --- !u!4 &2100185254
 Transform:
   m_ObjectHideFlags: 0
@@ -2286,6 +2267,25 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2100185255
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2100185252}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe32f38337b77c840bb94dbd6563137d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scrollContent: {fileID: 276133216}
+  lastText: {fileID: 58838361}
+  scrollSpeed: 40
+  startDelay: 1
+  restDelay: 5
+  linkButton: {fileID: 1149845130}
+  linkUrl: https://github.com/yangchang-n/SandBingo
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

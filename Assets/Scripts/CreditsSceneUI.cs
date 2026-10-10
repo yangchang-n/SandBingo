@@ -11,7 +11,7 @@ public class CreditsSceneUI : MonoBehaviour
     [Tooltip("가장 아래에 있는 텍스트")]
     public Text lastText;
     public float scrollSpeed = 40f;
-    public float startDelay = 3f;
+    public float startDelay = 1f;
     public float restDelay = 5f;
 
     [Header("Link")]
