@@ -63,3 +63,5 @@
 
 - C# scripts : Claude Sonnet 4.5 - 5, Claude Opus 4.6 - 5.5
 - Images : GPT Image 2.0, Grok Aurora
+- This game contains AI-generated images.
+- No generative AI is used during gameplay.
